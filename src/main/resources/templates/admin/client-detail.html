@@ -445,7 +445,7 @@
             border: 1px solid var(--rc-border);
             overflow: hidden;
             transition: var(--transition);
-            height: 100%;
+            height: auto;
         }
 
         .content-card:hover {
@@ -1094,22 +1094,36 @@
                 </div>
 
                 <div class="row g-4">
-                    <!-- Left: Corporate Info -->
+                    <!-- Left: Client Info -->
                     <div class="col-lg-4">
                         <div class="content-card fade-in-up fade-in-up-delay-1">
                             <div class="card-header-custom">
-                                <h3><i class="bi bi-building"></i> Información Corporativa</h3>
+                                <h3><i class="bi bi-person-badge"></i> Información del Cliente</h3>
                             </div>
                             <div class="card-body-custom">
                                 <div class="info-list">
                                     <div class="info-item">
                                         <div class="info-icon"><i class="bi bi-tag"></i></div>
                                         <div class="info-content">
-                                            <div class="info-label">NIT</div>
+                                            <div class="info-label">NIT / Cédula</div>
                                             <div class="info-value" th:text="${client.nit}">NIT</div>
                                         </div>
                                     </div>
-                                    <div class="info-item">
+                                    <div class="info-item" th:if="${client.phones != null && !client.phones.isEmpty()}">
+                                        <div class="info-icon"><i class="bi bi-telephone"></i></div>
+                                        <div class="info-content">
+                                            <div class="info-label">Teléfonos</div>
+                                            <div class="info-value" th:each="phone : ${client.phones}" th:text="${phone}">3001234567</div>
+                                        </div>
+                                    </div>
+                                    <div class="info-item" th:if="${client.emails != null && !client.emails.isEmpty()}">
+                                        <div class="info-icon"><i class="bi bi-envelope"></i></div>
+                                        <div class="info-content">
+                                            <div class="info-label">Correos Electrónicos</div>
+                                            <div class="info-value" th:each="email : ${client.emails}" th:text="${email}">correo@ejemplo.com</div>
+                                        </div>
+                                    </div>
+                                    <div class="info-item" th:if="${client.gps != null && !client.gps.isEmpty()}">
                                         <div class="info-icon"><i class="bi bi-geo-alt"></i></div>
                                         <div class="info-content">
                                             <div class="info-label">Ubicación GPS</div>
@@ -1137,46 +1151,6 @@
                                                 Dirección</div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Emails -->
-                        <div class="content-card fade-in-up fade-in-up-delay-2" style="margin-top: 1.5rem;">
-                            <div class="card-header-custom">
-                                <h3><i class="bi bi-envelope"></i> Correos Electrónicos</h3>
-                            </div>
-                            <div class="card-body-custom">
-                                <div class="tag-list" th:if="${client.emails != null && !client.emails.isEmpty()}">
-                                    <div class="tag-item" th:each="email : ${client.emails}">
-                                        <i class="bi bi-envelope-at"></i>
-                                        <span th:text="${email}">correo@ejemplo.com</span>
-                                    </div>
-                                </div>
-                                <div class="empty-state" th:if="${client.emails == null || client.emails.isEmpty()}">
-                                    <div class="empty-state-icon"><i class="bi bi-envelope-x"></i></div>
-                                    <h4>Sin correos registrados</h4>
-                                    <p>No hay direcciones de email asociadas.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Phones -->
-                        <div class="content-card fade-in-up fade-in-up-delay-3" style="margin-top: 1.5rem;">
-                            <div class="card-header-custom">
-                                <h3><i class="bi bi-telephone"></i> Teléfonos</h3>
-                            </div>
-                            <div class="card-body-custom">
-                                <div class="tag-list" th:if="${client.phones != null && !client.phones.isEmpty()}">
-                                    <div class="tag-item" th:each="phone : ${client.phones}">
-                                        <i class="bi bi-telephone"></i>
-                                        <span th:text="${phone}">3001234567</span>
-                                    </div>
-                                </div>
-                                <div class="empty-state" th:if="${client.phones == null || client.phones.isEmpty()}">
-                                    <div class="empty-state-icon"><i class="bi bi-telephone-x"></i></div>
-                                    <h4>Sin teléfonos registrados</h4>
-                                    <p>No hay números telefónicos asociados.</p>
                                 </div>
                             </div>
                         </div>
