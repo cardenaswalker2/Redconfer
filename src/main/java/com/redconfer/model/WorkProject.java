@@ -27,6 +27,8 @@ public class WorkProject {
     private String clientId;
     private String clientName;
     private String description;
+    private String location;
+    private String manager;
     
     @Builder.Default
     private ProjectStatus status = ProjectStatus.PLANNING;
