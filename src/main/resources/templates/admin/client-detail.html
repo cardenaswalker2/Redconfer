@@ -49,6 +49,22 @@
             box-sizing: border-box;
         }
 
+        html, body {
+
+
+            overflow-x: hidden;
+
+
+            width: 100%;
+
+
+            position: relative;
+
+
+        }
+
+
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #f1f5f9;
@@ -239,7 +255,9 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-        }
+        
+            min-width: 0;
+            width: 100%;}
 
         /* ========== TOP HEADER ========== */
         .top-header {
@@ -824,11 +842,14 @@
         @media (max-width: 991.98px) {
             .sidebar {
                 transform: translateX(-100%);
-            }
+            
+                display: none;
+                width: 280px;}
 
             .sidebar.open {
                 transform: translateX(0);
-            }
+            
+                display: flex;}
 
             .main-content {
                 margin-left: 0;
@@ -915,6 +936,19 @@
                 transform: translateY(0);
             }
         }
+
+    /* Custom Table Responsiveness */
+
+    .table-responsive-custom {
+
+        overflow-x: auto !important;
+
+        width: 100% !important;
+
+        -webkit-overflow-scrolling: touch;
+
+    }
+
     </style>
 </head>
 
@@ -1316,9 +1350,28 @@
         // ===== SIDEBAR TOGGLE =====
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
+            let overlay = document.getElementById('sidebarOverlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'sidebarOverlay';
+                overlay.className = 'sidebar-overlay';
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.right = '0';
+                overlay.style.bottom = '0';
+                overlay.style.background = 'rgba(0, 0, 0, 0.5)';
+                overlay.style.zIndex = '999';
+                overlay.style.display = 'none';
+                overlay.onclick = toggleSidebar;
+                document.body.appendChild(overlay);
+            }
             sidebar.classList.toggle('open');
-            overlay.classList.toggle('show');
+            if (sidebar.classList.contains('open')) {
+                overlay.style.display = 'block';
+            } else {
+                overlay.style.display = 'none';
+            }
         }
 
         // Close sidebar on resize to desktop
