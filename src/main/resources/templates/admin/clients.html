@@ -1102,6 +1102,17 @@
             cards.forEach((card, index) => {
                 card.style.animationDelay = `${index * 0.05}s`;
                 card.classList.add('fade-in-up');
+
+                // Make entire card clickable
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', function (e) {
+                    if (e.target.tagName !== 'A' && !e.target.closest('a')) {
+                        const viewBtn = this.querySelector('.btn-view');
+                        if (viewBtn) {
+                            window.location.href = viewBtn.getAttribute('href');
+                        }
+                    }
+                });
             });
         });
     </script>
