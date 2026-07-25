@@ -77,6 +77,10 @@ public class WorkProject {
         private double actualCost;
         private double revenue;
         private double margin; // (revenue - actualCost)
+
+        public double getCost() {
+            return this.actualCost;
+        }
     }
 
     @Data
