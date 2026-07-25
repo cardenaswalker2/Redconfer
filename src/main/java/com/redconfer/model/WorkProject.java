@@ -63,6 +63,16 @@ public class WorkProject {
         return (int) tasks.stream().filter(ProjectTask::isCompleted).count();
     }
 
+    public int getPendingTasks() {
+        if (tasks == null) return 0;
+        return (int) tasks.stream().filter(t -> !t.isCompleted()).count();
+    }
+
+    public long getEstimatedDays() {
+        if (startDate == null || endDate == null) return 0;
+        return java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate);
+    }
+
     public int getTotalTasks() {
         return tasks != null ? tasks.size() : 0;
     }
