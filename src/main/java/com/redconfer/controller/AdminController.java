@@ -365,7 +365,13 @@ public class AdminController {
     // --- CLIENTS CARD 360 MANAGEMENT ---
     @GetMapping("/clientes")
     public String listClients(Model model) {
-        model.addAttribute("clients", clientCardRepository.findAll());
+        List<ClientCard> clients = clientCardRepository.findAll();
+        System.out.println("=== DEBUG: LOGGING REGISTERED CLIENTS ===");
+        for (ClientCard c : clients) {
+            System.out.println("Client: " + c.getName() + " | ID: " + c.getId() + " | NIT: " + c.getNit());
+        }
+        System.out.println("=========================================");
+        model.addAttribute("clients", clients);
         return "admin/clients";
     }
 
