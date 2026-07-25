@@ -56,6 +56,15 @@ public class WorkProject {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    public int getCompletedTasks() {
+        if (tasks == null) return 0;
+        return (int) tasks.stream().filter(ProjectTask::isCompleted).count();
+    }
+
+    public int getTotalTasks() {
+        return tasks != null ? tasks.size() : 0;
+    }
+
     public enum ProjectStatus {
         PLANNING, IN_PROGRESS, ON_HOLD, COMPLETED, CANCELLED
     }
