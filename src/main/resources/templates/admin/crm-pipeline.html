@@ -52,12 +52,17 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: #f1f5f9;
             color: var(--rc-text);
             min-height: 100vh;
-            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -719,6 +724,64 @@
             color: #dc2626;
             background: #fee2e2;
         }
+
+        /* Custom form styles for modals */
+        .form-label-custom {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--rc-text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: var(--rc-text);
+            background: var(--rc-surface);
+            transition: var(--transition);
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: var(--rc-accent);
+            box-shadow: 0 0 0 4px rgba(198, 26, 34, 0.08);
+        }
+
+        .form-control-custom::placeholder {
+            color: var(--rc-text-muted);
+        }
+
+        .form-control-custom.has-icon {
+            padding-left: 48px;
+        }
+
+        .input-wrapper .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--rc-text-muted);
+            font-size: 1rem;
+            transition: var(--transition);
+            pointer-events: none;
+        }
+
+        .form-control-custom.has-icon:focus ~ .input-icon {
+            color: var(--rc-accent);
+        }
+
         /* ========== RESPONSIVE ========== */
         @media (max-width: 1200px) {
             .kanban-board {
