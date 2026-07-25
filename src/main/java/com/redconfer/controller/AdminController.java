@@ -366,6 +366,20 @@ public class AdminController {
     @GetMapping("/clientes")
     public String listClients(Model model) {
         List<ClientCard> clients = clientCardRepository.findAll();
+        boolean migrated = false;
+        for (ClientCard c : new ArrayList<>(clients)) {
+            if (c.getId() == null || c.getId().trim().isEmpty()) {
+                // Delete document with empty ID
+                clientCardRepository.delete(c);
+                // Assign a new valid UUID and re-save
+                c.setId(UUID.randomUUID().toString());
+                clientCardRepository.save(c);
+                migrated = true;
+            }
+        }
+        if (migrated) {
+            clients = clientCardRepository.findAll();
+        }
         System.out.println("=== DEBUG: LOGGING REGISTERED CLIENTS ===");
         for (ClientCard c : clients) {
             System.out.println("Client: " + c.getName() + " | ID: " + c.getId() + " | NIT: " + c.getNit());
@@ -392,11 +406,13 @@ public class AdminController {
     public String saveClient(@ModelAttribute ClientCard client, 
                              @RequestParam(value = "emailVal", required = false) String emailVal,
                              @RequestParam(value = "phoneVal", required = false) String phoneVal) {
-        if (client.getId() != null && !client.getId().isEmpty()) {
+        if (client.getId() != null && !client.getId().trim().isEmpty()) {
             ClientCard existing = clientCardRepository.findById(client.getId()).orElseThrow();
             client.setCreatedAt(existing.getCreatedAt());
             client.setTimeline(existing.getTimeline());
             client.setInstalledEquipment(existing.getInstalledEquipment());
+        } else {
+            client.setId(null); // Force ID to null so Spring Data MongoDB generates a valid ObjectId
         }
         
         if (emailVal != null && !emailVal.trim().isEmpty()) {
