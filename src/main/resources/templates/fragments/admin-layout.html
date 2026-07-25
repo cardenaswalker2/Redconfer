@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+    <!-- Admin Header Navbar Fragment -->
+    <nav th:fragment="header" class="navbar navbar-expand-lg navbar-dark top-header">
+        <div class="container-fluid px-4">
+            <span class="navbar-brand fw-bold"><span style="color:#C61A22;">RED</span>CONFER Control Center</span>
+            <div class="ms-auto d-flex align-items-center">
+                <a href="/logout" class="btn btn-outline-light btn-sm rounded-pill px-3">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Sidebar Fragment -->
+    <div th:fragment="sidebar(activePage)" class="sidebar-card">
+        <div class="d-flex align-items-center mb-4 px-2">
+            <i class="bi bi-shield-lock-fill text-danger fs-3 me-2"></i>
+            <div>
+                <div class="fw-bold lh-1 text-white">Carlos</div>
+                <span class="text-secondary small">Administrador Principal</span>
+            </div>
+        </div>
+        
+        <ul class="nav flex-column gap-1">
+            <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'dashboard' ? 'active' : ''}" href="/admin/dashboard"><i class="bi bi-grid-fill me-2"></i>Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'pipeline' ? 'active' : ''}" href="/admin/crm/pipeline"><i class="bi bi-kanban-fill me-2"></i>CRM Pipeline</a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'proyectos' ? 'active' : ''}" href="/admin/proyectos-activos"><i class="bi bi-cone-striped me-2"></i>Proyectos de Obra</a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'cotizaciones' ? 'active' : ''}" href="/admin/cotizaciones"><i class="bi bi-file-earmark-text-fill me-2"></i>Cotizaciones</a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'inventario' ? 'active' : ''}" href="/admin/inventario"><i class="bi bi-box-seam-fill me-2"></i>Inventario</a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'clientes' ? 'active' : ''}" href="/admin/clientes"><i class="bi bi-people-fill me-2"></i>Fichas de Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'finanzas' ? 'active' : ''}" href="/admin/finanzas"><i class="bi bi-wallet2 me-2"></i>Finanzas & Caja Menor</a>
+            </li>
+            <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'configuracion' ? 'active' : ''}" href="/admin/configuracion"><i class="bi bi-gear-fill me-2"></i>Configuración</a>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>

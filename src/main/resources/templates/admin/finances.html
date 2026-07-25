@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caja Menor & Finanzas - REDCONFER</title>
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --rc-primary: #0f172a;
+            --rc-secondary: #1e293b;
+            --rc-accent: #C61A22;
+            --rc-accent-light: #dc2626;
+            --rc-surface: #ffffff;
+            --rc-surface-alt: #f8fafc;
+            --rc-border: #e2e8f0;
+            --rc-border-dark: rgba(255, 255, 255, 0.06);
+            --rc-text: #0f172a;
+            --rc-text-secondary: #64748b;
+            --rc-text-muted: #94a3b8;
+            --rc-success: #059669;
+            --rc-danger: #dc2626;
+            --rc-info: #2563eb;
+            --rc-radius-sm: 10px;
+            --rc-radius-md: 14px;
+            --rc-radius-lg: 18px;
+            --rc-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --rc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --rc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--rc-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        /* ========== LAYOUT ========== */
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--rc-primary) 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--rc-border-dark);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--rc-border-dark);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 0.75rem 1rem 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.8rem 1rem;
+            border-radius: var(--rc-radius-sm);
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .sidebar-nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.3);
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--rc-border-dark);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ========== TOP HEADER ========== */
+        .top-header {
+            background: var(--rc-surface);
+            border-bottom: 1px solid var(--rc-border);
+            padding: 0.875rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.25rem;
+            color: var(--rc-text);
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--rc-radius-sm);
+            border: 1px solid var(--rc-border);
+            background: var(--rc-surface);
+            color: var(--rc-text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            text-decoration: none;
+        }
+
+        .header-btn:hover {
+            border-color: var(--rc-accent);
+            color: var(--rc-accent);
+            background: rgba(198, 26, 34, 0.04);
+        }
+
+        .header-btn .badge-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--rc-accent);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* ========== PAGE HEADER ========== */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.5rem;
+            color: var(--rc-text);
+            margin: 0 0 0.25rem;
+        }
+
+        .page-header p {
+            color: var(--rc-text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* ========== STATS CARDS ========== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--rc-surface);
+            border-radius: var(--rc-radius-md);
+            padding: 1.5rem;
+            border: 1px solid var(--rc-border);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            border-radius: var(--rc-radius-md) var(--rc-radius-md) 0 0;
+        }
+
+        .stat-card.income::before {
+            background: var(--rc-success);
+        }
+
+        .stat-card.expense::before {
+            background: var(--rc-danger);
+        }
+
+        .stat-card.balance::before {
+            background: var(--rc-info);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--rc-shadow-lg);
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--rc-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .stat-card.income .stat-icon {
+            background: rgba(5, 150, 105, 0.08);
+            color: var(--rc-success);
+        }
+
+        .stat-card.expense .stat-icon {
+            background: rgba(220, 38, 38, 0.08);
+            color: var(--rc-danger);
+        }
+
+        .stat-card.balance .stat-icon {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--rc-info);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--rc-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--rc-text);
+            letter-spacing: -0.02em;
+        }
+
+        .stat-value.income {
+            color: var(--rc-success);
+        }
+
+        .stat-value.expense {
+            color: var(--rc-danger);
+        }
+
+        .stat-value.balance {
+            color: var(--rc-info);
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .stat-trend.up {
+            color: var(--rc-success);
+        }
+
+        .stat-trend.down {
+            color: var(--rc-danger);
+        }
+
+        .stat-trend.neutral {
+            color: var(--rc-text-muted);
+        }
+
+        /* ========== CONTENT CARDS ========== */
+        .content-card {
+            background: var(--rc-surface);
+            border-radius: var(--rc-radius-md);
+            border: 1px solid var(--rc-border);
+            overflow: hidden;
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .content-card:hover {
+            box-shadow: var(--rc-shadow-lg);
+        }
+
+        .card-header-custom {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--rc-border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-header-custom h3 {
+            font-size: 0.95rem;
+            color: var(--rc-text);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header-custom h3 i {
+            color: var(--rc-accent);
+        }
+
+        .card-body-custom {
+            padding: 1.5rem;
+        }
+
+        /* ========== FORM STYLES ========== */
+        .form-group-custom {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label-custom {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--rc-text);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .form-label-custom i {
+            color: var(--rc-text-muted);
+            font-size: 0.85rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--rc-text-muted);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            border: 2px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--rc-text);
+            background: var(--rc-surface);
+            transition: var(--transition);
+        }
+
+        .form-control-custom.has-icon {
+            padding-left: 2.75rem;
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--rc-accent);
+            box-shadow: 0 0 0 4px rgba(198, 26, 34, 0.08);
+            outline: none;
+        }
+
+        .form-control-custom:focus+.input-icon,
+        .input-wrapper:focus-within .input-icon {
+            color: var(--rc-accent);
+        }
+
+        .form-control-custom::placeholder {
+            color: var(--rc-text-muted);
+            font-weight: 400;
+        }
+
+        .form-select-custom {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px 12px;
+            padding-right: 2.5rem;
+        }
+
+        textarea.form-control-custom {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, var(--rc-primary) 0%, var(--rc-secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--rc-radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .content-area {
+                padding: 1rem;
+            }
+
+            .top-header {
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* Mobile overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-up-delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .fade-in-up-delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .fade-in-up-delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="dashboard-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link active">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <button class="header-btn d-lg-none" onclick="toggleSidebar()" style="margin-right: 0.5rem;">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h1>Finanzas</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" title="Notificaciones">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge-dot"></span>
+                    </button>
+                    <button class="header-btn" title="Mensajes">
+                        <i class="bi bi-chat-left-text"></i>
+                    </button>
+                    <a href="/logout" class="header-btn" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+
+                <!-- Page Header -->
+                <div class="page-header fade-in-up">
+                    <h1>Caja Menor y Flujo Financiero</h1>
+                    <p>Registros de caja diaria, compras operativas, gastos de viáticos y rentabilidad</p>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="stats-row fade-in-up fade-in-up-delay-1">
+                    <div class="stat-card income">
+                        <div class="stat-icon"><i class="bi bi-arrow-down-circle"></i></div>
+                        <div class="stat-label">Total Ingresos</div>
+                        <div class="stat-value income"
+                            th:text="${'$' + #numbers.formatDecimal(totalIncomes, 0, 'POINT', 0, 'COMMA')}">$0</div>
+                        <div class="stat-trend up">
+                            <i class="bi bi-arrow-up-right"></i>
+                            <span>Entradas registradas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card expense">
+                        <div class="stat-icon"><i class="bi bi-arrow-up-circle"></i></div>
+                        <div class="stat-label">Total Gastos / Egresos</div>
+                        <div class="stat-value expense"
+                            th:text="${'$' + #numbers.formatDecimal(totalExpenses, 0, 'POINT', 0, 'COMMA')}">$0</div>
+                        <div class="stat-trend down">
+                            <i class="bi bi-arrow-up-right"></i>
+                            <span>Salidas registradas</span>
+                        </div>
+                    </div>
+                    <div class="stat-card balance">
+                        <div class="stat-icon"><i class="bi bi-wallet2"></i></div>
+                        <div class="stat-label">Saldo de Caja Menor</div>
+                        <div class="stat-value balance"
+                            th:text="${'$' + #numbers.formatDecimal(netRevenue, 0, 'POINT', 0, 'COMMA')}">$0</div>
+                        <div class="stat-trend neutral">
+                            <i class="bi bi-dash-circle"></i>
+                            <span>Balance actual</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Left: Form -->
+                    <div class="col-lg-5">
+                        <div class="content-card fade-in-up fade-in-up-delay-2">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-plus-circle"></i> Registrar Operación de Caja</h3>
+                            </div>
+                            <div class="card-body-custom">
+                                <form th:action="@{/admin/finanzas/guardar}" method="POST" id="financeForm">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="bi bi-arrow-left-right"></i> Tipo de Operación
+                                        </label>
+                                        <select name="type" class="form-control-custom form-select-custom" required
+                                            id="typeSelect">
+                                            <option value="INCOME">Ingreso (Entrada de dinero)</option>
+                                            <option value="EXPENSE">Egreso (Gasto / Salida)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="bi bi-folder"></i> Categoría
+                                        </label>
+                                        <select name="category" class="form-control-custom form-select-custom" required
+                                            id="categorySelect">
+                                            <option value="REVENUE">Ingreso por Obra / Mantenimiento</option>
+                                            <option value="GASOLINE">Combustible / Gasolina</option>
+                                            <option value="TOLLS">Peajes / Viáticos</option>
+                                            <option value="MATERIALS">Materiales e Insumos</option>
+                                            <option value="TOOLS">Herramientas</option>
+                                            <option value="SALARY">Nómina / Pago Técnico</option>
+                                            <option value="OTHER">Otros Gastos</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="bi bi-currency-dollar"></i> Monto ($)
+                                        </label>
+                                        <div class="input-wrapper">
+                                            <i class="bi bi-currency-dollar input-icon"></i>
+                                            <input type="number" name="amount" class="form-control-custom has-icon"
+                                                placeholder="Ej: 50000" min="0" step="100" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">
+                                            <i class="bi bi-pencil-square"></i> Concepto / Descripción
+                                        </label>
+                                        <textarea name="description" class="form-control-custom" rows="3"
+                                            placeholder="Ej: Pago peaje Turbaco camioneta" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn-submit" id="submitBtn">
+                                        <i class="bi bi-check-lg"></i> Registrar Movimiento
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right: Transactions List -->
+                    <div class="col-lg-7">
+                        <div class="content-card fade-in-up fade-in-up-delay-3">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-list-columns-reverse"></i> Historial de Transacciones</h3>
+                                <span class="badge bg-light text-dark border rounded-pill px-3 py-1 small"
+                                    th:if="${transactions != null}" th:text="${transactions.size() + ' registros'}">0
+                                    registros</span>
+                            </div>
+                            <div class="card-body-custom" style="padding: 0;">
+
+                                <!-- Transactions Table -->
+                                <div class="table-responsive"
+                                    th:if="${transactions != null && !transactions.isEmpty()}">
+                                    <table class="table-transactions">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Tipo</th>
+                                                <th>Categoría</th>
+                                                <th>Concepto</th>
+                                                <th class="text-end">Monto</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="tx : ${transactions}">
+                                                <td>
+                                                    <div class="tx-date">
+                                                        <span class="tx-day"
+                                                            th:text="${#temporals.format(tx.timestamp, 'dd')}">24</span>
+                                                        <span class="tx-month"
+                                                            th:text="${#temporals.format(tx.timestamp, 'MMM yyyy')}">Jul
+                                                            2026</span>
+                                                    </div>
+                                                    <div class="tx-time"
+                                                        th:text="${#temporals.format(tx.timestamp, 'HH:mm')}">14:30
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="tx-badge"
+                                                        th:classappend="${tx.type == 'INCOME' ? 'income' : 'expense'}">
+                                                        <i class="bi"
+                                                            th:classappend="${tx.type == 'INCOME' ? 'bi-arrow-down-left' : 'bi-arrow-up-right'}"></i>
+                                                        <span
+                                                            th:text="${tx.type == 'INCOME' ? 'Ingreso' : 'Egreso'}">Tipo</span>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="tx-category" th:text="${tx.category}">Categoría</span>
+                                                </td>
+                                                <td>
+                                                    <span class="tx-desc" th:text="${tx.description}">Descripción</span>
+                                                </td>
+                                                <td class="text-end">
+                                                    <span class="tx-amount"
+                                                        th:classappend="${tx.type == 'INCOME' ? 'income' : 'expense'}"
+                                                        th:text="${'$' + #numbers.formatDecimal(tx.amount, 0, 'POINT', 0, 'COMMA')}">$0</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Empty State -->
+                                <div class="empty-state" th:if="${transactions == null || transactions.isEmpty()}">
+                                    <div class="empty-state-icon">
+                                        <i class="bi bi-receipt"></i>
+                                    </div>
+                                    <h4>Sin transacciones registradas</h4>
+                                    <p>No hay movimientos de caja registrados. Comienza registrando tu primera
+                                        operación.</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:inline="javascript">
+        // ===== SIDEBAR TOGGLE =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Close sidebar on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 991.98) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('show');
+            }
+        });
+
+        // ===== ANIMATE STATS NUMBERS =====
+        document.addEventListener('DOMContentLoaded', function () {
+            const statValues = document.querySelectorAll('.stat-value');
+
+            statValues.forEach(el => {
+                const finalText = el.innerText;
+                const numericStr = finalText.replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.');
+                const numericVal = parseFloat(numericStr) || 0;
+
+                if (numericVal > 0) {
+                    let current = 0;
+                    const duration = 1000;
+                    const startTime = performance.now();
+
+                    function update(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easeOut = 1 - Math.pow(1 - progress, 3);
+
+                        el.innerText = '$ ' + Math.round(numericVal * easeOut).toLocaleString('es-CO');
+
+                        if (progress < 1) {
+                            requestAnimationFrame(update);
+                        } else {
+                            el.innerText = finalText;
+                        }
+                    }
+
+                    requestAnimationFrame(update);
+                }
+            });
+        });
+
+        // ===== FORM SUBMIT LOADING =====
+        const financeForm = document.getElementById('financeForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (financeForm && submitBtn) {
+            financeForm.addEventListener('submit', function () {
+                if (financeForm.checkValidity()) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registrando...';
+                }
+            });
+        }
+
+        // ===== TYPE/CATEGORY DYNAMIC UPDATE =====
+        const typeSelect = document.getElementById('typeSelect');
+        const categorySelect = document.getElementById('categorySelect');
+
+        if (typeSelect && categorySelect) {
+            typeSelect.addEventListener('change', function () {
+                const isIncome = this.value === 'INCOME';
+
+                // Clear current options
+                categorySelect.innerHTML = '';
+
+                if (isIncome) {
+                    categorySelect.innerHTML = `
+                        <option value="REVENUE">Ingreso por Obra / Mantenimiento</option>
+                        <option value="OTHER">Otros Ingresos</option>
+                    `;
+                } else {
+                    categorySelect.innerHTML = `
+                        <option value="GASOLINE">Combustible / Gasolina</option>
+                        <option value="TOLLS">Peajes / Viáticos</option>
+                        <option value="MATERIALS">Materiales e Insumos</option>
+                        <option value="TOOLS">Herramientas</option>
+                        <option value="SALARY">Nómina / Pago Técnico</option>
+                        <option value="OTHER">Otros Gastos</option>
+                    `;
+                }
+            });
+        }
+    </script>
+
+    <style>
+        /* ========== TABLE STYLES (inline for Part 2) ========== */
+        .table-transactions {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 0;
+        }
+
+        .table-transactions thead th {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--rc-text-muted);
+            padding: 1rem 1.25rem;
+            border-bottom: 2px solid var(--rc-border);
+            background: var(--rc-surface-alt);
+            white-space: nowrap;
+        }
+
+        .table-transactions thead th:first-child {
+            border-radius: var(--rc-radius-md) 0 0 0;
+        }
+
+        .table-transactions tbody td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--rc-border);
+            vertical-align: top;
+        }
+
+        .table-transactions tbody tr {
+            transition: var(--transition);
+        }
+
+        .table-transactions tbody tr:hover {
+            background: var(--rc-surface-alt);
+        }
+
+        .table-transactions tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-transactions tbody tr:last-child td:first-child {
+            border-radius: 0 0 0 var(--rc-radius-md);
+        }
+
+        .table-transactions tbody tr:last-child td:last-child {
+            border-radius: 0 0 var(--rc-radius-md) 0;
+        }
+
+        /* Transaction date */
+        .tx-date {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .tx-day {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--rc-text);
+            line-height: 1;
+        }
+
+        .tx-month {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--rc-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tx-time {
+            font-size: 0.75rem;
+            color: var(--rc-text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Transaction badge */
+        .tx-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .tx-badge.income {
+            background: rgba(5, 150, 105, 0.08);
+            color: var(--rc-success);
+        }
+
+        .tx-badge.expense {
+            background: rgba(220, 38, 38, 0.08);
+            color: var(--rc-danger);
+        }
+
+        .tx-badge i {
+            font-size: 0.7rem;
+        }
+
+        /* Category */
+        .tx-category {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--rc-text-secondary);
+            background: var(--rc-surface-alt);
+            padding: 0.3rem 0.625rem;
+            border-radius: 6px;
+            border: 1px solid var(--rc-border);
+            display: inline-block;
+        }
+
+        /* Description */
+        .tx-desc {
+            font-size: 0.85rem;
+            color: var(--rc-text);
+            font-weight: 500;
+            line-height: 1.4;
+            max-width: 200px;
+        }
+
+        /* Amount */
+        .tx-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .tx-amount.income {
+            color: var(--rc-success);
+        }
+
+        .tx-amount.expense {
+            color: var(--rc-danger);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--rc-surface-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            border: 2px solid var(--rc-border);
+        }
+
+        .empty-state-icon i {
+            color: var(--rc-text-muted);
+            font-size: 1.75rem;
+        }
+
+        .empty-state h4 {
+            font-size: 1rem;
+            color: var(--rc-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            font-size: 0.85rem;
+            color: var(--rc-text-muted);
+            margin: 0;
+        }
+
+        /* Responsive table */
+        @media (max-width: 767.98px) {
+            .table-transactions thead {
+                display: none;
+            }
+
+            .table-transactions tbody tr {
+                display: block;
+                padding: 1rem;
+                border-bottom: 1px solid var(--rc-border);
+            }
+
+            .table-transactions tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem 0;
+                border: none;
+            }
+
+            .table-transactions tbody td::before {
+                content: attr(data-label);
+                font-size: 0.75rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                color: var(--rc-text-muted);
+            }
+
+            .tx-desc {
+                max-width: none;
+            }
+        }
+    </style>
+
+</body>
+
+</html>

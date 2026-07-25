@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguimiento de Proyecto - REDCONFER</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #DC2626;
+            --primary-dark: #B91C1C;
+            --primary-light: #FEE2E2;
+            --secondary: #1E293B;
+            --dark: #0F172A;
+            --light: #F8FAFC;
+            --surface: #FFFFFF;
+            --surface-elevated: #FFFFFF;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --info: #3B82F6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== LAYOUT ===== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            transition: var(--transition);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 0.75rem 1rem 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .sidebar-nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.3);
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+        }
+
+        /* ===== TOP HEADER ===== */
+        .top-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .breadcrumb-custom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-custom a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-custom a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb-custom .separator {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        .breadcrumb-custom .current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .btn-icon:hover {
+            background: var(--light);
+            color: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 2px solid var(--surface);
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        .page-content {
+            padding: 32px;
+            max-width: 1400px;
+        }
+
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* ===== CARDS ===== */
+        .card-elevated {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .card-elevated:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header-custom {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header-custom h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header-custom h3 i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .card-body-custom {
+            padding: 24px;
+        }
+
+        /* ===== PROJECT INFO CARD ===== */
+        .project-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-planning {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .badge-active {
+            background: #DBEAFE;
+            color: #2563EB;
+        }
+
+        .badge-completed {
+            background: #D1FAE5;
+            color: #059669;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin: 12px 0 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .project-code {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-family: 'SF Mono', monospace;
+            background: var(--light);
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--radius);
+            background: var(--light);
+            transition: var(--transition);
+        }
+
+        .info-item:hover {
+            background: var(--border-light);
+        }
+
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1rem;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .info-content h6 {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: 0 0 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-content p {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        /* ===== BUDGET CARD ===== */
+        .budget-display {
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 100%);
+            border-radius: var(--radius);
+            border: 1px solid #BBF7D0;
+            margin-top: 20px;
+        }
+
+        .budget-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #059669;
+            margin-bottom: 8px;
+        }
+
+        .budget-amount {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #047857;
+            letter-spacing: -1px;
+        }
+
+        /* ===== CHRONOMETER ===== */
+        .chronometer-card {
+            text-align: center;
+            padding: 28px 24px;
+        }
+
+        .chronometer-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), #FEE2E2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .chronometer-display {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--dark);
+            font-family: 'SF Mono', 'Courier New', monospace;
+            letter-spacing: 2px;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .chronometer-display.running {
+            color: var(--primary);
+            animation: pulse-timer 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse-timer {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .chronometer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-chrono {
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-chrono-start {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-chrono-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-chrono-pause {
+            background: var(--light);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-chrono-pause:hover {
+            background: var(--border-light);
+            color: var(--text-primary);
+        }
+
+        .btn-chrono-reset {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-chrono-reset:hover {
+            color: var(--primary);
+            border-color: var(--primary-light);
+            background: var(--primary-light);
+        }
+
+        /* ===== PROGRESS SECTION ===== */
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-header h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .progress-percentage {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .progress-custom {
+            height: 12px;
+            background: var(--border-light);
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-custom-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, #EF4444 100%);
+            border-radius: 100px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-custom-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .progress-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-stat-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .progress-stat-dot.completed {
+            background: var(--success);
+        }
+
+        .progress-stat-dot.pending {
+            background: var(--text-muted);
+        }
+
+        .progress-stat span {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .progress-stat strong {
+            color: var(--text-primary);
+        }
+
+        /* ===== TASKS ===== */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--light);
+            border-radius: var(--radius);
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .task-item:hover {
+            background: var(--surface);
+            border-color: var(--border);
+            box-shadow: var(--shadow-sm);
+            transform: translateX(4px);
+        }
+
+        .task-item.completed {
+            background: var(--success-light);
+            border-color: #A7F3D0;
+        }
+
+        .task-item.completed:hover {
+            background: #BBF7D0;
+        }
+
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .task-item.completed .task-checkbox {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-content h5 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 4px;
+        }
+
+        .task-item.completed .task-content h5 {
+            text-decoration: line-through;
+            color: var(--text-secondary);
+        }
+
+        .task-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .task-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .task-tag.technician {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+
+        .task-tag.date {
+            background: var(--border-light);
+            color: var(--text-muted);
+        }
+
+        .task-action {
+            flex-shrink: 0;
+        }
+
+        .btn-complete-task {
+            padding: 8px 18px;
+            border-radius: 100px;
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid var(--primary-light);
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-complete-task:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+        }
+
+        .task-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            background: var(--success-light);
+            color: var(--success);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            background: var(--light);
+            border-radius: var(--radius);
+            border: 2px dashed var(--border);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .empty-state h5 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .empty-state p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* ===== FORM SECTIONS ===== */
+        .form-section {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .form-section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-section-header i {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .form-section-header h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--surface);
+            transition: var(--transition);
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-control-custom::placeholder {
+            color: var(--text-muted);
+        }
+
+        textarea.form-control-custom {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .btn-submit {
+            padding: 12px 28px;
+            border-radius: 100px;
+            background: linear-gradient(135deg, var(--dark), var(--secondary));
+            color: white;
+            border: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.3);
+        }
+
+        /* ===== PHOTO GALLERY ===== */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .photo-card {
+            position: relative;
+            aspect-ratio: 4/3;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 2px dashed var(--border);
+            background: var(--light);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .photo-card:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .photo-card .photo-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .photo-card.before .photo-icon {
+            background: #FEE2E2;
+            color: var(--primary);
+        }
+
+        .photo-card.during .photo-icon {
+            background: #DBEAFE;
+            color: var(--info);
+        }
+
+        .photo-card.after .photo-icon {
+            background: #D1FAE5;
+            color: var(--success);
+        }
+
+        .photo-card h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .photo-card p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .photo-card .upload-hint {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: var(--surface);
+            padding: 4px 12px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+        }
+
+        .photo-preview {
+            position: absolute;
+            inset: 0;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .photo-card:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-overlay i {
+            color: white;
+            font-size: 2rem;
+        }
+
+        /* ===== TIMELINE MINI ===== */
+        .timeline-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--light);
+            border-radius: var(--radius);
+        }
+
+        .timeline-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .timeline-step::after {
+            content: '';
+            position: absolute;
+            top: 12px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .timeline-step:last-child::after {
+            display: none;
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            margin: 0 auto 6px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-dot.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .timeline-dot.completed {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .timeline-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-toggle {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 20px;
+            }
+
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chronometer-display {
+                font-size: 2.2rem;
+            }
+
+            .top-header {
+                padding: 12px 20px;
+            }
+
+            .progress-stats {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 100px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar slide-in-left" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link" style="text-decoration: none;">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link active">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/servicios" class="sidebar-nav-link">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="mobile-toggle" onclick="toggleSidebar()">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <nav class="breadcrumb-custom">
+                        <a href="/admin/dashboard"><i class="bi bi-house-door"></i></a>
+                        <span class="separator"><i class="bi bi-chevron-right"></i></span>
+                        <a href="/admin/proyectos-activos">Proyectos</a>
+                        <span class="separator"><i class="bi bi-chevron-right"></i></span>
+                        <span class="current">Seguimiento</span>
+                    </nav>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <a href="/logout" class="btn-icon" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+
+                <!-- PAGE HEADER -->
+                <div class="page-header fade-in">
+                    <h1>Seguimiento de Proyecto</h1>
+                    <p>Monitorea el avance, gestiona tareas y registra la documentación fotográfica del proyecto.</p>
+                </div>
+
+                <div class="row g-4">
+
+                    <!-- LEFT COLUMN -->
+                    <div class="col-xl-4 col-lg-5">
+
+                        <!-- PROJECT INFO CARD -->
+                        <div class="card-elevated mb-4 fade-in">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-file-earmark-text"></i> Ficha Técnica</h3>
+                                <span class="project-badge badge-planning" th:text="${project.status}"
+                                    th:classappend="${project.status == 'ACTIVE' ? 'badge-active' : (project.status == 'COMPLETED' ? 'badge-completed' : 'badge-planning')}">PLANNING</span>
+                            </div>
+                            <div class="card-body-custom">
+                                <h2 class="project-title" th:text="${project.name}">Nombre del Proyecto</h2>
+                                <span class="project-code" th:text="'Código: ' + ${project.projectId}">PRJ-0001</span>
+
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-icon"><i class="bi bi-person"></i></div>
+                                        <div class="info-content">
+                                            <h6>Cliente</h6>
+                                            <p th:text="${project.clientName}">Nombre del Cliente</p>
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon"><i class="bi bi-calendar3"></i></div>
+                                        <div class="info-content">
+                                            <h6>Fecha de Inicio</h6>
+                                            <p th:text="${#temporals.format(project.startDate, 'dd/MM/yyyy')}">
+                                                24/07/2026</p>
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon"><i class="bi bi-geo-alt"></i></div>
+                                        <div class="info-content">
+                                            <h6>Ubicación</h6>
+                                            <p th:text="${project.location != null ? project.location : 'Por definir'}">
+                                                Ubicación del proyecto</p>
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon"><i class="bi bi-person-badge"></i></div>
+                                        <div class="info-content">
+                                            <h6>Responsable</h6>
+                                            <p th:text="${project.manager != null ? project.manager : 'Sin asignar'}">
+                                                Responsable del proyecto</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="budget-display">
+                                    <div class="budget-label">Presupuesto Estimado</div>
+                                    <div class="budget-amount"
+                                        th:text="${'$' + #numbers.formatDecimal(project.budget.revenue, 0, 'POINT', 0, 'COMMA')}">
+                                        $0</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CHRONOMETER CARD -->
+                        <div class="card-elevated fade-in">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-stopwatch"></i> Cronómetro de Obra</h3>
+                            </div>
+                            <div class="card-body-custom chronometer-card">
+                                <div class="chronometer-icon">
+                                    <i class="bi bi-stopwatch-fill"></i>
+                                </div>
+                                <div class="chronometer-display" id="timerDisplay">00:00:00</div>
+                                <div class="chronometer-controls">
+                                    <button class="btn-chrono btn-chrono-start" onclick="startTimer()" id="btnStart">
+                                        <i class="bi bi-play-fill"></i> Iniciar
+                                    </button>
+                                    <button class="btn-chrono btn-chrono-pause" onclick="pauseTimer()">
+                                        <i class="bi bi-pause-fill"></i> Pausar
+                                    </button>
+                                    <button class="btn-chrono btn-chrono-reset" onclick="resetTimer()">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="card-elevated fade-in">
+                            <div class="card-body-custom">
+
+                                <!-- PROGRESS SECTION -->
+                                <div class="mb-4">
+                                    <div class="progress-header">
+                                        <h4><i class="bi bi-graph-up-arrow text-danger me-2"></i>Avance General del
+                                            Proyecto</h4>
+                                        <span class="progress-percentage"
+                                            th:text="${project.progressPercentage} + '%'">0%</span>
+                                    </div>
+                                    <div class="progress-custom">
+                                        <div class="progress-custom-bar" role="progressbar"
+                                            th:style="'width: ' + ${project.progressPercentage} + '%'" style="width: 0%"
+                                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div class="progress-stats">
+                                        <div class="progress-stat">
+                                            <span class="progress-stat-dot completed"></span>
+                                            <span><strong
+                                                    th:text="${project.completedTasks != null ? project.completedTasks : 0}">0</strong>
+                                                tareas completadas</span>
+                                        </div>
+                                        <div class="progress-stat">
+                                            <span class="progress-stat-dot pending"></span>
+                                            <span><strong
+                                                    th:text="${project.pendingTasks != null ? project.pendingTasks : 0}">0</strong>
+                                                tareas pendientes</span>
+                                        </div>
+                                        <div class="progress-stat">
+                                            <i class="bi bi-clock text-muted me-1" style="font-size: 0.8rem;"></i>
+                                            <span><strong
+                                                    th:text="${project.estimatedDays != null ? project.estimatedDays : 0}">0</strong>
+                                                días estimados</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- TIMELINE MINI -->
+                                <div class="timeline-mini mb-4">
+                                    <div class="timeline-step">
+                                        <div class="timeline-dot completed"><i class="bi bi-check"></i></div>
+                                        <div class="timeline-label">Inicio</div>
+                                    </div>
+                                    <div class="timeline-step">
+                                        <div class="timeline-dot active"><i class="bi bi-1-circle-fill"></i></div>
+                                        <div class="timeline-label">Ejecución</div>
+                                    </div>
+                                    <div class="timeline-step">
+                                        <div class="timeline-dot"><i class="bi bi-2-circle"></i></div>
+                                        <div class="timeline-label">Revisión</div>
+                                    </div>
+                                    <div class="timeline-step">
+                                        <div class="timeline-dot"><i class="bi bi-3-circle"></i></div>
+                                        <div class="timeline-label">Entrega</div>
+                                    </div>
+                                </div>
+
+                                <!-- TASKS SECTION -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-check2-square"></i>
+                                        <h3>Tareas y Cronograma de Trabajo</h3>
+                                    </div>
+
+                                    <div class="task-list" th:if="${project.tasks != null && !project.tasks.isEmpty()}">
+                                        <div class="task-item" th:each="task : ${project.tasks}"
+                                            th:classappend="${task.completed ? 'completed' : ''}">
+                                            <div class="task-checkbox" th:if="${task.completed}">
+                                                <i class="bi bi-check-lg"></i>
+                                            </div>
+                                            <div class="task-checkbox" th:unless="${task.completed}"></div>
+
+                                            <div class="task-content">
+                                                <h5 th:text="${task.title}">Título de la Tarea</h5>
+                                                <p th:text="${task.description}">Descripción detallada de la tarea a
+                                                    realizar...</p>
+                                                <div class="task-meta">
+                                                    <span class="task-tag technician"
+                                                        th:if="${task.assignedTo != null}">
+                                                        <i class="bi bi-person"></i>
+                                                        <span th:text="${task.assignedTo}">Técnico</span>
+                                                    </span>
+                                                    <span class="task-tag date" th:if="${task.dueDate != null}">
+                                                        <i class="bi bi-calendar"></i>
+                                                        <span
+                                                            th:text="${#temporals.format(task.dueDate, 'dd/MM/yyyy')}">24/07/2026</span>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="task-action">
+                                                <span class="task-status-badge" th:if="${task.completed}">
+                                                    <i class="bi bi-check-circle-fill"></i> Completada
+                                                </span>
+                                                <a th:href="@{'/admin/proyectos-activos/completar-tarea/' + ${project.id} + '/' + ${task.id}}"
+                                                    class="btn-complete-task" th:unless="${task.completed}">
+                                                    <i class="bi bi-check-lg"></i> Completar
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="empty-state"
+                                        th:if="${project.tasks == null || project.tasks.isEmpty()}">
+                                        <i class="bi bi-clipboard-check"></i>
+                                        <h5>Sin tareas programadas</h5>
+                                        <p>Aún no hay tareas asignadas a este proyecto. Crea la primera tarea abajo.</p>
+                                    </div>
+                                </div>
+
+                                <!-- CREATE TASK FORM -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-plus-circle"></i>
+                                        <h3>Asignar Nueva Tarea</h3>
+                                    </div>
+                                    <form th:action="@{'/admin/proyectos-activos/guardar-tarea/' + ${project.id}}"
+                                        method="POST">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">Título de la Tarea</label>
+                                                <input type="text" name="taskTitle" class="form-control-custom"
+                                                    placeholder="Ej: Canalización de cámaras de seguridad" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">Técnico Asignado</label>
+                                                <select name="taskAssigned" class="form-control-custom">
+                                                    <option value="">Seleccionar instalador...</option>
+                                                    <option th:each="tech : ${technicians}" th:value="${tech.name}"
+                                                        th:text="${tech.name}">Técnico</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">Fecha Límite</label>
+                                                <input type="date" name="taskDueDate" class="form-control-custom">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">Prioridad</label>
+                                                <select name="taskPriority" class="form-control-custom">
+                                                    <option value="NORMAL">Normal</option>
+                                                    <option value="HIGH">Alta</option>
+                                                    <option value="LOW">Baja</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label-custom">Instrucciones Detalladas</label>
+                                                <textarea name="taskDesc" class="form-control-custom" rows="3"
+                                                    placeholder="Ej: Instalar canaleta metálica de 2 pulgadas en el área de estacionamiento, asegurar con tacos de expansión cada 50cm..."
+                                                    required></textarea>
+                                            </div>
+                                            <div class="col-12 text-end">
+                                                <button type="submit" class="btn-submit">
+                                                    <i class="bi bi-plus-lg"></i> Agregar Tarea
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- PHOTO GALLERY -->
+                                <div class="form-section">
+                                    <div class="form-section-header">
+                                        <i class="bi bi-images"></i>
+                                        <h3>Registro Fotográfico</h3>
+                                    </div>
+                                    <p class="text-muted small mb-3">Documenta el estado del proyecto en cada fase. Haz
+                                        clic para subir o ver las fotografías.</p>
+                                    <div class="photo-grid">
+                                        <div class="photo-card before"
+                                            onclick="document.getElementById('fileBefore').click()">
+                                            <input type="file" id="fileBefore" style="display:none" accept="image/*"
+                                                onchange="previewImage(this, 'previewBefore')">
+                                            <img id="previewBefore" class="photo-preview" style="display:none">
+                                            <div class="photo-overlay" style="display:none" id="overlayBefore">
+                                                <i class="bi bi-eye"></i>
+                                            </div>
+                                            <div class="photo-icon"><i class="bi bi-image"></i></div>
+                                            <h5>Antes de Obra</h5>
+                                            <p>Estado inicial del sitio</p>
+                                            <span class="upload-hint"><i class="bi bi-upload me-1"></i>Subir foto</span>
+                                        </div>
+                                        <div class="photo-card during"
+                                            onclick="document.getElementById('fileDuring').click()">
+                                            <input type="file" id="fileDuring" style="display:none" accept="image/*"
+                                                onchange="previewImage(this, 'previewDuring')">
+                                            <img id="previewDuring" class="photo-preview" style="display:none">
+                                            <div class="photo-overlay" style="display:none" id="overlayDuring">
+                                                <i class="bi bi-eye"></i>
+                                            </div>
+                                            <div class="photo-icon"><i class="bi bi-image"></i></div>
+                                            <h5>Durante Obra</h5>
+                                            <p>Avance y proceso</p>
+                                            <span class="upload-hint"><i class="bi bi-upload me-1"></i>Subir foto</span>
+                                        </div>
+                                        <div class="photo-card after"
+                                            onclick="document.getElementById('fileAfter').click()">
+                                            <input type="file" id="fileAfter" style="display:none" accept="image/*"
+                                                onchange="previewImage(this, 'previewAfter')">
+                                            <img id="previewAfter" class="photo-preview" style="display:none">
+                                            <div class="photo-overlay" style="display:none" id="overlayAfter">
+                                                <i class="bi bi-eye"></i>
+                                            </div>
+                                            <div class="photo-icon"><i class="bi bi-image"></i></div>
+                                            <h5>Después de Obra</h5>
+                                            <p>Resultado final</p>
+                                            <span class="upload-hint"><i class="bi bi-upload me-1"></i>Subir foto</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ===== CHRONOMETER =====
+        let timerInterval;
+        let seconds = 0;
+        let isRunning = false;
+        let startTime = null;
+        let elapsedBeforePause = 0;
+
+        const timerDisplay = document.getElementById('timerDisplay');
+        const btnStart = document.getElementById('btnStart');
+
+        function formatTime(totalSeconds) {
+            const hrs = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const mins = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const secs = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${hrs}:${mins}:${secs}`;
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+
+            isRunning = true;
+            startTime = Date.now() - (elapsedBeforePause * 1000);
+
+            timerDisplay.classList.add('running');
+            btnStart.innerHTML = '<i class="bi bi-play-fill"></i> En marcha';
+            btnStart.style.opacity = '0.7';
+            btnStart.style.cursor = 'default';
+
+            timerInterval = setInterval(() => {
+                const now = Date.now();
+                seconds = Math.floor((now - startTime) / 1000);
+                timerDisplay.innerText = formatTime(seconds);
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (!isRunning) return;
+
+            clearInterval(timerInterval);
+            isRunning = false;
+            elapsedBeforePause = seconds;
+
+            timerDisplay.classList.remove('running');
+            btnStart.innerHTML = '<i class="bi bi-play-fill"></i> Reanudar';
+            btnStart.style.opacity = '1';
+            btnStart.style.cursor = 'pointer';
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            seconds = 0;
+            elapsedBeforePause = 0;
+            startTime = null;
+
+            timerDisplay.innerText = '00:00:00';
+            timerDisplay.classList.remove('running');
+            btnStart.innerHTML = '<i class="bi bi-play-fill"></i> Iniciar';
+            btnStart.style.opacity = '1';
+            btnStart.style.cursor = 'pointer';
+        }
+
+        // ===== IMAGE PREVIEW =====
+        function previewImage(input, previewId) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.getElementById(previewId);
+                const overlay = document.getElementById(previewId.replace('preview', 'overlay'));
+                const card = img.closest('.photo-card');
+
+                img.src = e.target.result;
+                img.style.display = 'block';
+                overlay.style.display = 'flex';
+
+                // Hide the placeholder content
+                card.querySelector('.photo-icon').style.display = 'none';
+                card.querySelector('h5').style.display = 'none';
+                card.querySelector('p').style.display = 'none';
+                card.querySelector('.upload-hint').innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Cambiar foto';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ===== SIDEBAR TOGGLE (Mobile) =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (e) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 1200 &&
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) &&
+                !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // ===== ANIMATE PROGRESS BAR ON LOAD =====
+        document.addEventListener('DOMContentLoaded', function () {
+            const progressBar = document.querySelector('.progress-custom-bar');
+            if (progressBar) {
+                const width = progressBar.style.width || '0%';
+                progressBar.style.width = '0%';
+                setTimeout(() => {
+                    progressBar.style.width = width;
+                }, 300);
+            }
+        });
+
+        // ===== TASK COMPLETION CONFIRMATION =====
+        document.querySelectorAll('.btn-complete-task').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                if (!confirm('¿Marcar esta tarea como completada?')) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

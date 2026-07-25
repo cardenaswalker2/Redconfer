@@ -1,0 +1,2697 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REDCONFER Comprehensive Services - Seguridad Electrónica, Redes y Automatización</title>
+    <meta name="description"
+        content="Líderes en instalación de cámaras de seguridad CCTV, cableado estructurado, fibra óptica, alarmas y energía solar en Cartagena y el departamento de Bolívar.">
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- External Animation and Slider Libraries -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
+    <!-- Styles - REDCONFER Premium Corporate Identity -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #64748b;
+            --accent-red: #C61A22;
+            --accent-red-hover: #b0141b;
+            --accent-red-glow: rgba(198, 26, 34, 0.15);
+            --accent-red-light: #fef2f2;
+            --slate-dark: #0f172a;
+            --slate-darker: #020617;
+            --border-color: rgba(15, 23, 42, 0.06);
+            --border-color-strong: rgba(15, 23, 42, 0.12);
+            --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 8px -2px rgba(0, 0, 0, 0.02);
+            --shadow-medium: 0 10px 40px -10px rgba(15, 23, 42, 0.08), 0 4px 12px -4px rgba(15, 23, 42, 0.03);
+            --shadow-premium: 0 25px 50px -12px rgba(198, 26, 34, 0.08), 0 12px 24px -12px rgba(0, 0, 0, 0.04);
+            --shadow-hero: 0 30px 60px -15px rgba(0, 0, 0, 0.3);
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: var(--transition-smooth);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        /* ============================================
+           SCROLL PROGRESS BAR
+           ============================================ */
+        .scroll-progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            z-index: 9999;
+            background: transparent;
+        }
+
+        .scroll-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-red), #E52E37);
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(198, 26, 34, 0.5);
+        }
+
+        /* ============================================
+           GLASSMORPHISM
+           ============================================ */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ============================================
+           NAVBAR PREMIUM
+           ============================================ */
+        .navbar-premium {
+            padding: 20px 0;
+            transition: var(--transition-smooth);
+            z-index: 1030;
+        }
+
+        .navbar-premium .navbar-brand {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .navbar-premium .brand-text-title {
+            color: #ffffff !important;
+            transition: var(--transition-smooth);
+        }
+
+        .navbar-premium .brand-subtitle {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            display: block;
+            margin-top: -2px;
+        }
+
+        .navbar-premium .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 8px 16px !important;
+            border-radius: 8px;
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .navbar-premium .nav-link:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-premium .nav-link.active {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .navbar-premium .btn-nav-cta {
+            background: linear-gradient(135deg, var(--accent-red) 0%, #E52E37 100%);
+            color: #fff !important;
+            border: none;
+            font-weight: 600;
+            padding: 10px 24px !important;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.3);
+            transition: var(--transition-fast);
+        }
+
+        .navbar-premium .btn-nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(198, 26, 34, 0.5);
+            color: #fff !important;
+            background: linear-gradient(135deg, var(--accent-red-hover) 0%, #d42830 100%);
+        }
+
+        /* Navbar Scrolled State */
+        .navbar-premium.scrolled {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-soft);
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+        }
+
+        .navbar-premium.scrolled .brand-text-title {
+            color: var(--text-primary) !important;
+        }
+
+        .navbar-premium.scrolled .brand-subtitle {
+            color: var(--text-secondary) !important;
+        }
+
+        .navbar-premium.scrolled .nav-link {
+            color: var(--text-secondary) !important;
+        }
+
+        .navbar-premium.scrolled .nav-link:hover {
+            color: var(--accent-red) !important;
+            background: var(--accent-red-light);
+        }
+
+        .navbar-premium.scrolled .nav-link.active {
+            color: var(--accent-red) !important;
+            background: var(--accent-red-light);
+        }
+
+        .navbar-premium.scrolled .navbar-toggler {
+            color: var(--text-primary) !important;
+            border-color: var(--border-color-strong);
+        }
+
+        .navbar-premium.scrolled .btn-nav-cta {
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.2);
+        }
+
+        /* ============================================
+           HERO SECTION - ULTRA PREMIUM
+           ============================================ */
+        .hero-section-premium {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background-image: linear-gradient(135deg, rgba(2, 6, 23, 0.92) 0%, rgba(15, 23, 42, 0.88) 50%, rgba(198, 26, 34, 0.2) 100%), url('/ft1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            z-index: 1;
+            padding-top: 120px;
+            padding-bottom: 80px;
+            overflow: hidden;
+        }
+
+        .hero-section-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(198, 26, 34, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-section-premium::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .hero-shape-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, var(--bg-primary), transparent);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(198, 26, 34, 0.15);
+            border: 1px solid rgba(198, 26, 34, 0.3);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+            margin-bottom: 24px;
+        }
+
+        .hero-badge i {
+            margin-right: 8px;
+            color: #E52E37;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+        }
+
+        .hero-title .typed-highlight {
+            color: #E52E37;
+            position: relative;
+            display: inline;
+        }
+
+        .hero-title .typed-highlight::after {
+            content: '|';
+            animation: blink 1s infinite;
+            color: #E52E37;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .hero-description {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.65);
+            max-width: 600px;
+            margin-bottom: 32px;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .hero-stats-row {
+            display: flex;
+            gap: 40px;
+            padding-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .hero-stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+        }
+
+        /* Hero Glass Card */
+        .hero-glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-glass-card h3 {
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+        }
+
+        .hero-glass-card .subtitle {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-bottom: 28px;
+        }
+
+        .hero-glass-card .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition-fast);
+        }
+
+        .hero-glass-card .contact-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
+        }
+
+        .hero-glass-card .contact-item i {
+            font-size: 1.5rem;
+            color: #E52E37;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .hero-glass-card .contact-item .label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 2px;
+        }
+
+        .hero-glass-card .contact-item .value {
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           PREMIUM BUTTONS
+           ============================================ */
+        .btn-premium-red {
+            background: linear-gradient(135deg, var(--accent-red) 0%, #E52E37 100%);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 14px 32px;
+            font-size: 0.95rem;
+            box-shadow: 0 8px 20px -4px rgba(198, 26, 34, 0.4);
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-premium-red::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-premium-red:hover::before {
+            left: 100%;
+        }
+
+        .btn-premium-red:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px -4px rgba(198, 26, 34, 0.6);
+            color: #fff;
+        }
+
+        .btn-premium-red:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-premium-outline {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 14px 32px;
+            font-size: 0.95rem;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-premium-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+        .btn-premium-outline-dark {
+            border: 2px solid var(--text-primary);
+            background: transparent;
+            color: var(--text-primary);
+            font-weight: 600;
+            border-radius: 50px;
+            padding: 12px 28px;
+            font-size: 0.9rem;
+            transition: var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-premium-outline-dark:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            transform: translateY(-3px);
+        }
+
+        /* ============================================
+           SECTION HEADERS
+           ============================================ */
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--accent-red-light);
+            color: var(--accent-red);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid rgba(198, 26, 34, 0.12);
+            margin-bottom: 16px;
+        }
+
+        .section-badge i {
+            margin-right: 8px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           BRAND SLIDER - INFINITE SCROLL
+           ============================================ */
+        .brand-slider-section {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 40px 0;
+            overflow: hidden;
+        }
+
+        .brand-slider-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .brand-slider-wrapper::before,
+        .brand-slider-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 150px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .brand-slider-wrapper::before {
+            left: 0;
+            background: linear-gradient(to right, var(--bg-secondary), transparent);
+        }
+
+        .brand-slider-wrapper::after {
+            right: 0;
+            background: linear-gradient(to left, var(--bg-secondary), transparent);
+        }
+
+        .brand-track {
+            display: flex;
+            width: max-content;
+            animation: scroll-brands 35s linear infinite;
+        }
+
+        .brand-track:hover {
+            animation-play-state: paused;
+        }
+
+        .brand-logo-slide {
+            width: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 30px;
+            opacity: 0.4;
+            filter: grayscale(1);
+            transition: var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .brand-logo-slide:hover {
+            opacity: 1;
+            filter: grayscale(0);
+        }
+
+        .brand-logo-slide h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
+        }
+
+        @keyframes scroll-brands {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ============================================
+           BENEFIT CARDS - ULTRA PREMIUM
+           ============================================ */
+        .benefit-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px 32px;
+            height: 100%;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-red), #E52E37);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 2;
+        }
+
+        .benefit-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(198, 26, 34, 0.03), transparent);
+            opacity: 0;
+            z-index: -1;
+            transition: var(--transition-smooth);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-premium);
+            border-color: rgba(198, 26, 34, 0.15);
+        }
+
+        .benefit-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .benefit-card:hover::after {
+            opacity: 1;
+        }
+
+        .benefit-card .icon-wrapper {
+            width: 56px;
+            height: 56px;
+            background: var(--accent-red-light);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: var(--transition-fast);
+        }
+
+        .benefit-card:hover .icon-wrapper {
+            background: linear-gradient(135deg, var(--accent-red), #E52E37);
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .benefit-card .icon-wrapper i {
+            font-size: 1.5rem;
+            color: var(--accent-red);
+            transition: var(--transition-fast);
+        }
+
+        .benefit-card:hover .icon-wrapper i {
+            color: #fff;
+        }
+
+        .benefit-card h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .benefit-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           SERVICE CARDS - ULTRA PREMIUM
+           ============================================ */
+        .service-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 0;
+            height: 100%;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-red), #E52E37);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 2;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(198, 26, 34, 0.02), transparent);
+            opacity: 0;
+            z-index: -1;
+            transition: var(--transition-smooth);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-premium);
+            border-color: rgba(198, 26, 34, 0.15);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover::after {
+            opacity: 1;
+        }
+
+        .service-card .service-header {
+            padding: 40px 32px 0;
+        }
+
+        .service-card .service-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-red-light);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            transition: var(--transition-fast);
+        }
+
+        .service-card:hover .service-icon {
+            background: linear-gradient(135deg, var(--accent-red), #E52E37);
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 8px 20px rgba(198, 26, 34, 0.3);
+        }
+
+        .service-card .service-icon i {
+            font-size: 1.75rem;
+            color: var(--accent-red);
+            transition: var(--transition-fast);
+        }
+
+        .service-card:hover .service-icon i {
+            color: #fff;
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .service-card .service-desc {
+            padding: 0 32px;
+            flex: 1;
+        }
+
+        .service-card .service-desc p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .service-card .service-footer {
+            padding: 24px 32px 32px;
+        }
+
+        /* ============================================
+           TIMELINE - PREMIUM
+           ============================================ */
+        .timeline-container {
+            position: relative;
+            padding: 20px 0;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 3px;
+            background: linear-gradient(180deg, var(--accent-red) 0%, rgba(198, 26, 34, 0.1) 100%);
+            transform: translateX(-50%);
+            border-radius: 10px;
+        }
+
+        .timeline-item {
+            margin-bottom: 50px;
+            position: relative;
+            width: 50%;
+            padding: 0 50px;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 20px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            border: 5px solid var(--bg-secondary);
+            box-shadow: 0 0 0 4px rgba(198, 26, 34, 0.15);
+            z-index: 5;
+            transition: var(--transition-fast);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -12px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -12px;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.3);
+            background: #fff;
+            border-color: var(--accent-red);
+            box-shadow: 0 0 0 6px rgba(198, 26, 34, 0.2);
+        }
+
+        .timeline-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 28px;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+            border-color: rgba(198, 26, 34, 0.15);
+        }
+
+        .timeline-card .step-number {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--accent-red);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .timeline-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .timeline-card h4 i {
+            color: var(--accent-red);
+            margin-right: 8px;
+        }
+
+        .timeline-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section-premium {
+                background-attachment: scroll !important;
+                background-position: center center !important;
+            }
+
+            .timeline-container::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100% !important;
+                padding-left: 60px !important;
+                padding-right: 20px !important;
+                text-align: left !important;
+            }
+
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+
+            .timeline-dot {
+                left: 8px !important;
+            }
+        }
+
+        /* ============================================
+           PROJECT CARDS & IMAGE ZOOM
+           ============================================ */
+        .img-zoom-hover {
+            overflow: hidden;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .img-zoom-hover img {
+            transition: var(--transition-smooth);
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .img-zoom-hover:hover img {
+            transform: scale(1.08);
+            filter: brightness(0.85);
+        }
+
+        .img-zoom-hover .img-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent 60%);
+            opacity: 0;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .img-zoom-hover:hover .img-overlay {
+            opacity: 1;
+        }
+
+        .img-zoom-hover .img-overlay span {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .project-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-premium);
+            border-color: rgba(198, 26, 34, 0.15);
+        }
+
+        .project-card .project-body {
+            padding: 28px;
+        }
+
+        .project-card .project-location {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-red);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .project-card h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .project-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           STATS SECTION - DARK
+           ============================================ */
+        .stats-section {
+            background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 20% 50%, rgba(198, 26, 34, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(198, 26, 34, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .stats-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .stat-item {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #E52E37, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+        }
+
+        /* ============================================
+           TESTIMONIAL CARDS
+           ============================================ */
+        .testimonial-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 36px;
+            height: 100%;
+            transition: var(--transition-smooth);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+            border-color: rgba(198, 26, 34, 0.1);
+        }
+
+        .testimonial-card .quote-icon {
+            font-size: 2.5rem;
+            color: var(--accent-red);
+            opacity: 0.2;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .testimonial-card .testimonial-text {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .testimonial-card .author-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--bg-primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-card .author-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .testimonial-card .author-role {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+        }
+
+        .testimonial-card .stars {
+            color: #f59e0b;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        /* ============================================
+           COBERTURA SECTION
+           ============================================ */
+        .coverage-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            transition: var(--transition-smooth);
+        }
+
+        .coverage-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+            border-color: rgba(198, 26, 34, 0.15);
+        }
+
+        .coverage-item .coverage-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-red-light);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            transition: var(--transition-fast);
+        }
+
+        .coverage-item:hover .coverage-icon {
+            background: linear-gradient(135deg, var(--accent-red), #E52E37);
+            transform: scale(1.1);
+        }
+
+        .coverage-item .coverage-icon i {
+            font-size: 1.5rem;
+            color: var(--accent-red);
+            transition: var(--transition-fast);
+        }
+
+        .coverage-item:hover .coverage-icon i {
+            color: #fff;
+        }
+
+        .coverage-item h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .coverage-item p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        /* ============================================
+           FAQ MODERN
+           ============================================ */
+        .faq-item-premium {
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            border-radius: 20px;
+            margin-bottom: 16px;
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+
+        .faq-item-premium:hover {
+            border-color: rgba(198, 26, 34, 0.2);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .faq-button-premium {
+            padding: 24px 28px;
+            font-weight: 600;
+            background: transparent !important;
+            border: none;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+            transition: var(--transition-fast);
+            font-size: 1rem;
+        }
+
+        .faq-button-premium:not(.collapsed) {
+            color: var(--accent-red);
+        }
+
+        .faq-icon-indicator {
+            width: 32px;
+            height: 32px;
+            background: var(--bg-tertiary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, background 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .faq-button-premium:not(.collapsed) .faq-icon-indicator {
+            transform: rotate(180deg);
+            background: var(--accent-red-light);
+            color: var(--accent-red);
+        }
+
+        .faq-answer {
+            padding: 0 28px 24px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* ============================================
+           CTA FINAL SECTION
+           ============================================ */
+        .cta-final-section {
+            background: linear-gradient(135deg, #020617 0%, #0f172a 40%, var(--accent-red) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-final-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(198, 26, 34, 0.2) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .cta-final-section .cta-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(198, 26, 34, 0.15) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .cta-final-section .cta-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* ============================================
+           FLOATING WHATSAPP
+           ============================================ */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+            z-index: 999;
+            font-size: 32px;
+            transition: var(--transition-fast);
+            text-decoration: none !important;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.15) rotate(10deg);
+            color: white;
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.6);
+        }
+
+        .whatsapp-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse-wa 2.5s infinite;
+        }
+
+        @keyframes pulse-wa {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer.bg-dark {
+            background: linear-gradient(180deg, #0b0f19 0%, #020617 100%) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        footer.bg-dark .text-muted {
+            color: #64748b !important;
+        }
+
+        footer.bg-dark a.text-muted:hover {
+            color: #fff !important;
+        }
+
+        footer.bg-dark h5 {
+            color: #fff !important;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        footer.bg-dark a.hover-red:hover {
+            color: var(--accent-red) !important;
+        }
+
+        footer .footer-link {
+            color: #64748b;
+            text-decoration: none;
+            transition: var(--transition-fast);
+            display: block;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+
+        footer .footer-link:hover {
+            color: #fff;
+            padding-left: 4px;
+        }
+
+        footer .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 24px;
+            margin-top: 40px;
+        }
+
+        /* ============================================
+           COMPARISON SLIDER (Before/After)
+           ============================================ */
+        .comparison-slider-modern {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            overflow: hidden;
+            border-radius: 32px;
+            box-shadow: var(--shadow-medium);
+            border: 1px solid var(--border-color);
+        }
+
+        .comparison-slider-modern img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .comparison-slider-modern .resize-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 50%;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .comparison-slider-modern .resize-img img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            max-width: none;
+            object-fit: cover;
+        }
+
+        .comparison-slider-modern .handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: #ffffff;
+            z-index: 3;
+            cursor: ew-resize;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .comparison-slider-modern .handle::after {
+            content: "↔";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background: var(--accent-red);
+            border: 4px solid #ffffff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ============================================
+           UTILITY CLASSES
+           ============================================ */
+        .py-6 {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+
+        .py-7 {
+            padding-top: 7rem;
+            padding-bottom: 7rem;
+        }
+
+        @media (min-width: 992px) {
+            .py-lg-7 {
+                padding-top: 7rem;
+                padding-bottom: 7rem;
+            }
+        }
+
+        .text-gradient-red {
+            background: linear-gradient(135deg, var(--accent-red), #E52E37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection color */
+        ::selection {
+            background: rgba(198, 26, 34, 0.2);
+            color: var(--text-primary);
+        }
+
+        /* Focus styles */
+        *:focus-visible {
+            outline: 2px solid var(--accent-red);
+            outline-offset: 2px;
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 991px) {
+            .hero-section-premium {
+                padding-top: 100px;
+                text-align: center;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-cta-group {
+                justify-content: center;
+            }
+
+            .hero-stats-row {
+                justify-content: center;
+            }
+
+            .hero-glass-card {
+                margin-top: 40px;
+            }
+
+            .navbar-premium .navbar-collapse {
+                background: rgba(15, 23, 42, 0.98);
+                backdrop-filter: blur(20px);
+                padding: 20px;
+                border-radius: 16px;
+                margin-top: 16px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .navbar-premium.scrolled .navbar-collapse {
+                background: rgba(255, 255, 255, 0.98);
+                border: 1px solid var(--border-color);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-stats-row {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .btn-premium-red,
+            .btn-premium-outline {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Fragment -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="#" class="whatsapp-float"
+        data-wa-custom-msg="Hola REDCONFER, vi su página de inicio y me gustaría hablar con un asesor especializado sobre soluciones tecnológicas.">
+        <div class="whatsapp-pulse"></div>
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- ============================================
+         HERO SECTION - ULTRA PREMIUM
+         ============================================ -->
+    <section class="hero-section-premium d-flex align-items-center"
+        th:style="'background-image: linear-gradient(135deg, rgba(2, 6, 23, 0.92) 0%, rgba(15, 23, 42, 0.88) 50%, rgba(198, 26, 34, 0.2) 100%), url(' + @{/ft1.jpg} + ');'">
+        <div class="container position-relative" style="z-index: 3;">
+            <div class="row align-items-center">
+                <div class="col-lg-7" data-aos="fade-right" data-aos-duration="1000">
+                    <div class="hero-badge">
+                        <i class="bi bi-shield-check"></i>Seguridad y Conectividad de Vanguardia
+                    </div>
+                    <h1 class="hero-title text-white">
+                        Integración e Ingeniería de <span id="typed-text" class="typed-highlight"></span>
+                    </h1>
+                    <p class="hero-description">
+                        REDCONFER Comprehensive Services diseña, implementa y certifica sistemas de videovigilancia
+                        CCTV, cableado estructurado, controles de acceso, fibra óptica y soluciones de energía solar en
+                        Cartagena, Bolívar y toda la costa.
+                    </p>
+
+                    <div class="hero-cta-group">
+                        <a href="#" class="btn btn-premium-red btn-lg"
+                            data-wa-custom-msg="Hola REDCONFER, quiero cotizar un proyecto de seguridad o redes desde el botón del Hero.">
+                            <i class="bi bi-whatsapp"></i>Solicitar Presupuesto
+                        </a>
+                        <a href="#servicios" class="btn btn-premium-outline btn-lg">
+                            Explorar Catálogo<i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="hero-stats-row">
+                        <div class="hero-stat-item">
+                            <span class="hero-stat-number">+8 Años</span>
+                            <span class="hero-stat-label">De experiencia corporativa</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <span class="hero-stat-number">100%</span>
+                            <span class="hero-stat-label">Personal certificado</span>
+                        </div>
+                        <div class="hero-stat-item">
+                            <span class="hero-stat-number">Mamonal</span>
+                            <span class="hero-stat-label">Centro de operaciones</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 mt-5 mt-lg-0" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="hero-glass-card">
+                        <h3><i class="bi bi-lightning-charge-fill text-danger me-2"></i>Soporte Técnico Activo</h3>
+                        <p class="subtitle">¿Tu infraestructura tecnológica tiene fallas? Agenda hoy mismo un
+                            diagnóstico calificado.</p>
+
+                        <div class="d-flex flex-column gap-3">
+                            <div class="contact-item">
+                                <i class="bi bi-telephone-outbound"></i>
+                                <div>
+                                    <div class="label">Línea Directa y WhatsApp</div>
+                                    <div class="value">+57 323 357 0996</div>
+                                </div>
+                            </div>
+                            <div class="contact-item">
+                                <i class="bi bi-clock-history"></i>
+                                <div>
+                                    <div class="label">Tiempo de Respuesta</div>
+                                    <div class="value">Menor a 4 horas en Cartagena</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-premium-red w-100 mt-4 py-3"
+                            data-wa-custom-msg="Hola REDCONFER, requiero programar una visita técnica de soporte urgente.">
+                            <i class="bi bi-chat-text-fill me-2"></i>Chatear con Ingeniería
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-shape-overlay"></div>
+    </section>
+
+    <!-- ============================================
+         BRAND SLIDER - MARCAS QUE CONFIAN
+         ============================================ -->
+    <section class="brand-slider-section">
+        <div class="container text-center mb-4">
+            <h6 class="text-uppercase tracking-widest text-secondary small fw-bold" style="letter-spacing: 0.15em;">
+                Tecnología de Marcas Líderes con las que Trabajamos</h6>
+        </div>
+        <div class="brand-slider-wrapper">
+            <div class="brand-track">
+                <!-- Logos list (Doubled for infinite scroll loop) -->
+                <div class="brand-logo-slide">
+                    <h4>HIKVISION</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>DAHUA</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>UBIQUITI</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>MIKROTIK</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>CISCO</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>TP-LINK</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>UNIFI</h4>
+                </div>
+
+                <div class="brand-logo-slide">
+                    <h4>HIKVISION</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>DAHUA</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>UBIQUITI</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>MIKROTIK</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>CISCO</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>TP-LINK</h4>
+                </div>
+                <div class="brand-logo-slide">
+                    <h4>UNIFI</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         BENEFICIOS - POR QUÉ ELEGIRNOS
+         ============================================ -->
+    <section class="py-6 py-lg-7" id="beneficios" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge"><i class="bi bi-award"></i>Por Qué Elegirnos</span>
+                <h2 class="section-title">Garantías y Estándares de Nivel Corporativo</h2>
+                <p class="section-subtitle">Nos diferenciamos por cumplir estrictamente las normativas técnicas e
+                    industriales para cada proyecto.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="benefit-card">
+                        <div class="icon-wrapper"><i class="bi bi-clock-history"></i></div>
+                        <h4>Atención Rápida e Inmediata</h4>
+                        <p>Entendemos que la inactividad de las redes y de la seguridad es crítica. Garantizamos tiempos
+                            de respuesta óptimos para su tranquilidad.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="150">
+                    <div class="benefit-card">
+                        <div class="icon-wrapper"><i class="bi bi-shield-check"></i></div>
+                        <h4>Garantía Real REDCONFER</h4>
+                        <p>Ofrecemos hasta 2 años de garantía directa en materiales e instalación. Responderemos
+                            ágilmente ante cualquier incidente.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="benefit-card">
+                        <div class="icon-wrapper"><i class="bi bi-file-earmark-check"></i></div>
+                        <h4>Personal Altamente Certificado</h4>
+                        <p>Nuestros ingenieros y personal técnico cuentan con certificaciones oficiales de las
+                            principales marcas del mercado.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="250">
+                    <div class="benefit-card">
+                        <div class="icon-wrapper"><i class="bi bi-headset"></i></div>
+                        <h4>Soporte Técnico 24/7</h4>
+                        <p>Plan de soporte preventivo y correctivo con línea activa los 365 días del año para
+                            infraestructuras críticas e industriales.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="benefit-card">
+                        <div class="icon-wrapper"><i class="bi bi-award"></i></div>
+                        <h4>Equipos 100% Originales</h4>
+                        <p>Solo instalamos tecnología original de marcas líderes internacionales, asegurando
+                            durabilidad, soporte y actualizaciones.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="350">
+                    <div class="benefit-card">
+                        <div class="icon-wrapper"><i class="bi bi-cone-striped"></i></div>
+                        <h4>Instalación Profesional Estética</h4>
+                        <p>Cuidamos la canalización, el etiquetado y los racks. Su cableado e instalación cumplirá con
+                            altos estándares de orden.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================================
+         SERVICIOS - SOLUCIONES TECNOLÓGICAS
+         ============================================ -->
+    <section class="py-6 py-lg-7 bg-white" id="servicios">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge"><i class="bi bi-grid-3x3-gap"></i>Qué Hacemos</span>
+                <h2 class="section-title">Soluciones Tecnológicas Integrales</h2>
+                <p class="section-subtitle">Servicios diseñados para elevar la productividad, la conectividad y el
+                    resguardo de su empresa u hogar.</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- CCTV -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon"><i class="bi bi-camera-video-fill"></i></div>
+                            <h3>Cámaras de Seguridad (CCTV)</h3>
+                        </div>
+                        <div class="service-desc">
+                            <p>Instalación y mantenimiento de sistemas IP, analógicos y térmicos. Monitoreo remoto en
+                                tiempo real, analíticas de video con inteligencia artificial.</p>
+                        </div>
+                        <div class="service-footer">
+                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
+                                data-wa-custom-msg="Hola REDCONFER, requiero una cotización detallada para un sistema de Cámaras de Seguridad (CCTV).">
+                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Redes y Fibra -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="150">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon"><i class="bi bi-diagram-3-fill"></i></div>
+                            <h3>Redes y Cableado Estructurado</h3>
+                        </div>
+                        <div class="service-desc">
+                            <p>Certificación de redes en Cat6, Cat6A y Cat7. Fusionado y tendido de Fibra Óptica aérea o
+                                subterránea. Ordenamiento de racks.</p>
+                        </div>
+                        <div class="service-footer">
+                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
+                                data-wa-custom-msg="Hola REDCONFER, solicito presupuesto para instalación y certificación de Cableado Estructurado o Fibra Óptica.">
+                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Acceso -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon"><i class="bi bi-fingerprint"></i></div>
+                            <h3>Control de Acceso y Biometría</h3>
+                        </div>
+                        <div class="service-desc">
+                            <p>Sistemas de control peatonal y vehicular. Cerraduras electromagnéticas, biometría facial,
+                                lectores de tarjetas RFID y barreras.</p>
+                        </div>
+                        <div class="service-footer">
+                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
+                                data-wa-custom-msg="Hola REDCONFER, deseo cotizar lectores biométricos y sistemas de Control de Acceso.">
+                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alarmas y Cercas -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="250">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                            <h3>Alarmas y Cercas Eléctricas</h3>
+                        </div>
+                        <div class="service-desc">
+                            <p>Protección perimetral con alarmas contra robo inteligentes conectadas a su móvil y cercos
+                                eléctricos de alto voltaje controlado homologados.</p>
+                        </div>
+                        <div class="service-footer">
+                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
+                                data-wa-custom-msg="Hola REDCONFER, requiero una cotización para sistemas de Alarmas de Intrusión o Cercas Eléctricas.">
+                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Energía Solar -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon"><i class="bi bi-sun-fill"></i></div>
+                            <h3>Paneles y Energía Solar</h3>
+                        </div>
+                        <div class="service-desc">
+                            <p>Estudios de ahorro energético. Instalaciones fotovoltaicas híbridas, autónomas y
+                                conectadas a la red de alta eficiencia para empresas y residencias.</p>
+                        </div>
+                        <div class="service-footer">
+                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
+                                data-wa-custom-msg="Hola REDCONFER, solicito una cotización y estudio para la instalación de Paneles Solares y Energía Solar.">
+                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Domotica -->
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="350">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon"><i class="bi bi-cpu"></i></div>
+                            <h3>Automatización y Domótica</h3>
+                        </div>
+                        <div class="service-desc">
+                            <p>Control inteligente de iluminación, portones automatizados, aires acondicionados y
+                                sistemas de audio envolventes integrados en una App.</p>
+                        </div>
+                        <div class="service-footer">
+                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
+                                data-wa-custom-msg="Hola REDCONFER, deseo cotizar soluciones de Domótica y Automatización inteligente.">
+                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PROCESO DE SERVICIO - TIMELINE
+         ============================================ -->
+    <section class="py-6 py-lg-7" style="background-color: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge"><i class="bi bi-kanban"></i>Metodología</span>
+                <h2 class="section-title">Nuestro Proceso de Trabajo</h2>
+                <p class="section-subtitle">Planificación estricta y ejecución certificada para garantizar el éxito
+                    total del proyecto.</p>
+            </div>
+
+            <div class="timeline-container">
+                <!-- 1. Diagnostico -->
+                <div class="timeline-item" data-aos="fade-right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="step-number">Paso 01</div>
+                        <h4><i class="bi bi-clipboard2-pulse"></i>Diagnóstico y Visita Técnica</h4>
+                        <p>Inspeccionamos los puntos clave en Cartagena y Bolívar para relevar las necesidades exactas
+                            en sitio.</p>
+                    </div>
+                </div>
+
+                <!-- 2. Cotización -->
+                <div class="timeline-item" data-aos="fade-left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="step-number">Paso 02</div>
+                        <h4><i class="bi bi-cash-coin"></i>Cotización Transparente</h4>
+                        <p>Enviamos una propuesta comercial formal detallando equipos originales, licencias y mano de
+                            obra.</p>
+                    </div>
+                </div>
+
+                <!-- 3. Instalacion -->
+                <div class="timeline-item" data-aos="fade-right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="step-number">Paso 03</div>
+                        <h4><i class="bi bi-tools"></i>Instalación y Despliegue</h4>
+                        <p>Nuestros técnicos ejecutan el cableado, fijaciones y montaje respetando las normas de
+                            seguridad industrial.</p>
+                    </div>
+                </div>
+
+                <!-- 4. Configuracion -->
+                <div class="timeline-item" data-aos="fade-left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="step-number">Paso 04</div>
+                        <h4><i class="bi bi-gear-wide-connected"></i>Configuración y Puesta a Punto</h4>
+                        <p>Optimizamos el software, grabadoras, switches de red e integramos las alertas directamente en
+                            sus dispositivos.</p>
+                    </div>
+                </div>
+
+                <!-- 5. Capacitacion -->
+                <div class="timeline-item" data-aos="fade-right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="step-number">Paso 05</div>
+                        <h4><i class="bi bi-people-fill"></i>Capacitación al Usuario</h4>
+                        <p>Explicamos detalladamente el uso básico y avanzado de los sistemas entregando manuales y
+                            accesos seguros.</p>
+                    </div>
+                </div>
+
+                <!-- 6. Soporte -->
+                <div class="timeline-item" data-aos="fade-left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="step-number">Paso 06</div>
+                        <h4><i class="bi bi-shield-heart-fill"></i>Soporte Post-Venta</h4>
+                        <p>Hacemos seguimiento preventivo posterior para asegurar el correcto funcionamiento en el largo
+                            plazo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PROYECTOS REALIZADOS
+         ============================================ -->
+    <section class="py-6 py-lg-7 bg-white" id="proyectos">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge"><i class="bi bi-images"></i>Casos de Éxito</span>
+                <h2 class="section-title">Galería de Proyectos Entregados</h2>
+                <p class="section-subtitle">Evidencia real de nuestras reestructuraciones y tendidos certificados bajo
+                    normativas exigentes.</p>
+            </div>
+
+            <!-- Trabajo de Campo Aéreo y Nodos -->
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-10">
+                    <div class="card"
+                        style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 24px; padding: 40px; box-shadow: var(--shadow-soft);">
+                        <h3 class="h4 fw-bold text-center mb-5"><i
+                                class="bi bi-tools text-danger me-2"></i>Infraestructura de Redes y Despliegue de Campo
+                        </h3>
+                        <div class="row g-4">
+                            <!-- Foto 1: Poste / Alturas -->
+                            <div class="col-md-6">
+                                <div class="project-card">
+                                    <div class="img-zoom-hover" style="height: 320px;">
+                                        <a href="/ft4.jpg" class="glightbox-gallery"
+                                            data-description="Tendido aéreo de cableado estructurado y fibra óptica en poste de energía.">
+                                            <img th:src="@{/ft4.jpg}" src="/ft4.jpg" alt="Tendido Aéreo REDCONFER"
+                                                class="h-100 w-100" style="object-fit: cover;">
+                                            <div class="img-overlay"><span><i class="bi bi-zoom-in me-2"></i>Ver en
+                                                    grande</span></div>
+                                        </a>
+                                    </div>
+                                    <div
+                                        style="background: linear-gradient(135deg, var(--accent-red), #E52E37); padding: 14px; text-align: center; border-radius: 0 0 24px 24px;">
+                                        <span class="text-white fw-bold"><i class="bi bi-cone-striped me-2"></i>Tendido
+                                            Aéreo y Fibra Óptica en Altura</span>
+                                    </div>
+                                    <div class="p-4">
+                                        <p class="text-secondary small mb-0">Despliegue y anclaje técnico de redes
+                                            aéreas en postes utilizando escaleras homologadas y equipos de protección
+                                            anticaídas dieléctricos.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Foto 2: Nodo Exterior -->
+                            <div class="col-md-6">
+                                <div class="project-card">
+                                    <div class="img-zoom-hover" style="height: 320px;">
+                                        <a href="/ft5.jpg" class="glightbox-gallery"
+                                            data-description="Montaje y puesta a punto de caja de distribución estanca y equipos perimetrales.">
+                                            <img th:src="@{/ft5.jpg}" src="/ft5.jpg" alt="Montaje de Equipos REDCONFER"
+                                                class="h-100 w-100" style="object-fit: cover;">
+                                            <div class="img-overlay"><span><i class="bi bi-zoom-in me-2"></i>Ver en
+                                                    grande</span></div>
+                                        </a>
+                                    </div>
+                                    <div
+                                        style="background: linear-gradient(135deg, #059669, #10b981); padding: 14px; text-align: center; border-radius: 0 0 24px 24px;">
+                                        <span class="text-white fw-bold"><i class="bi bi-cpu-fill me-2"></i>Instalación
+                                            y Conexión de Nodos Exteriores</span>
+                                    </div>
+                                    <div class="p-4">
+                                        <p class="text-secondary small mb-0">Montaje y configuración en campo de cajas
+                                            herméticas estancas intemperie para switches de red, fuentes de poder y
+                                            bocinas de alerta.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proyectos Recientes (Swiper) -->
+            <div class="row mt-5">
+                <div class="col-12" data-aos="fade-up">
+                    <h3 class="h4 fw-bold mb-4"><i class="bi bi-images text-danger me-2"></i>Proyectos Recientes en
+                        Cartagena</h3>
+                    <div class="swiper swiper-proyectos">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="project-card">
+                                    <div class="img-zoom-hover" style="height: 240px;">
+                                        <a href="https://www.novaseguridad.com.co/wp-content/uploads/2021/07/seguridad-corporativa.jpg"
+                                            class="glightbox-gallery"
+                                            data-description="Implementación completa de CCTV IP de alta definición en Mamonal">
+                                            <img src="https://www.novaseguridad.com.co/wp-content/uploads/2021/07/seguridad-corporativa.jpg"
+                                                alt="Seguridad Corporativa" class="h-100 w-100"
+                                                style="object-fit: cover;">
+                                            <div class="img-overlay"><span><i class="bi bi-zoom-in me-2"></i>Ver
+                                                    proyecto</span></div>
+                                        </a>
+                                    </div>
+                                    <div class="project-body">
+                                        <div class="project-location">Mamonal, Cartagena</div>
+                                        <h4>CCTV Corporativo IP</h4>
+                                        <p>Instalación de cámaras robustas PTZ de alta resolución para supervisión
+                                            perimetral de patios logísticos.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="project-card">
+                                    <div class="img-zoom-hover" style="height: 240px;">
+                                        <a href="https://realestatemarket.com.mx/images/2023/octubre/16-octubre/infraestructura-de-datos-otro-reto-en-nearshoring-g.jpg"
+                                            class="glightbox-gallery"
+                                            data-description="Diseño e instalación de rack de telecomunicaciones y cableado estructurado certificado">
+                                            <img src="https://realestatemarket.com.mx/images/2023/octubre/16-octubre/infraestructura-de-datos-otro-reto-en-nearshoring-g.jpg"
+                                                alt="Infraestructura de Datos" class="h-100 w-100"
+                                                style="object-fit: cover;">
+                                            <div class="img-overlay"><span><i class="bi bi-zoom-in me-2"></i>Ver
+                                                    proyecto</span></div>
+                                        </a>
+                                    </div>
+                                    <div class="project-body">
+                                        <div class="project-location">Bocagrande, Cartagena</div>
+                                        <h4>Redes de Fibra Óptica y Cobre</h4>
+                                        <p>Estructuración y peinado de armarios de red con certificación Cat6A para
+                                            complejo hotelero.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="project-card">
+                                    <div class="img-zoom-hover" style="height: 240px;">
+                                        <a href="https://enchufesolar.com/wp-content/uploads/2021/08/instalacion_panel-solar.jpg"
+                                            class="glightbox-gallery"
+                                            data-description="Sistemas avanzados de energía solar fotovoltaica integrada">
+                                            <img src="https://enchufesolar.com/wp-content/uploads/2021/08/instalacion_panel-solar.jpg"
+                                                alt="Energía Solar Fotovoltaica" class="h-100 w-100"
+                                                style="object-fit: cover;">
+                                            <div class="img-overlay"><span><i class="bi bi-zoom-in me-2"></i>Ver
+                                                    proyecto</span></div>
+                                        </a>
+                                    </div>
+                                    <div class="project-body">
+                                        <div class="project-location">Turbaco, Bolívar</div>
+                                        <h4>Hibridación Solar Residencial</h4>
+                                        <p>Integración de inversores y paneles solares para el soporte eléctrico
+                                            ininterrumpido de sistemas de cámaras.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination mt-4 position-relative"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ESTADÍSTICAS ANIMADAS
+         ============================================ -->
+    <section class="py-5 stats-section">
+        <div class="container py-4 position-relative" style="z-index: 1;">
+            <div class="row g-4 text-center">
+                <div class="col-md-4 col-6" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-item">
+                        <div class="stat-number"><span class="counter-number" data-target="850">0</span>+</div>
+                        <p class="stat-label">Instalaciones Certificadas</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6" data-aos="zoom-in" data-aos-delay="150">
+                    <div class="stat-item">
+                        <div class="stat-number"><span class="counter-number" data-target="350">0</span>+</div>
+                        <p class="stat-label">Clientes de Alto Perfil</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-item">
+                        <div class="stat-number"><span class="counter-number" data-target="99.9"
+                                data-decimals="1">0</span>%</div>
+                        <p class="stat-label">Disponibilidad en Soporte</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6" data-aos="zoom-in" data-aos-delay="250">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <p class="stat-label">Atención a Urgencias</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="stat-item">
+                        <div class="stat-number"><span class="counter-number" data-target="15">0</span>+</div>
+                        <p class="stat-label">Municipios Atendidos en Bolívar</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6" data-aos="zoom-in" data-aos-delay="350">
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <p class="stat-label">Garantía Real de Fábrica</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         TESTIMONIOS
+         ============================================ -->
+    <section class="py-6 py-lg-7" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge"><i class="bi bi-chat-square-quote"></i>Testimonios</span>
+                <h2 class="section-title">La Opinión de Nuestros Clientes</h2>
+                <p class="section-subtitle">Empresas y propietarios que confían el resguardo y conectividad de su
+                    patrimonio a REDCONFER.</p>
+            </div>
+
+            <div class="swiper swiper-testimonios">
+                <div class="swiper-wrapper">
+                    <!-- Testimonio 1 -->
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="quote-icon"><i class="bi bi-quote"></i></div>
+                            <div class="stars">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                    class="bi bi-star-fill"></i>
+                            </div>
+                            <p class="testimonial-text">"Instalamos 48 cámaras IP y un centro de monitoreo robusto. La
+                                calidad técnica, orden del cableado y soporte posterior en Cartagena han sido
+                                intachables."</p>
+                            <div class="d-flex align-items-center">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80"
+                                    alt="Ing. Carolina Gomez" class="author-avatar me-3">
+                                <div>
+                                    <div class="author-name">Ing. Carolina Gómez</div>
+                                    <div class="author-role">Administradora General - Condominio Serena</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonio 2 -->
+                    <div class="swiper-slide">
+                        <div class="testimonial-card">
+                            <div class="quote-icon"><i class="bi bi-quote"></i></div>
+                            <div class="stars">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
+                                    class="bi bi-star-fill"></i>
+                            </div>
+                            <p class="testimonial-text">"La certificación de las redes de datos de la bodega principal
+                                se hizo de manera sumamente ordenada y en el tiempo récord prometido. Gran
+                                profesionalismo."</p>
+                            <div class="d-flex align-items-center">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                                    alt="Ing. Andres Restrepo" class="author-avatar me-3">
+                                <div>
+                                    <div class="author-name">Andrés Restrepo</div>
+                                    <div class="author-role">Jefe de Operaciones - Mamonal Logistic Terminal</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination mt-4 position-relative"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         COBERTURA
+         ============================================ -->
+    <section class="py-6 py-lg-7 bg-white" id="cobertura">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge"><i class="bi bi-geo-alt"></i>Cobertura</span>
+                <h2 class="section-title">Atención Inmediata en Cartagena y Bolívar</h2>
+                <p class="section-subtitle">Nuestra ubicación en Cartagena nos permite movilizar cuadrillas de
+                    ingeniería rápidamente hacia cualquier sector del departamento de Bolívar y zonas aledañas de la
+                    Costa Caribe.</p>
+            </div>
+
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-5" data-aos="fade-up" data-aos-delay="100">
+                    <div class="coverage-item">
+                        <div class="coverage-icon"><i class="bi bi-building"></i></div>
+                        <h4>Cartagena Metropolitana</h4>
+                        <p>Manga, Bocagrande, Castillogrande, Mamonal y Zona Norte.</p>
+                    </div>
+                </div>
+                <div class="col-md-5" data-aos="fade-up" data-aos-delay="200">
+                    <div class="coverage-item">
+                        <div class="coverage-icon"><i class="bi bi-map"></i></div>
+                        <h4>Municipios de Bolívar</h4>
+                        <p>Turbaco, Arjona, Turbana, Pasacaballos, Bayunca.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FAQ - PREGUNTAS FRECUENTES
+         ============================================ -->
+    <section class="py-6 py-lg-7" style="background: var(--bg-secondary);" id="faq">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-badge"><i class="bi bi-question-circle"></i>Preguntas Frecuentes</span>
+                <h2 class="section-title">Dudas Frecuentes Resueltas</h2>
+                <p class="section-subtitle">Respuestas directas sobre nuestros términos de garantía, visitas técnicas y
+                    cotizaciones.</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <div id="faqAccordionPremium">
+                        <!-- FAQ 1 -->
+                        <div class="faq-item-premium" data-aos="fade-up" data-aos-delay="100">
+                            <button class="faq-button-premium collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#f1">
+                                <span>¿Tienen cobertura y atención de emergencias en fines de semana?</span>
+                                <span class="faq-icon-indicator"><i class="bi bi-chevron-down"></i></span>
+                            </button>
+                            <div id="f1" class="collapse" data-bs-parent="#faqAccordionPremium">
+                                <div class="faq-answer">
+                                    Sí, disponemos de planes de mantenimiento que incluyen soporte técnico prioritario
+                                    24/7, incluyendo sábados, domingos y días festivos para condominios, puertos e
+                                    industrias en Mamonal.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 2 -->
+                        <div class="faq-item-premium" data-aos="fade-up" data-aos-delay="150">
+                            <button class="faq-button-premium collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#f2">
+                                <span>¿Las visitas técnicas de diagnóstico tienen algún costo en Cartagena?</span>
+                                <span class="faq-icon-indicator"><i class="bi bi-chevron-down"></i></span>
+                            </button>
+                            <div id="f2" class="collapse" data-bs-parent="#faqAccordionPremium">
+                                <div class="faq-answer">
+                                    Para proyectos corporativos e industriales medianos/grandes, la visita técnica
+                                    inicial de diagnóstico en Cartagena es totalmente gratuita. Para residencias
+                                    particulares, coordinamos un cargo mínimo reembolsable al aceptar el proyecto.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 3 -->
+                        <div class="faq-item-premium" data-aos="fade-up" data-aos-delay="200">
+                            <button class="faq-button-premium collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#f3">
+                                <span>¿Qué marcas de cámaras y equipos de redes recomiendan?</span>
+                                <span class="faq-icon-indicator"><i class="bi bi-chevron-down"></i></span>
+                            </button>
+                            <div id="f3" class="collapse" data-bs-parent="#faqAccordionPremium">
+                                <div class="faq-answer">
+                                    Trabajamos principalmente con marcas homologadas mundialmente: Hikvision y Dahua en
+                                    CCTV; Ubiquiti, MikroTik y Cisco en redes/fibra. Esto garantiza la estabilidad del
+                                    sistema y el respaldo directo del fabricante.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ============================================
+         CTA FINAL - LLAMADO A LA ACCIÓN
+         ============================================ -->
+    <section class="py-6 py-lg-7 text-white text-center position-relative cta-final-section" id="contacto">
+        <div class="cta-glow"></div>
+        <div class="cta-pattern"></div>
+        <div class="container position-relative" style="z-index: 1;" data-aos="zoom-in">
+            <span class="text-uppercase tracking-widest fw-bold text-white-50 small mb-3 d-inline-block"
+                style="letter-spacing: 0.2em;">¿Listos para Asegurar su Empresa?</span>
+            <h2 class="display-4 fw-extrabold mt-2 mb-4"
+                style="max-width: 800px; margin: 0 auto; line-height: 1.15; font-size: clamp(2rem, 4vw, 3.5rem);">
+                Proteja su Infraestructura con Ingeniería Certificada hoy mismo
+            </h2>
+            <p class="lead text-white-50 mb-5 mx-auto" style="max-width: 600px; line-height: 1.7;">
+                Agende una llamada técnica gratuita y reciba asesoramiento sin costo. Nuestro equipo de ingenieros está
+                listo para visitarlo.
+            </p>
+            <div class="d-flex justify-content-center flex-wrap gap-3">
+                <a href="#" class="btn btn-light btn-lg rounded-pill px-5 py-3 text-danger fw-bold border-0 shadow-lg"
+                    style="font-size: 1rem;"
+                    data-wa-custom-msg="Hola REDCONFER, deseo agendar de inmediato una visita técnica de inspección en mi empresa.">
+                    <i class="bi bi-whatsapp me-2"></i>Agenda Visita Gratuita
+                </a>
+                <a href="/cotizador" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 border-2"
+                    style="font-size: 1rem;">
+                    Cotizar en Línea<i class="bi bi-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <!-- Bootstrap 5 Bundle JS & External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initialize AOS (Animate On Scroll)
+            AOS.init({
+                duration: 400,
+                once: true,
+                offset: 40,
+                easing: 'ease-out-cubic'
+            });
+
+            // 2. Initialize Typed.js in Hero
+            if (document.getElementById('typed-text')) {
+                new Typed('#typed-text', {
+                    strings: [
+                        'Seguridad Electrónica',
+                        'Videovigilancia IP',
+                        'Cableado Estructurado',
+                        'Automatización',
+                        'Energía Solar'
+                    ],
+                    typeSpeed: 70,
+                    backSpeed: 45,
+                    loop: true,
+                    backDelay: 2500,
+                    showCursor: false
+                });
+            }
+
+            // 3. Initialize Swiper for Projects
+            new Swiper('.swiper-proyectos', {
+                slidesPerView: 1,
+                spaceBetween: 24,
+                pagination: {
+                    el: '.swiper-proyectos .swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1.5,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                    }
+                },
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                }
+            });
+
+            // 4. Initialize Swiper for Testimonios
+            new Swiper('.swiper-testimonios', {
+                slidesPerView: 1,
+                spaceBetween: 24,
+                pagination: {
+                    el: '.swiper-testimonios .swiper-pagination',
+                    clickable: true,
+                    dynamicBullets: true
+                },
+                breakpoints: {
+                    768: {
+                        slidesPerView: 1.5,
+                    },
+                    992: {
+                        slidesPerView: 2,
+                    }
+                },
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                }
+            });
+
+            // 5. Initialize GLightbox
+            GLightbox({
+                selector: '.glightbox-gallery',
+                touchNavigation: true,
+                loop: true,
+                autoplayVideos: true
+            });
+
+            // 6. Transparent Header Transition on Scroll & Scroll Progress Bar
+            const navbar = document.querySelector('.navbar-premium');
+            const scrollBar = document.getElementById('scrollProgressBar');
+
+            window.addEventListener('scroll', () => {
+                // Scroll progress percentage calculation
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                if (scrollBar) {
+                    scrollBar.style.width = scrolled + '%';
+                }
+
+                // Navbar theme transition
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                    navbar.classList.remove('navbar-dark');
+                    navbar.classList.add('navbar-light');
+                } else {
+                    navbar.classList.remove('scrolled');
+                    navbar.classList.add('navbar-dark');
+                    navbar.classList.remove('navbar-light');
+                }
+            });
+
+            // 7. Interactive Before/After Image Slider
+            const sliders = document.querySelectorAll('.comparison-slider-modern');
+            sliders.forEach(slider => {
+                const resizeImg = slider.querySelector('.resize-img');
+                const handle = slider.querySelector('.handle');
+                if (!resizeImg || !handle) return;
+
+                const innerImg = resizeImg.querySelector('img');
+                let active = false;
+
+                const updateImgWidth = () => {
+                    if (innerImg) {
+                        innerImg.style.width = `${slider.clientWidth}px`;
+                    }
+                };
+
+                // Initialize width
+                setTimeout(updateImgWidth, 100);
+                window.addEventListener('resize', updateImgWidth);
+
+                const slide = (x) => {
+                    let rect = slider.getBoundingClientRect();
+                    let position = ((x - rect.left) / rect.width) * 100;
+                    if (position < 0) position = 0;
+                    if (position > 100) position = 100;
+
+                    resizeImg.style.width = `${position}%`;
+                    handle.style.left = `${position}%`;
+                    updateImgWidth();
+                };
+
+                slider.addEventListener('mousedown', () => active = true);
+                window.addEventListener('mouseup', () => active = false);
+                slider.addEventListener('mousemove', (e) => {
+                    if (!active) return;
+                    slide(e.pageX);
+                });
+
+                slider.addEventListener('touchstart', () => active = true);
+                window.addEventListener('touchend', () => active = false);
+                slider.addEventListener('touchmove', (e) => {
+                    if (!active) return;
+                    slide(e.touches[0].pageX);
+                });
+            });
+
+            // 8. CountUp Animation for Statistics
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                const counters = document.querySelectorAll('.counter-number');
+                const speed = 200;
+                let hasAnimated = false;
+
+                const runCounters = () => {
+                    counters.forEach(counter => {
+                        const target = parseFloat(counter.getAttribute('data-target'));
+                        const decimals = parseInt(counter.getAttribute('data-decimals')) || 0;
+                        let count = parseFloat(counter.innerText);
+                        const increment = target / speed;
+
+                        const updateCount = () => {
+                            count += increment;
+                            if (count < target) {
+                                counter.innerText = count.toFixed(decimals);
+                                requestAnimationFrame(updateCount);
+                            } else {
+                                counter.innerText = target.toFixed(decimals);
+                            }
+                        };
+                        updateCount();
+                    });
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !hasAnimated) {
+                            hasAnimated = true;
+                            runCounters();
+                            observer.disconnect();
+                        }
+                    });
+                }, { threshold: 0.3 });
+
+                observer.observe(statsSection);
+            }
+
+            // 9. Premium Unified WhatsApp Handler
+            const phone = "573233570996";
+            const waElements = document.querySelectorAll('[data-wa-custom-msg]');
+
+            waElements.forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const rawMsg = el.getAttribute('data-wa-custom-msg');
+                    const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(rawMsg)}`;
+                    window.open(url, '_blank');
+                });
+            });
+
+            // 10. Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            const offset = 80;
+                            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // 11. Force light mode always
+            document.documentElement.setAttribute('data-theme', 'light');
+        });
+    </script>
+</body>
+
+</html>

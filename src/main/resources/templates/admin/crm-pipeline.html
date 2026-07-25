@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro Comercial y Oportunidades CRM - REDCONFER</title>
+
+    <!-- CSRF -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --rc-primary: #0f172a;
+            --rc-secondary: #1e293b;
+            --rc-accent: #C61A22;
+            --rc-accent-light: #dc2626;
+            --rc-surface: #ffffff;
+            --rc-surface-alt: #f8fafc;
+            --rc-border: #e2e8f0;
+            --rc-border-dark: rgba(255, 255, 255, 0.06);
+            --rc-text: #0f172a;
+            --rc-text-secondary: #64748b;
+            --rc-text-muted: #94a3b8;
+            --rc-success: #059669;
+            --rc-warning: #d97706;
+            --rc-info: #2563eb;
+            --rc-radius-sm: 10px;
+            --rc-radius-md: 14px;
+            --rc-radius-lg: 18px;
+            --rc-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --rc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --rc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--rc-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        /* ========== LAYOUT ========== */
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--rc-primary) 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--rc-border-dark);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--rc-border-dark);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 0.75rem 1rem 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.8rem 1rem;
+            border-radius: var(--rc-radius-sm);
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .sidebar-nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.3);
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--rc-border-dark);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ========== TOP HEADER ========== */
+        .top-header {
+            background: var(--rc-surface);
+            border-bottom: 1px solid var(--rc-border);
+            padding: 0.875rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.25rem;
+            color: var(--rc-text);
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--rc-radius-sm);
+            border: 1px solid var(--rc-border);
+            background: var(--rc-surface);
+            color: var(--rc-text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            text-decoration: none;
+        }
+
+        .header-btn:hover {
+            border-color: var(--rc-accent);
+            color: var(--rc-accent);
+            background: rgba(198, 26, 34, 0.04);
+        }
+
+        .header-btn .badge-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--rc-accent);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* ========== PAGE HEADER ========== */
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .page-title-group h1 {
+            font-size: 1.5rem;
+            color: var(--rc-text);
+            margin: 0 0 0.25rem;
+        }
+
+        .page-title-group p {
+            color: var(--rc-text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .btn-new {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--rc-radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(198, 26, 34, 0.25);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-new:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(198, 26, 34, 0.35);
+            color: white;
+        }
+
+        /* ========== STATS BAR ========== */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--rc-surface);
+            border: 1px solid var(--rc-border);
+            border-radius: var(--rc-radius-md);
+            padding: 1.25rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: var(--rc-radius-md) 0 0 var(--rc-radius-md);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--rc-shadow-lg);
+        }
+
+        .stat-card.total::before {
+            background: var(--rc-text);
+        }
+
+        .stat-card.pipeline::before {
+            background: var(--rc-accent);
+        }
+
+        .stat-card.won::before {
+            background: var(--rc-success);
+        }
+
+        .stat-card.lost::before {
+            background: var(--rc-text-muted);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--rc-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--rc-text);
+            letter-spacing: -0.02em;
+        }
+
+        .stat-value.accent {
+            color: var(--rc-accent);
+        }
+
+        .stat-value.success {
+            color: var(--rc-success);
+        }
+
+        .stat-value.muted {
+            color: var(--rc-text-muted);
+        }
+
+        .kanban-wrapper {
+            padding-bottom: 1rem;
+            margin: 0;
+            padding: 0 0 1rem;
+        }
+
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        .kanban-column {
+            width: 100%;
+            background: var(--rc-surface);
+            border: 1px solid var(--rc-border);
+            border-radius: var(--rc-radius-md);
+            padding: 1rem;
+            transition: var(--transition);
+        }
+
+        .kanban-column.drag-over {
+            border-color: var(--rc-accent);
+            box-shadow: 0 0 0 3px rgba(198, 26, 34, 0.1);
+            background: rgba(198, 26, 34, 0.02);
+        }
+
+        .kanban-column-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--rc-border);
+        }
+
+        .kanban-column-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .kanban-column-title h3 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--rc-text);
+            margin: 0;
+        }
+
+        .kanban-count {
+            background: var(--rc-surface-alt);
+            color: var(--rc-text-secondary);
+            padding: 0.15rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .kanban-column.drag-over .kanban-count {
+            background: var(--rc-accent);
+            color: white;
+        }
+
+        /* Column colors */
+        .column-contact .kanban-column-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--rc-text-muted);
+        }
+
+        .column-escribi .kanban-column-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--rc-info);
+        }
+
+        .column-respondio .kanban-column-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--rc-success);
+        }
+
+        .column-interesado .kanban-column-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--rc-warning);
+        }
+
+        .column-sin-respuesta .kanban-column-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #9ca3af;
+        }
+
+        .column-negociacion .kanban-column-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #7c3aed;
+        }
+
+        .column-ganado .kanban-column-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--rc-success);
+        }
+
+        .column-perdido .kanban-column-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+        }
+
+        /* ========== KANBAN CARDS ========== */
+        .column-cards-container {
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .kanban-card {
+            background: var(--rc-surface);
+            border: 1px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            padding: 1rem;
+            cursor: grab;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--rc-shadow-md);
+            border-color: rgba(198, 26, 34, 0.2);
+        }
+
+        .kanban-card.dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+            cursor: grabbing;
+        }
+
+        .kanban-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .priority-badge {
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.25rem 0.625rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .priority-urgente {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .priority-alta {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+
+        .priority-media {
+            background: #fef9c3;
+            color: #ca8a04;
+        }
+
+        .priority-baja {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .service-tag {
+            font-size: 0.7rem;
+            color: var(--rc-text-muted);
+            font-weight: 500;
+            background: var(--rc-surface-alt);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .kanban-card-body {
+            margin-bottom: 0.75rem;
+        }
+
+        .client-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--rc-text);
+            margin: 0 0 0.25rem;
+            line-height: 1.3;
+        }
+
+        .client-company {
+            font-size: 0.8rem;
+            color: var(--rc-text-secondary);
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .card-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--rc-accent);
+            margin: 0.5rem 0 0;
+        }
+
+        .kanban-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--rc-border);
+        }
+
+        .btn-cotizar {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.875rem;
+            background: transparent;
+            color: var(--rc-accent);
+            border: 1px solid rgba(198, 26, 34, 0.2);
+            border-radius: var(--rc-radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn-cotizar:hover {
+            background: var(--rc-accent);
+            color: white;
+            border-color: var(--rc-accent);
+        }
+
+        .btn-delete {
+            color: var(--rc-text-muted);
+            background: none;
+            border: none;
+            padding: 0.4rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 6px;
+        }
+
+        .btn-delete:hover {
+            color: #dc2626;
+            background: #fee2e2;
+        }
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1200px) {
+            .kanban-board {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .content-area {
+                padding: 1rem;
+            }
+
+            .top-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+            }
+
+            .btn-new {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .kanban-board {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Mobile overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-up-delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .fade-in-up-delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .fade-in-up-delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="dashboard-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link active">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <button class="header-btn d-lg-none" onclick="toggleSidebar()" style="margin-right: 0.5rem;">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h1>CRM</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" title="Notificaciones">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge-dot"></span>
+                    </button>
+                    <button class="header-btn" title="Mensajes">
+                        <i class="bi bi-chat-left-text"></i>
+                    </button>
+                    <a href="/logout" class="header-btn" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+
+                <!-- Page Header -->
+                <div class="page-header fade-in-up">
+                    <div class="page-title-group">
+                        <h1>Oportunidades de Negocio</h1>
+                        <p>Registra prospectos, gestiona llamadas y convierte leads en proyectos</p>
+                    </div>
+                    <button class="btn-new" data-bs-toggle="modal" data-bs-target="#newOpportunityModal">
+                        <i class="bi bi-plus-lg"></i> Nueva Oportunidad
+                    </button>
+                </div>
+
+                <!-- Stats Bar -->
+                <div class="stats-bar fade-in-up fade-in-up-delay-1">
+                    <div class="stat-card total">
+                        <div class="stat-label"><i class="bi bi-kanban"></i> Total Oportunidades</div>
+                        <div class="stat-value" th:text="${totalOpportunities}">0</div>
+                    </div>
+                    <div class="stat-card pipeline">
+                        <div class="stat-label"><i class="bi bi-currency-dollar"></i> Valor del Pipeline</div>
+                        <div class="stat-value accent"
+                            th:text="${'$' + #numbers.formatDecimal(totalValue, 0, 'POINT', 0, 'COMMA')}">$0</div>
+                    </div>
+                    <div class="stat-card won">
+                        <div class="stat-label"><i class="bi bi-trophy"></i> Negocios Ganados</div>
+                        <div class="stat-value success" th:text="${wonCount}">0</div>
+                    </div>
+                    <div class="stat-card lost">
+                        <div class="stat-label"><i class="bi bi-x-circle"></i> Negocios Perdidos</div>
+                        <div class="stat-value muted" th:text="${lostCount}">0</div>
+                    </div>
+                </div>
+
+                <!-- Kanban Board -->
+                <div class="kanban-wrapper fade-in-up fade-in-up-delay-2">
+                    <div class="kanban-board">
+
+                        <!-- Loop through stages -->
+                        <div class="kanban-column" th:each="stage : ${stages}" th:data-stage="${stage}"
+                            th:classappend="${'column-' + #strings.toLowerCase(#strings.replace(stage, '_', '-'))}">
+
+                            <div class="kanban-column-header">
+                                <div class="kanban-column-title">
+                                    <h3
+                                        th:text="${stage == 'CONTACT' ? 'Contacto' : (stage == 'ESCRIBI' ? 'Le Escribí' : (stage == 'RESPONDIO' ? 'Respondió' : (stage == 'INTERESADO' ? 'Interesado' : (stage == 'SIN_RESPUESTA' ? 'Sin Respuesta' : (stage == 'NEGOCIACION' ? 'Negociación' : (stage == 'GANADO' ? 'Ganado' : 'Perdido'))))))}">
+                                        Contacto</h3>
+                                </div>
+                                <span class="kanban-count" th:text="${pipeline.get(stage).size()}">0</span>
+                            </div>
+
+                            <div class="column-cards-container" th:data-stage-name="${stage}"
+                                ondragover="allowDrop(event)" ondrop="drop(event)">
+
+                                <!-- Card Loop -->
+                                <div class="kanban-card" th:each="opp : ${pipeline.get(stage)}" draggable="true"
+                                    th:id="${opp.id}" th:data-opp-id="${opp.id}" ondragstart="drag(event)">
+
+                                    <div class="kanban-card-header">
+                                        <span class="priority-badge"
+                                            th:classappend="${opp.priority == 'URGENTE' ? 'priority-urgente' : (opp.priority == 'ALTA' ? 'priority-alta' : (opp.priority == 'MEDIA' ? 'priority-media' : 'priority-baja'))}"
+                                            th:text="${opp.priority != null ? opp.priority : 'BAJA'}">BAJA</span>
+                                        <span class="service-tag" th:text="${opp.serviceType}">CCTV</span>
+                                    </div>
+
+                                    <div class="kanban-card-body">
+                                        <h4 class="client-name" th:text="${opp.clientName}">Nombre Cliente</h4>
+                                        <p class="client-company" th:text="${opp.clientCompany}">Empresa</p>
+                                        <div class="card-value"
+                                            th:text="${'$' + #numbers.formatDecimal(opp.total, 0, 'POINT', 0, 'COMMA')}">
+                                            $0</div>
+                                    </div>
+
+                                    <div class="kanban-card-footer">
+                                        <a th:href="@{'/admin/cotizaciones/nuevo?clientId=' + ${opp.clientId}}"
+                                            class="btn-cotizar">
+                                            <i class="bi bi-file-earmark-plus"></i> Cotizar
+                                        </a>
+                                        <a th:href="@{'/admin/crm/oportunidad/eliminar/' + ${opp.id}}"
+                                            class="btn-delete" onclick="return confirm('¿Eliminar esta oportunidad?')"
+                                            title="Eliminar">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: New Opportunity -->
+    <div class="modal fade" id="newOpportunityModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0" style="border-radius: var(--rc-radius-lg); overflow: hidden;">
+
+                <!-- Modal Header -->
+                <div class="modal-header border-0"
+                    style="background: linear-gradient(135deg, var(--rc-primary) 0%, var(--rc-secondary) 100%); padding: 1.5rem;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div
+                            style="width: 44px; height: 44px; border-radius: var(--rc-radius-sm); background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%); display: flex; align-items: center; justify-content: center;">
+                            <i class="bi bi-plus-lg text-white fs-5"></i>
+                        </div>
+                        <div>
+                            <h5 class="modal-title text-white fw-bold mb-0">Crear Oportunidad Manual</h5>
+                            <p class="text-white-50 small mb-0">Registra un nuevo prospecto en el pipeline</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body p-4">
+                    <form th:action="@{/admin/crm/oportunidad/guardar}" method="POST" id="opportunityForm">
+                        <div class="row g-3">
+
+                            <!-- Client Info -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-person"></i> Nombre del Cliente <span
+                                        style="color: var(--rc-accent);">*</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-person input-icon"></i>
+                                    <input type="text" name="clientName" class="form-control-custom has-icon"
+                                        placeholder="Ej: Juan Pérez" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-building"></i> Empresa / Lugar
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-building input-icon"></i>
+                                    <input type="text" name="clientCompany" class="form-control-custom has-icon"
+                                        placeholder="Ej: Casa, Local, Finca...">
+                                </div>
+                            </div>
+
+                            <!-- Contact -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-telephone"></i> Celular / WhatsApp
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-telephone input-icon"></i>
+                                    <input type="text" name="clientPhone" class="form-control-custom has-icon"
+                                        placeholder="Ej: +57 300 987 6543">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-envelope"></i> Correo Electrónico
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-envelope-at input-icon"></i>
+                                    <input type="email" name="clientEmail" class="form-control-custom has-icon"
+                                        placeholder="Ej: cliente@empresa.com">
+                                </div>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-geo-alt"></i> Dirección
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-geo-alt input-icon"></i>
+                                    <input type="text" name="clientAddress" class="form-control-custom has-icon"
+                                        placeholder="Ej: Transversal 54 No. 23-45">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-globe"></i> Ciudad
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-globe input-icon"></i>
+                                    <input type="text" name="clientCity" class="form-control-custom has-icon"
+                                        value="Cartagena">
+                                </div>
+                            </div>
+
+                            <!-- Service & Value -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-tools"></i> Servicio Requerido
+                                </label>
+                                <select name="serviceType" class="form-control-custom form-select-custom">
+                                    <option value="CCTV IP">CCTV IP</option>
+                                    <option value="Paneles Solares">Paneles Solares</option>
+                                    <option value="Redes Categoría 6">Redes Estructuradas</option>
+                                    <option value="Fibra Óptica">Fibra Óptica</option>
+                                    <option value="Control de Acceso">Control de Acceso</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-currency-dollar"></i> Valor Estimado ($) <span
+                                        style="color: var(--rc-accent);">*</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <i class="bi bi-currency-dollar input-icon"></i>
+                                    <input type="number" name="value" class="form-control-custom has-icon" value="0"
+                                        min="0" required>
+                                </div>
+                            </div>
+
+                            <!-- Priority & Origin -->
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-flag"></i> Prioridad
+                                </label>
+                                <select name="priority" class="form-control-custom form-select-custom">
+                                    <option value="BAJA">Baja</option>
+                                    <option value="MEDIA">Media</option>
+                                    <option value="ALTA">Alta</option>
+                                    <option value="URGENTE">Urgente</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-signpost-split"></i> Cómo nos conoció
+                                </label>
+                                <select name="howMet" class="form-control-custom form-select-custom">
+                                    <option value="WHATSAPP">WhatsApp</option>
+                                    <option value="LLAMADA">Llamada</option>
+                                    <option value="RECOMENDACION">Recomendación</option>
+                                    <option value="CLIENTE_ANTIGUO">Cliente Antiguo</option>
+                                    <option value="VISITA">Visita presencial</option>
+                                </select>
+                            </div>
+
+                            <!-- Observations -->
+                            <div class="col-12">
+                                <label class="form-label-custom">
+                                    <i class="bi bi-pencil-square"></i> Observaciones Iniciales
+                                </label>
+                                <textarea name="observations" class="form-control-custom" rows="3"
+                                    placeholder="Describe las necesidades del cliente..."></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer border-top-0 pt-0 pb-4 px-4">
+                    <button type="button" class="btn-form btn-form-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn-form btn-form-primary" form="opportunityForm"
+                        id="saveOpportunityBtn">
+                        <i class="bi bi-check-lg"></i> Guardar Oportunidad
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:inline="javascript">
+        // ===== SIDEBAR TOGGLE =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Close sidebar on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 991.98) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('show');
+            }
+        });
+
+        // ===== DRAG & DROP =====
+        let draggedCard = null;
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            const container = ev.target.closest('.column-cards-container');
+            if (container) {
+                container.closest('.kanban-column').classList.add('drag-over');
+            }
+        }
+
+        // Remove drag-over on drag leave
+        document.addEventListener('dragend', function () {
+            document.querySelectorAll('.kanban-column').forEach(col => {
+                col.classList.remove('drag-over');
+            });
+        });
+
+        document.addEventListener('dragleave', function (ev) {
+            if (ev.target.classList && ev.target.classList.contains('column-cards-container')) {
+                ev.target.closest('.kanban-column').classList.remove('drag-over');
+            }
+        });
+
+        function drag(ev) {
+            const card = ev.target.closest('.kanban-card');
+            if (card) {
+                draggedCard = card;
+                card.classList.add('dragging');
+                ev.dataTransfer.effectAllowed = 'move';
+                ev.dataTransfer.setData("text", card.getAttribute("data-opp-id"));
+            }
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const container = ev.target.closest('.column-cards-container');
+
+            // Remove all drag-over states
+            document.querySelectorAll('.kanban-column').forEach(col => {
+                col.classList.remove('drag-over');
+            });
+
+            if (draggedCard) {
+                draggedCard.classList.remove('dragging');
+            }
+
+            if (!container) return;
+
+            const targetStage = container.getAttribute("data-stage-name");
+            const cardId = ev.dataTransfer.getData("text");
+
+            // Visual feedback - move card immediately
+            const card = document.querySelector(`[data-opp-id="${cardId}"]`);
+            if (card && container !== card.parentElement) {
+                container.appendChild(card);
+
+                // Update count badges
+                updateColumnCounts();
+            }
+
+            // Send to server
+            var formData = new FormData();
+            formData.append("crmStage", targetStage);
+
+            var csrfHeader = document.querySelector("meta[name='_csrf_header']").getAttribute("content");
+            var csrfToken = document.querySelector("meta[name='_csrf']").getAttribute("content");
+
+            var headers = {
+                'X-Requested-With': 'XMLHttpRequest'
+            };
+            if (csrfHeader && csrfToken) {
+                headers[csrfHeader] = csrfToken;
+            }
+
+            fetch('/admin/crm/pipeline/update-stage/' + cardId, {
+                method: 'POST',
+                body: formData,
+                headers: headers
+            }).then(response => {
+                if (!response.ok) {
+                    // Revert on error
+                    window.location.reload();
+                }
+            }).catch(err => {
+                console.error('Error updating stage:', err);
+                window.location.reload();
+            });
+        }
+
+        // Update column counts
+        function updateColumnCounts() {
+            document.querySelectorAll('.kanban-column').forEach(col => {
+                const count = col.querySelectorAll('.kanban-card').length;
+                const badge = col.querySelector('.kanban-count');
+                if (badge) badge.textContent = count;
+            });
+        }
+
+        // ===== ANIMATE STATS NUMBERS =====
+        document.addEventListener('DOMContentLoaded', function () {
+            const statValues = document.querySelectorAll('.stat-value');
+
+            statValues.forEach(el => {
+                const finalText = el.innerText;
+                const hasDollar = finalText.includes('$');
+                const numericStr = finalText.replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.');
+                const numericVal = parseFloat(numericStr) || 0;
+
+                if (numericVal > 0) {
+                    let current = 0;
+                    const duration = 1000;
+                    const startTime = performance.now();
+
+                    function update(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const easeOut = 1 - Math.pow(1 - progress, 3);
+
+                        if (hasDollar) {
+                            el.innerText = '$ ' + Math.round(numericVal * easeOut).toLocaleString('es-CO');
+                        } else {
+                            el.innerText = Math.round(numericVal * easeOut);
+                        }
+
+                        if (progress < 1) {
+                            requestAnimationFrame(update);
+                        } else {
+                            el.innerText = finalText;
+                        }
+                    }
+
+                    requestAnimationFrame(update);
+                }
+            });
+        });
+
+        // ===== MODAL FORM SUBMIT =====
+        const opportunityForm = document.getElementById('opportunityForm');
+        const saveBtn = document.getElementById('saveOpportunityBtn');
+
+        if (opportunityForm && saveBtn) {
+            opportunityForm.addEventListener('submit', function () {
+                if (opportunityForm.checkValidity()) {
+                    saveBtn.disabled = true;
+                    saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Guardando...';
+                }
+            });
+        }
+
+        // ===== KANBAN CARDS STAGGER ANIMATION =====
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.kanban-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.animation = `fadeInUp 0.4s ease-out ${index * 0.03}s forwards`;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

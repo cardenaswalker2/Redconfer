@@ -1,0 +1,74 @@
+<!-- Footer Fragment -->
+<footer th:fragment="footer" class="bg-dark text-white pt-5 pb-4 mt-auto" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+    <div class="container">
+        <div class="row">
+            <!-- Brand Column -->
+            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                <div class="d-flex align-items-center mb-3">
+                    <svg width="35" height="35" viewBox="0 0 100 100" class="me-2">
+                        <circle cx="50" cy="25" r="8" fill="#C61A22"/>
+                        <circle cx="25" cy="50" r="8" fill="#C61A22"/>
+                        <circle cx="75" cy="50" r="8" fill="#fff"/>
+                        <circle cx="38" cy="75" r="8" fill="#fff"/>
+                        <circle cx="62" cy="75" r="8" fill="#fff"/>
+                        <line x1="50" y1="25" x2="25" y2="50" stroke="#C61A22" stroke-width="4"/>
+                        <line x1="50" y1="25" x2="75" y2="50" stroke="#fff" stroke-width="4"/>
+                        <line x1="25" y1="50" x2="38" y2="75" stroke="#C61A22" stroke-width="4"/>
+                        <line x1="75" y1="50" x2="62" y2="75" stroke="#fff" stroke-width="4"/>
+                        <circle cx="50" cy="50" r="10" fill="#C61A22"/>
+                    </svg>
+                    <span class="fs-4 fw-bold tracking-wide"><span style="color: #C61A22;">RED</span>CONFER</span>
+                </div>
+                <p class="text-muted small" th:text="${settings != null ? settings.metaDescription : 'Servicios Integrales de Seguridad y Conectividad.'}">
+                    Sistemas avanzados de seguridad electrónica, CCTV, fibra óptica y automatización para el sector corporativo y residencial.
+                </p>
+                <div class="d-flex mt-3">
+                    <a th:href="${settings != null ? settings.facebook : '#'}" class="text-white me-3 fs-5 hover-red"><i class="bi bi-facebook"></i></a>
+                    <a th:href="${settings != null ? settings.instagram : '#'}" class="text-white me-3 fs-5 hover-red"><i class="bi bi-instagram"></i></a>
+                    <a th:href="${settings != null ? settings.linkedin : '#'}" class="text-white me-3 fs-5 hover-red"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase fw-bold mb-3" style="font-size: 14px;">Enlaces Rápidos</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/#servicios" class="text-muted text-decoration-none hover-white small">Servicios</a></li>
+                    <li><a href="/proyectos" class="text-muted text-decoration-none hover-white small">Proyectos</a></li>
+                    <li><a href="/cobertura" class="text-muted text-decoration-none hover-white small">Calculadora</a></li>
+                    <li><a href="/cotizador" class="text-muted text-decoration-none hover-white small">Solicitar Cotización</a></li>
+                </ul>
+            </div>
+
+            <!-- Services -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase fw-bold mb-3" style="font-size: 14px;">Soluciones</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-muted text-decoration-none hover-white small">Cámaras IP y Análogas</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none hover-white small">Cableado Estructurado</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none hover-white small">Fibra Óptica</a></li>
+                    <li><a href="#" class="text-muted text-decoration-none hover-white small">Controles de Acceso</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact info -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h5 class="text-uppercase fw-bold mb-3" style="font-size: 14px;">Contacto</h5>
+                <p class="text-muted small mb-1" th:text="${settings != null ? settings.address : 'Mamonal Km 5, Cartagena'}"></p>
+                <p class="text-muted small mb-1" th:text="${settings != null ? settings.phone : '+57 323 357 0996'}"></p>
+                <p class="text-muted small mb-1" th:text="${settings != null ? settings.email : 'contacto@redconfer.com'}"></p>
+                <p class="text-muted small" th:text="${settings != null ? settings.schedule : 'Lun-Vie: 8AM-6PM'}"></p>
+            </div>
+        </div>
+        <hr class="border-secondary my-4">
+        <div class="row align-items-center">
+            <div class="col-md-7 text-center text-md-start">
+                <p class="text-muted small mb-0">&copy; 2026 REDCONFER Comprehensive Services. Todos los derechos reservados.</p>
+            </div>
+            <div class="col-md-5 text-center text-md-end mt-2 mt-md-0">
+                <a href="#" class="text-muted text-decoration-none small hover-white me-3">Privacidad</a>
+                <a href="#" class="text-muted text-decoration-none small hover-white">Términos</a>
+            </div>
+        </div>
+    </div>
+</footer>

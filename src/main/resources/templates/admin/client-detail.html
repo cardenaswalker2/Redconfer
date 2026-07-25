@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial del Cliente 360 - REDCONFER</title>
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --rc-primary: #0f172a;
+            --rc-secondary: #1e293b;
+            --rc-accent: #C61A22;
+            --rc-accent-light: #dc2626;
+            --rc-accent-glow: rgba(198, 26, 34, 0.15);
+            --rc-surface: #ffffff;
+            --rc-surface-alt: #f8fafc;
+            --rc-border: #e2e8f0;
+            --rc-border-dark: rgba(255, 255, 255, 0.06);
+            --rc-text: #0f172a;
+            --rc-text-secondary: #64748b;
+            --rc-text-muted: #94a3b8;
+            --rc-success: #059669;
+            --rc-warning: #d97706;
+            --rc-info: #2563eb;
+            --rc-radius-sm: 10px;
+            --rc-radius-md: 14px;
+            --rc-radius-lg: 18px;
+            --rc-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --rc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --rc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--rc-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        /* ========== LAYOUT ========== */
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ========== SIDEBAR (same as dashboard) ========== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--rc-primary) 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--rc-border-dark);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--rc-border-dark);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 0.75rem 1rem 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.8rem 1rem;
+            border-radius: var(--rc-radius-sm);
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .sidebar-nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.3);
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--rc-border-dark);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ========== TOP HEADER ========== */
+        .top-header {
+            background: var(--rc-surface);
+            border-bottom: 1px solid var(--rc-border);
+            padding: 0.875rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.25rem;
+            color: var(--rc-text);
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--rc-radius-sm);
+            border: 1px solid var(--rc-border);
+            background: var(--rc-surface);
+            color: var(--rc-text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            text-decoration: none;
+        }
+
+        .header-btn:hover {
+            border-color: var(--rc-accent);
+            color: var(--rc-accent);
+            background: rgba(198, 26, 34, 0.04);
+        }
+
+        .header-btn .badge-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--rc-accent);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        /* ========== CLIENT HEADER ========== */
+        .client-header {
+            margin-bottom: 2rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--rc-text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            color: var(--rc-accent);
+            gap: 0.75rem;
+        }
+
+        .client-title-group {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .client-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--rc-radius-lg);
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            box-shadow: 0 8px 20px rgba(198, 26, 34, 0.25);
+            flex-shrink: 0;
+        }
+
+        .client-name h1 {
+            font-size: 1.6rem;
+            color: var(--rc-text);
+            margin: 0 0 0.25rem;
+        }
+
+        .client-name .company-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--rc-surface-alt);
+            border: 1px solid var(--rc-border);
+            padding: 0.35rem 0.875rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--rc-text-secondary);
+            font-weight: 500;
+        }
+
+        .client-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: var(--rc-radius-sm);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(198, 26, 34, 0.25);
+        }
+
+        .btn-action-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(198, 26, 34, 0.35);
+            color: white;
+        }
+
+        .btn-action-secondary {
+            background: var(--rc-surface);
+            color: var(--rc-text);
+            border: 1px solid var(--rc-border);
+        }
+
+        .btn-action-secondary:hover {
+            border-color: var(--rc-accent);
+            color: var(--rc-accent);
+            background: rgba(198, 26, 34, 0.03);
+        }
+
+        /* ========== CARDS ========== */
+        .content-card {
+            background: var(--rc-surface);
+            border-radius: var(--rc-radius-md);
+            border: 1px solid var(--rc-border);
+            overflow: hidden;
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .content-card:hover {
+            box-shadow: var(--rc-shadow-lg);
+        }
+
+        .card-header-custom {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--rc-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-header-custom h3 {
+            font-size: 0.95rem;
+            color: var(--rc-text);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header-custom h3 i {
+            color: var(--rc-accent);
+        }
+
+        .card-body-custom {
+            padding: 1.5rem;
+        }
+
+        /* ========== INFO LIST ========== */
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.875rem;
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--rc-border);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--rc-surface-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--rc-accent);
+            font-size: 0.9rem;
+        }
+
+        .info-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--rc-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--rc-text);
+            word-break: break-word;
+        }
+
+        .info-value a {
+            color: var(--rc-accent);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .info-value a:hover {
+            text-decoration: underline;
+        }
+
+        /* Tag list (emails, phones) */
+        .tag-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .tag-item {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            padding: 0.6rem 0.875rem;
+            background: var(--rc-surface-alt);
+            border-radius: var(--rc-radius-sm);
+            font-size: 0.85rem;
+            color: var(--rc-text);
+            font-weight: 500;
+            border: 1px solid var(--rc-border);
+            transition: var(--transition);
+        }
+
+        .tag-item:hover {
+            border-color: rgba(198, 26, 34, 0.2);
+            background: rgba(198, 26, 34, 0.02);
+        }
+
+        .tag-item i {
+            color: var(--rc-text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ========== TIMELINE ========== */
+        .timeline-container {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--rc-accent) 0%, var(--rc-border) 100%);
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1.5rem;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -1.5rem;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--rc-surface);
+            border: 3px solid var(--rc-accent);
+            box-shadow: 0 0 0 4px rgba(198, 26, 34, 0.1);
+            z-index: 2;
+        }
+
+        .timeline-content {
+            background: var(--rc-surface-alt);
+            border: 1px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            padding: 1rem;
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            border-color: rgba(198, 26, 34, 0.15);
+            box-shadow: var(--rc-shadow-sm);
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--rc-accent);
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .timeline-text {
+            font-size: 0.9rem;
+            color: var(--rc-text);
+            line-height: 1.5;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-author {
+            font-size: 0.75rem;
+            color: var(--rc-text-muted);
+            font-weight: 500;
+        }
+
+        /* Timeline form */
+        .timeline-form {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--rc-border);
+        }
+
+        .input-group-custom {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .form-control-custom {
+            flex: 1;
+            border: 2px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--rc-text);
+            background: var(--rc-surface);
+            transition: var(--transition);
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--rc-accent);
+            box-shadow: 0 0 0 4px rgba(198, 26, 34, 0.08);
+            outline: none;
+        }
+
+        .form-control-custom::placeholder {
+            color: var(--rc-text-muted);
+            font-weight: 400;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--rc-primary) 0%, var(--rc-secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--rc-radius-sm);
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+        }
+
+        /* ========== TABLE ========== */
+        .table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table-custom thead th {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--rc-text-muted);
+            padding: 0.875rem 1rem;
+            border-bottom: 2px solid var(--rc-border);
+            background: var(--rc-surface-alt);
+        }
+
+        .table-custom thead th:first-child {
+            border-radius: var(--rc-radius-sm) 0 0 0;
+        }
+
+        .table-custom thead th:last-child {
+            border-radius: 0 var(--rc-radius-sm) 0 0;
+        }
+
+        .table-custom tbody td {
+            padding: 1rem;
+            font-size: 0.875rem;
+            color: var(--rc-text);
+            border-bottom: 1px solid var(--rc-border);
+            vertical-align: middle;
+        }
+
+        .table-custom tbody tr {
+            transition: var(--transition);
+        }
+
+        .table-custom tbody tr:hover {
+            background: var(--rc-surface-alt);
+        }
+
+        .table-custom tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-custom tbody tr:last-child td:first-child {
+            border-radius: 0 0 0 var(--rc-radius-sm);
+        }
+
+        .table-custom tbody tr:last-child td:last-child {
+            border-radius: 0 0 var(--rc-radius-sm) 0;
+        }
+
+        .eq-name {
+            font-weight: 700;
+            color: var(--rc-text);
+        }
+
+        .eq-meta {
+            font-size: 0.8rem;
+            color: var(--rc-text-secondary);
+        }
+
+        /* ========== EQUIPMENT FORM ========== */
+        .equipment-form {
+            background: var(--rc-surface-alt);
+            border-radius: var(--rc-radius-md);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border: 1px solid var(--rc-border);
+        }
+
+        .equipment-form h4 {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: var(--rc-text);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .form-group label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--rc-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group .form-control-custom {
+            width: 100%;
+        }
+
+        /* ========== EMPTY STATE ========== */
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+        }
+
+        .empty-state-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--rc-surface-alt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            border: 2px solid var(--rc-border);
+        }
+
+        .empty-state-icon i {
+            color: var(--rc-text-muted);
+            font-size: 1.5rem;
+        }
+
+        .empty-state h4 {
+            font-size: 0.95rem;
+            color: var(--rc-text);
+            margin-bottom: 0.25rem;
+        }
+
+        .empty-state p {
+            font-size: 0.85rem;
+            color: var(--rc-text-muted);
+            margin: 0;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .content-area {
+                padding: 1rem;
+            }
+
+            .top-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .client-title-group {
+                flex-direction: column;
+            }
+
+            .client-actions {
+                width: 100%;
+            }
+
+            .btn-action {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .input-group-custom {
+                flex-direction: column;
+            }
+        }
+
+        /* Mobile overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .fade-in-up-delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .fade-in-up-delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .fade-in-up-delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <div class="dashboard-wrapper">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link active">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <button class="header-btn d-lg-none" onclick="toggleSidebar()" style="margin-right: 0.5rem;">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <h1>Ficha del Cliente</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" title="Notificaciones">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge-dot"></span>
+                    </button>
+                    <button class="header-btn" title="Mensajes">
+                        <i class="bi bi-chat-left-text"></i>
+                    </button>
+                    <a href="/logout" class="header-btn" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+
+                <!-- Client Header -->
+                <div class="client-header fade-in-up">
+                    <a href="/admin/clientes" class="back-link">
+                        <i class="bi bi-arrow-left"></i> Volver a Clientes
+                    </a>
+
+                    <div class="client-title-group">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="client-avatar" th:text="${client.name != null && !client.name.isEmpty() ? #strings.substring(client.name,0,1) : 'C'}">C</div>
+                            <div class="client-name">
+                                <h1 th:text="${client.name}">Nombre Cliente</h1>
+                                <span class="company-badge">
+                                    <i class="bi bi-building"></i>
+                                    <span th:text="${client.company}">Empresa</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="client-actions">
+                            <a th:href="@{'/admin/cotizaciones/nuevo?clientId=' + ${client.id}}"
+                                class="btn-action btn-action-primary">
+                                <i class="bi bi-plus-lg"></i> Crear Cotización
+                            </a>
+                            <a th:href="@{'/admin/clientes/editar/' + ${client.id}}"
+                                class="btn-action btn-action-secondary">
+                                <i class="bi bi-pencil"></i> Editar Ficha
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Left: Corporate Info -->
+                    <div class="col-lg-4">
+                        <div class="content-card fade-in-up fade-in-up-delay-1">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-building"></i> Información Corporativa</h3>
+                            </div>
+                            <div class="card-body-custom">
+                                <div class="info-list">
+                                    <div class="info-item">
+                                        <div class="info-icon"><i class="bi bi-tag"></i></div>
+                                        <div class="info-content">
+                                            <div class="info-label">NIT</div>
+                                            <div class="info-value" th:text="${client.nit}">NIT</div>
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon"><i class="bi bi-geo-alt"></i></div>
+                                        <div class="info-content">
+                                            <div class="info-label">Ubicación GPS</div>
+                                            <div class="info-value">
+                                                <a th:href="@{'https://www.google.com/maps/search/?api=1&query=' + ${client.gps}}"
+                                                    target="_blank">
+                                                    <i class="bi bi-box-arrow-up-right me-1"></i>
+                                                    <span th:text="${client.gps}">Ver Mapa</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon"><i class="bi bi-signpost-split"></i></div>
+                                        <div class="info-content">
+                                            <div class="info-label">Origen</div>
+                                            <div class="info-value" th:text="${client.origin}">Origen</div>
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon"><i class="bi bi-map"></i></div>
+                                        <div class="info-content">
+                                            <div class="info-label">Dirección</div>
+                                            <div class="info-value" th:text="${client.address + ', ' + client.city}">
+                                                Dirección</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Emails -->
+                        <div class="content-card fade-in-up fade-in-up-delay-2" style="margin-top: 1.5rem;">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-envelope"></i> Correos Electrónicos</h3>
+                            </div>
+                            <div class="card-body-custom">
+                                <div class="tag-list" th:if="${client.emails != null && !client.emails.isEmpty()}">
+                                    <div class="tag-item" th:each="email : ${client.emails}">
+                                        <i class="bi bi-envelope-at"></i>
+                                        <span th:text="${email}">correo@ejemplo.com</span>
+                                    </div>
+                                </div>
+                                <div class="empty-state" th:if="${client.emails == null || client.emails.isEmpty()}">
+                                    <div class="empty-state-icon"><i class="bi bi-envelope-x"></i></div>
+                                    <h4>Sin correos registrados</h4>
+                                    <p>No hay direcciones de email asociadas.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Phones -->
+                        <div class="content-card fade-in-up fade-in-up-delay-3" style="margin-top: 1.5rem;">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-telephone"></i> Teléfonos</h3>
+                            </div>
+                            <div class="card-body-custom">
+                                <div class="tag-list" th:if="${client.phones != null && !client.phones.isEmpty()}">
+                                    <div class="tag-item" th:each="phone : ${client.phones}">
+                                        <i class="bi bi-telephone"></i>
+                                        <span th:text="${phone}">3001234567</span>
+                                    </div>
+                                </div>
+                                <div class="empty-state" th:if="${client.phones == null || client.phones.isEmpty()}">
+                                    <div class="empty-state-icon"><i class="bi bi-telephone-x"></i></div>
+                                    <h4>Sin teléfonos registrados</h4>
+                                    <p>No hay números telefónicos asociados.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right: Timeline & Equipment -->
+                    <div class="col-lg-8">
+
+                        <!-- Timeline -->
+                        <div class="content-card fade-in-up fade-in-up-delay-1">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-clock-history"></i> Línea de Tiempo del Cliente</h3>
+                                <span class="badge bg-light text-dark border rounded-pill px-3 py-1 small"
+                                    th:if="${client.timeline != null}"
+                                    th:text="${client.timeline.size() + ' registros'}">0 registros</span>
+                            </div>
+                            <div class="card-body-custom">
+
+                                <!-- Timeline items -->
+                                <div class="timeline-container"
+                                    th:if="${client.timeline != null && !client.timeline.isEmpty()}">
+                                    <div class="timeline-item" th:each="item : ${client.timeline}">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-date">
+                                                <i class="bi bi-calendar-event"></i>
+                                                <span
+                                                    th:text="${#temporals.format(item.timestamp, 'dd MMM yyyy, HH:mm')}">24
+                                                    Jul 2026, 14:30</span>
+                                            </div>
+                                            <div class="timeline-text" th:text="${item.text}">Acción registrada...</div>
+                                            <div class="timeline-author">
+                                                <i class="bi bi-person-circle me-1"></i>
+                                                <span th:text="'Registrado por: ' + ${item.author}">Autor</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Empty state -->
+                                <div class="empty-state"
+                                    th:if="${client.timeline == null || client.timeline.isEmpty()}">
+                                    <div class="empty-state-icon">
+                                        <i class="bi bi-clock"></i>
+                                    </div>
+                                    <h4>Sin actividades registradas</h4>
+                                    <p>No hay seguimientos ni interacciones registradas para este cliente.</p>
+                                </div>
+
+                                <!-- Add timeline form -->
+                                <div class="timeline-form">
+                                    <form th:action="@{'/admin/clientes/save-timeline/' + ${client.id}}" method="POST">
+                                        <div class="input-group-custom">
+                                            <input type="text" name="timelineText" class="form-control-custom"
+                                                placeholder="Registrar llamada, visita, mantenimiento manual..."
+                                                required>
+                                            <button type="submit" class="btn-submit">
+                                                <i class="bi bi-plus-lg me-1"></i> Agregar Registro
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Installed Equipment -->
+                        <div class="content-card fade-in-up fade-in-up-delay-2" style="margin-top: 1.5rem;">
+                            <div class="card-header-custom">
+                                <h3><i class="bi bi-box-seam"></i> Equipos Instalados</h3>
+                                <span class="badge bg-light text-dark border rounded-pill px-3 py-1 small"
+                                    th:if="${client.installedEquipment != null}"
+                                    th:text="${client.installedEquipment.size() + ' equipos'}">0 equipos</span>
+                            </div>
+                            <div class="card-body-custom">
+
+                                <!-- Equipment table -->
+                                <div class="table-responsive"
+                                    th:if="${client.installedEquipment != null && !client.installedEquipment.isEmpty()}">
+                                    <table class="table-custom">
+                                        <thead>
+                                            <tr>
+                                                <th>Equipo</th>
+                                                <th>Serial</th>
+                                                <th>Ubicación</th>
+                                                <th>Instalado</th>
+                                                <th>Garantía</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="eq : ${client.installedEquipment}">
+                                                <td>
+                                                    <div class="eq-name" th:text="${eq.name}">Hikvision Dome</div>
+                                                </td>
+                                                <td>
+                                                    <span class="eq-meta" th:text="${eq.serialNumber}">HK-99212</span>
+                                                </td>
+                                                <td th:text="${eq.location}">Bodega principal</td>
+                                                <td>
+                                                    <span class="eq-meta">
+                                                        <i class="bi bi-calendar-check me-1"></i>
+                                                        <span
+                                                            th:text="${#temporals.format(eq.installDate, 'dd/MM/yyyy')}">24/07/2026</span>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        class="badge bg-success bg-opacity-10 text-success rounded-pill px-2 py-1 small"
+                                                        th:text="${eq.warrantyPeriod}">1 año</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!-- Empty state -->
+                                <div class="empty-state"
+                                    th:if="${client.installedEquipment == null || client.installedEquipment.isEmpty()}">
+                                    <div class="empty-state-icon">
+                                        <i class="bi bi-box-seam"></i>
+                                    </div>
+                                    <h4>Sin equipos registrados</h4>
+                                    <p>No hay equipos instalados asociados a este cliente.</p>
+                                </div>
+
+                                <!-- Add equipment form -->
+                                <div class="equipment-form">
+                                    <h4><i class="bi bi-plus-circle me-2 text-danger"></i>Registrar Nuevo Equipo</h4>
+                                    <form th:action="@{'/admin/clientes/save-equipment/' + ${client.id}}" method="POST">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label>Nombre del Equipo</label>
+                                                <input type="text" name="eqName" class="form-control-custom"
+                                                    placeholder="DVR Hikvision 16CH" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Número de Serie</label>
+                                                <input type="text" name="eqSerial" class="form-control-custom"
+                                                    placeholder="HK-99212">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Ubicación</label>
+                                                <input type="text" name="eqLocation" class="form-control-custom"
+                                                    placeholder="Oficina 201">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Garantía</label>
+                                                <input type="text" name="eqWarranty" class="form-control-custom"
+                                                    placeholder="1 año">
+                                            </div>
+                                        </div>
+                                        <div class="mt-3 text-end">
+                                            <button type="submit" class="btn-submit">
+                                                <i class="bi bi-plus-lg me-1"></i> Agregar Equipo
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ===== SIDEBAR TOGGLE =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Close sidebar on resize to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 991.98) {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('show');
+            }
+        });
+
+        // ===== ANIMATE TIMELINE ITEMS ON SCROLL =====
+        document.addEventListener('DOMContentLoaded', function () {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateX(0)';
+                        }, index * 100);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            timelineItems.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-10px)';
+                item.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                observer.observe(item);
+            });
+        });
+
+        // ===== FORM FOCUS EFFECTS =====
+        document.querySelectorAll('.form-control-custom').forEach(input => {
+            input.addEventListener('focus', function () {
+                this.closest('.form-group, .input-group-custom')?.classList.add('focused');
+            });
+            input.addEventListener('blur', function () {
+                this.closest('.form-group, .input-group-custom')?.classList.remove('focused');
+            });
+        });
+    </script>
+
+</body>
+
+</html>

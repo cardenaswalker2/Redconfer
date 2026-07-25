@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal del Cliente - REDCONFER</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css">
+    <style>
+        .stepper-installation {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .stepper-installation::before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 5%;
+            width: 90%;
+            height: 4px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+        .step-node {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: var(--transition-smooth);
+        }
+        .step-node.active {
+            background-color: var(--accent-red);
+            border-color: var(--accent-red);
+            color: white;
+        }
+        .step-label {
+            font-size: 11px;
+            text-align: center;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+        <div class="container-fluid px-4">
+            <span class="navbar-brand fw-bold"><span style="color:#C61A22;">RED</span>CONFER Portal</span>
+            <div class="ms-auto">
+                <a href="/logout" class="btn btn-outline-light btn-sm rounded-pill px-3">Cerrar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <div class="row g-4">
+            <!-- Sidebar -->
+            <div class="col-md-3">
+                <div class="card-premium p-3 bg-white shadow-sm">
+                    <div class="text-center py-3 mb-3 border-bottom">
+                        <i class="bi bi-person-circle fs-2 text-danger"></i>
+                        <h4 class="h6 fw-bold mt-2 mb-0" th:text="${clientUser.name}">Nombre Cliente</h4>
+                        <span class="text-secondary small" th:text="${clientUser.company}">Empresa</span>
+                    </div>
+                    <ul class="nav flex-column gap-2">
+                        <li class="nav-item"><a class="nav-link active text-danger fw-bold" href="/cliente/dashboard"><i class="bi bi-house-door me-2"></i>Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" href="/cliente/tickets"><i class="bi bi-chat-left-text me-2"></i>Soporte Técnico</a></li>
+                        <li class="nav-item"><a class="nav-link text-secondary" href="/"><i class="bi bi-globe me-2"></i>Sitio Principal</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="col-md-9">
+                <h1 class="h3 fw-bold mb-4">Bienvenido a su Portal de Cliente</h1>
+
+                <!-- Real Time Installation Tracker -->
+                <div class="card-premium p-4 bg-white shadow-sm mb-4" th:each="q : ${quotes}" th:if="${q.status.name() == 'APPROVED' || q.status.name() == 'COMPLETED'}">
+                    <span class="text-uppercase fw-bold text-danger small">Seguimiento de Instalación en Vivo</span>
+                    <h3 class="h6 fw-bold mt-2" th:text="${'Proyecto: ' + q.serviceType + ' (' + q.quoteNumber + ')'}">Proyecto CCTV</h3>
+                    
+                    <!-- Stepper Component -->
+                    <div class="stepper-installation">
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="step-node active">1</div>
+                            <span class="step-label">Planificación</span>
+                        </div>
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="step-node" th:classappend="${q.currentInstallationStep != null && q.currentInstallationStep.name() != 'PLANNING' ? 'active' : ''}">2</div>
+                            <span class="step-label">Cableado</span>
+                        </div>
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="step-node" th:classappend="${q.currentInstallationStep != null && q.currentInstallationStep.name() != 'PLANNING' && q.currentInstallationStep.name() != 'WIRING' ? 'active' : ''}">3</div>
+                            <span class="step-label">Montaje</span>
+                        </div>
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="step-node" th:classappend="${q.currentInstallationStep != null && q.currentInstallationStep.name() == 'CONFIGURATION' || q.currentInstallationStep != null && q.currentInstallationStep.name() == 'QUALITY_ASSURANCE' || q.currentInstallationStep != null && q.currentInstallationStep.name() == 'COMPLETED' ? 'active' : ''}">4</div>
+                            <span class="step-label">Configuración</span>
+                        </div>
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="step-node" th:classappend="${q.currentInstallationStep != null && q.currentInstallationStep.name() == 'QUALITY_ASSURANCE' || q.currentInstallationStep != null && q.currentInstallationStep.name() == 'COMPLETED' ? 'active' : ''}">5</div>
+                            <span class="step-label">Pruebas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quotes List -->
+                <div class="card-premium p-4 bg-white shadow-sm mb-4">
+                    <h3 class="h6 fw-bold mb-3">Historial de Cotizaciones</h3>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-hover small">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Servicio</th>
+                                    <th>Total</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="q : ${quotes}">
+                                    <td th:text="${q.quoteNumber}" class="fw-bold text-dark">RC-0001</td>
+                                    <td th:text="${q.serviceType}">CCTV</td>
+                                    <td th:text="${'$' + #numbers.formatDecimal(q.total, 0, 'POINT', 0, 'COMMA')}">$0</td>
+                                    <td>
+                                        <span class="badge" th:classappend="${
+                                            q.status.name() == 'PENDING' ? 'bg-warning text-dark' :
+                                            q.status.name() == 'APPROVED' ? 'bg-success' : 'bg-secondary'
+                                        }" th:text="${q.status}">Pendiente</span>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{'/cliente/cotizaciones/ver/' + ${q.id}}" class="btn btn-sm btn-outline-dark rounded-pill px-3">Ver Detalle</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

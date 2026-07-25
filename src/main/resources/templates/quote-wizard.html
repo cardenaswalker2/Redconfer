@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador Inteligente Premium - REDCONFER</title>
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --rc-primary: #0f172a;
+            --rc-secondary: #1e293b;
+            --rc-accent: #C61A22;
+            --rc-accent-light: #dc2626;
+            --rc-accent-dark: #991b1b;
+            --rc-surface: #ffffff;
+            --rc-surface-alt: #f8fafc;
+            --rc-surface-hover: #f1f5f9;
+            --rc-border: #e2e8f0;
+            --rc-border-light: #f1f5f9;
+            --rc-text: #0f172a;
+            --rc-text-secondary: #64748b;
+            --rc-text-muted: #94a3b8;
+            --rc-success: #059669;
+            --rc-warning: #d97706;
+            --rc-radius-sm: 12px;
+            --rc-radius-md: 16px;
+            --rc-radius-lg: 24px;
+            --rc-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --rc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --rc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --rc-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --rc-shadow-accent: 0 10px 40px -10px rgba(198, 26, 34, 0.3);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--rc-surface-alt);
+            color: var(--rc-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            background: linear-gradient(135deg, var(--rc-primary) 0%, var(--rc-secondary) 100%) !important;
+            padding: 1rem 0;
+            position: relative !important;
+            box-shadow: var(--rc-shadow-lg);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar .nav-link {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .navbar .nav-link:hover,
+        .navbar .nav-link.active {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar .navbar-brand {
+            color: #ffffff !important;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: -0.03em;
+        }
+
+        .navbar .navbar-brand span {
+            color: var(--rc-accent);
+        }
+
+        .navbar .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            color: #ffffff !important;
+            padding: 0.5rem;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero-wizard {
+            background: linear-gradient(135deg, var(--rc-primary) 0%, #1e293b 50%, #334155 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 0 5rem;
+        }
+
+        .hero-wizard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .hero-wizard .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(198, 26, 34, 0.15);
+            border: 1px solid rgba(198, 26, 34, 0.3);
+            color: #fca5a5;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge i {
+            font-size: 0.7rem;
+        }
+
+        .hero-wizard h1 {
+            color: #ffffff;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .hero-wizard h1 .highlight {
+            color: var(--rc-accent);
+            position: relative;
+        }
+
+        .hero-wizard p {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 1.1rem;
+            max-width: 550px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* ========== MAIN CONTAINER ========== */
+        .wizard-main-wrapper {
+            margin-top: -3rem;
+            position: relative;
+            z-index: 10;
+            padding-bottom: 4rem;
+        }
+
+        /* ========== GLASS PANEL ========== */
+        .glass-panel-wizard {
+            background: var(--rc-surface);
+            border-radius: var(--rc-radius-lg);
+            box-shadow: var(--rc-shadow-xl);
+            border: 1px solid var(--rc-border);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        /* ========== PROGRESS BAR ========== */
+        .progress-wizard-header {
+            background: linear-gradient(135deg, var(--rc-surface-alt) 0%, #ffffff 100%);
+            border-bottom: 1px solid var(--rc-border);
+            padding: 1.5rem 2rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--rc-accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            font-family: 'Space Grotesk', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .step-number.inactive {
+            background: var(--rc-border);
+            color: var(--rc-text-muted);
+        }
+
+        .step-info h6 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--rc-text);
+            margin: 0;
+            letter-spacing: 0;
+        }
+
+        .step-info span {
+            font-size: 0.75rem;
+            color: var(--rc-text-muted);
+            font-weight: 500;
+        }
+
+        .progress-custom {
+            height: 6px;
+            background: var(--rc-border-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-custom-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-custom-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* ========== WIZARD STEPS ========== */
+        .wizard-step-node {
+            display: none;
+            animation: none;
+        }
+
+        .wizard-step-node.active {
+            display: block;
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== SERVICE CARDS ========== */
+        .service-select-card {
+            border: 2px solid var(--rc-border);
+            border-radius: var(--rc-radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--rc-surface);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .service-select-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: transparent;
+            transition: var(--transition);
+        }
+
+        .service-select-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(198, 26, 34, 0.3);
+            box-shadow: var(--rc-shadow-lg);
+        }
+
+        .service-select-card:hover::before {
+            background: var(--rc-accent);
+        }
+
+        .btn-check:checked+.service-select-card {
+            border-color: var(--rc-accent);
+            background: linear-gradient(135deg, rgba(198, 26, 34, 0.03) 0%, rgba(198, 26, 34, 0.01) 100%);
+            box-shadow: var(--rc-shadow-accent);
+        }
+
+        .btn-check:checked+.service-select-card::before {
+            background: var(--rc-accent);
+        }
+
+        .service-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--rc-radius-sm);
+            background: linear-gradient(135deg, rgba(198, 26, 34, 0.1) 0%, rgba(198, 26, 34, 0.05) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .service-select-card:hover .service-icon-wrapper {
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+        }
+
+        .service-select-card:hover .service-icon-wrapper i {
+            color: white !important;
+        }
+
+        .service-select-card .service-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--rc-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-select-card .service-desc {
+            color: var(--rc-text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .service-meta {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--rc-border-light);
+            font-size: 0.75rem;
+            color: var(--rc-text-muted);
+            font-weight: 500;
+        }
+
+        .service-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .service-meta i {
+            font-size: 0.8rem;
+        }
+
+        /* Badge most demanded */
+        .badge-demanded {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--rc-accent);
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            z-index: 2;
+            box-shadow: 0 2px 8px rgba(198, 26, 34, 0.3);
+        }
+
+        /* ========== QUESTION CARDS ========== */
+        .question-card-option {
+            border: 2px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--rc-surface);
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--rc-text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-card-option:hover {
+            border-color: rgba(198, 26, 34, 0.2);
+            background: var(--rc-surface-hover);
+            color: var(--rc-text);
+        }
+
+        .btn-check:checked+.question-card-option {
+            border-color: var(--rc-accent);
+            background: linear-gradient(135deg, rgba(198, 26, 34, 0.04) 0%, rgba(198, 26, 34, 0.01) 100%);
+            color: var(--rc-accent);
+            box-shadow: 0 0 0 3px rgba(198, 26, 34, 0.1);
+        }
+
+        /* ========== FORM STYLING ========== */
+        .form-label-custom {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--rc-text);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label-custom i {
+            color: var(--rc-accent);
+            font-size: 0.9rem;
+        }
+
+        .form-control-custom {
+            border: 2px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--rc-text);
+            background: var(--rc-surface);
+            transition: var(--transition);
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--rc-accent);
+            box-shadow: 0 0 0 4px rgba(198, 26, 34, 0.08);
+            outline: none;
+        }
+
+        .form-control-custom::placeholder {
+            color: var(--rc-text-muted);
+            font-weight: 400;
+        }
+
+        .input-group-custom .input-group-text {
+            background: var(--rc-surface);
+            border: 2px solid var(--rc-border);
+            border-right: none;
+            border-radius: var(--rc-radius-sm) 0 0 var(--rc-radius-sm);
+            color: var(--rc-accent);
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+        }
+
+        .input-group-custom .form-control-custom {
+            border-radius: 0 var(--rc-radius-sm) var(--rc-radius-sm) 0;
+        }
+
+        /* Switch styling */
+        .form-switch-custom .form-check-input {
+            width: 3rem;
+            height: 1.5rem;
+            background-color: var(--rc-border);
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-switch-custom .form-check-input:checked {
+            background-color: var(--rc-accent);
+        }
+
+        .form-switch-custom .form-check-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--rc-text);
+            padding-left: 0.5rem;
+            cursor: pointer;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn-premium-red {
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--rc-radius-sm);
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 1rem 2.5rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(198, 26, 34, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-premium-red:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--rc-shadow-accent);
+            color: white;
+        }
+
+        .btn-premium-red:active {
+            transform: translateY(0);
+        }
+
+        .btn-premium-outline {
+            background: transparent;
+            color: var(--rc-text-secondary);
+            border: 2px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 1rem 2rem;
+            transition: var(--transition);
+        }
+
+        .btn-premium-outline:hover {
+            border-color: var(--rc-accent);
+            color: var(--rc-accent);
+            background: rgba(198, 26, 34, 0.03);
+        }
+
+        /* ========== SIDEBAR ========== */
+        .summary-sidebar-sticky {
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-card {
+            background: var(--rc-surface);
+            border-radius: var(--rc-radius-lg);
+            box-shadow: var(--rc-shadow-md);
+            border: 1px solid var(--rc-border);
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, var(--rc-primary) 0%, var(--rc-secondary) 100%);
+            padding: 1.25rem 1.5rem;
+            color: white;
+        }
+
+        .sidebar-header h5 {
+            font-size: 0.95rem;
+            margin: 0;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-body {
+            padding: 1.5rem;
+        }
+
+        .sidebar-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--rc-border-light);
+        }
+
+        .sidebar-item:last-child {
+            border-bottom: none;
+        }
+
+        .sidebar-item-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--rc-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.15rem;
+        }
+
+        .sidebar-item-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--rc-text);
+            text-align: right;
+        }
+
+        .sidebar-item-value.accent {
+            color: var(--rc-accent);
+        }
+
+        /* Trust badges */
+        .trust-badge-wizard {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--rc-surface);
+            border: 1px solid var(--rc-border);
+            padding: 0.6rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--rc-text-secondary);
+            margin: 0.25rem;
+            transition: var(--transition);
+        }
+
+        .trust-badge-wizard:hover {
+            border-color: var(--rc-accent);
+            color: var(--rc-accent);
+            transform: translateY(-1px);
+        }
+
+        .trust-badge-wizard i {
+            font-size: 0.9rem;
+        }
+
+        /* ========== DRAG DROP ========== */
+        .drag-drop-zone {
+            border: 2px dashed var(--rc-border);
+            border-radius: var(--rc-radius-md);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            background: var(--rc-surface-alt);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .drag-drop-zone:hover,
+        .drag-drop-zone.dragover {
+            border-color: var(--rc-accent);
+            background: rgba(198, 26, 34, 0.02);
+        }
+
+        .drag-drop-zone .upload-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(198, 26, 34, 0.1) 0%, rgba(198, 26, 34, 0.05) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: var(--transition);
+        }
+
+        .drag-drop-zone:hover .upload-icon {
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+        }
+
+        .drag-drop-zone:hover .upload-icon i {
+            color: white !important;
+        }
+
+        /* ========== SIMULATION ========== */
+        .simulation-container {
+            padding: 3rem 2rem;
+        }
+
+        .simulation-loader-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            font-weight: 500;
+            color: var(--rc-text-muted);
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--rc-border-light);
+            transition: var(--transition);
+        }
+
+        .simulation-loader-item:last-child {
+            border-bottom: none;
+        }
+
+        .simulation-loader-item.active {
+            color: var(--rc-text);
+            font-weight: 600;
+        }
+
+        .simulation-loader-item.completed {
+            color: var(--rc-success);
+        }
+
+        .simulation-loader-item .status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        .simulation-loader-item.active .status-icon {
+            background: rgba(198, 26, 34, 0.1);
+            color: var(--rc-accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        .simulation-loader-item.completed .status-icon {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--rc-success);
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+        }
+
+        /* ========== RESULT CARDS ========== */
+        .result-card-premium {
+            background: var(--rc-surface);
+            border-radius: var(--rc-radius-md);
+            padding: 2rem;
+            border: 1px solid var(--rc-border);
+            height: 100%;
+            transition: var(--transition);
+        }
+
+        .result-card-premium:hover {
+            box-shadow: var(--rc-shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .price-display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: var(--rc-accent);
+            letter-spacing: -0.02em;
+        }
+
+        .price-note {
+            font-size: 0.8rem;
+            color: var(--rc-text-muted);
+            line-height: 1.6;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: var(--rc-surface-alt);
+            border-radius: var(--rc-radius-sm);
+            border-left: 3px solid var(--rc-accent);
+        }
+
+        /* ========== ALERT WHATSAPP ========== */
+        .alert-whatsapp {
+            background: linear-gradient(135deg, rgba(198, 26, 34, 0.04) 0%, rgba(198, 26, 34, 0.01) 100%);
+            border: 1px solid rgba(198, 26, 34, 0.15);
+            border-radius: var(--rc-radius-md);
+            padding: 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .alert-whatsapp .alert-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--rc-radius-sm);
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alert-whatsapp .alert-icon i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* ========== PREVIEW THUMBS ========== */
+        .preview-thumb-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .preview-thumb {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--rc-radius-sm);
+            object-fit: cover;
+            border: 2px solid var(--rc-border);
+            transition: var(--transition);
+        }
+
+        .preview-thumb:hover {
+            transform: scale(1.05);
+            border-color: var(--rc-accent);
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: var(--rc-primary);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 3rem 0 2rem;
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 991.98px) {
+            .hero-wizard {
+                padding: 3rem 0 4rem;
+            }
+
+            .wizard-main-wrapper {
+                margin-top: -2rem;
+            }
+
+            .summary-sidebar-sticky {
+                position: relative;
+                top: 0;
+            }
+
+            .progress-wizard-header {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .service-select-card {
+                padding: 1.5rem !important;
+            }
+
+            .service-icon-wrapper {
+                width: 48px;
+                height: 48px;
+            }
+
+            .btn-premium-red,
+            .btn-premium-outline {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .wizard-step-node .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header Fragment -->
+    <div th:replace="~{fragments/header :: header}"></div>
+
+    <!-- HERO SECTION -->
+    <section class="hero-wizard">
+        <div class="container hero-content text-center">
+            <div class="hero-badge fade-in-up">
+                <i class="bi bi-stars"></i>
+                Asistente Interactivo
+            </div>
+            <h1 class="fade-in-up" style="animation-delay: 0.1s;">
+                Cotizador <span class="highlight">Inteligente</span> Premium
+            </h1>
+            <p class="fade-in-up" style="animation-delay: 0.2s;">
+                Complete los pasos en menos de <strong>2 minutos</strong> para obtener un análisis técnico preliminar y
+                programar soporte con nuestros ingenieros especializados.
+            </p>
+        </div>
+    </section>
+
+    <!-- MAIN WIZARD -->
+    <section class="wizard-main-wrapper">
+        <div class="container">
+            <div class="row g-4">
+
+                <!-- Main Wizard Column -->
+                <div class="col-lg-8">
+                    <div class="glass-panel-wizard">
+
+                        <!-- Progress Header -->
+                        <div class="progress-wizard-header">
+                            <div class="row align-items-center g-3">
+                                <div class="col-md-6">
+                                    <div class="step-indicator">
+                                        <div class="step-number" id="stepNumberBadge">1</div>
+                                        <div class="step-info">
+                                            <h6 id="stepIndicatorText">Paso 1 de 3: Solución</h6>
+                                            <span id="stepSubtitle">Selecciona el tipo de servicio que necesitas</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="d-flex align-items-center gap-3 justify-content-md-end">
+                                        <span class="text-muted small fw-semibold" id="stepPercentageText">33%
+                                            completado</span>
+                                        <div class="progress-custom" style="width: 140px;">
+                                            <div class="progress-custom-bar" id="wizardProgressBar"
+                                                style="width: 33.3%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Form -->
+                        <div class="p-4 p-md-5">
+                            <form id="quoteForm" th:action="@{/cotizador}" th:object="${quote}" method="POST"
+                                enctype="multipart/form-data">
+
+                                <!-- PASO 1: Servicio / Solución -->
+                                <div class="wizard-step-node active" id="stepNode1">
+                                    <div class="mb-4">
+                                        <h3 class="h5 fw-bold mb-1">
+                                            <i class="bi bi-layers-fill text-danger me-2"></i>¿Qué tipo de solución
+                                            tecnológica necesitas?
+                                        </h3>
+                                        <p class="text-muted small">Selecciona una opción para continuar con tu
+                                            cotización personalizada.</p>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- CCTV -->
+                                        <div class="col-md-6">
+                                            <input type="radio" class="btn-check" name="serviceType" id="srvCctv"
+                                                value="CCTV" th:field="*{serviceType}" checked>
+                                            <label class="service-select-card p-4 h-100 d-flex flex-column"
+                                                for="srvCctv">
+                                                <span class="badge-demanded">Más solicitado</span>
+                                                <div class="service-icon-wrapper">
+                                                    <i class="bi bi-camera-video-fill fs-4 text-danger"></i>
+                                                </div>
+                                                <span class="service-title">Cámaras de Seguridad (CCTV)</span>
+                                                <p class="service-desc flex-grow-1">Cámaras IP, NVR, DVR analógico,
+                                                    analíticas faciales y monitoreo móvil en tiempo real.</p>
+                                                <div class="service-meta mt-auto">
+                                                    <span><i class="bi bi-clock"></i> 1-2 días</span>
+                                                    <span><i class="bi bi-bar-chart"></i> Media</span>
+                                                </div>
+                                            </label>
+                                        </div>
+
+                                        <!-- Redes y Fibra -->
+                                        <div class="col-md-6">
+                                            <input type="radio" class="btn-check" name="serviceType" id="srvRedes"
+                                                value="Redes" th:field="*{serviceType}">
+                                            <label class="service-select-card p-4 h-100 d-flex flex-column"
+                                                for="srvRedes">
+                                                <div class="service-icon-wrapper">
+                                                    <i class="bi bi-diagram-3-fill fs-4 text-danger"></i>
+                                                </div>
+                                                <span class="service-title">Redes y Cableado Estructurado</span>
+                                                <p class="service-desc flex-grow-1">Certificación Cat6/6A, Fibra Óptica
+                                                    aérea, enlaces inalámbricos y racks profesionales.</p>
+                                                <div class="service-meta mt-auto">
+                                                    <span><i class="bi bi-clock"></i> 2-3 días</span>
+                                                    <span><i class="bi bi-bar-chart"></i> Alta</span>
+                                                </div>
+                                            </label>
+                                        </div>
+
+                                        <!-- Controles de Acceso y Alarmas -->
+                                        <div class="col-md-6">
+                                            <input type="radio" class="btn-check" name="serviceType" id="srvAcceso"
+                                                value="Acceso" th:field="*{serviceType}">
+                                            <label class="service-select-card p-4 h-100 d-flex flex-column"
+                                                for="srvAcceso">
+                                                <div class="service-icon-wrapper">
+                                                    <i class="bi bi-shield-lock-fill fs-4 text-danger"></i>
+                                                </div>
+                                                <span class="service-title">Control de Acceso y Alarmas</span>
+                                                <p class="service-desc flex-grow-1">Biometría, tarjetas RFID,
+                                                    talanqueras vehiculares y alarmas perimetrales inteligentes.</p>
+                                                <div class="service-meta mt-auto">
+                                                    <span><i class="bi bi-clock"></i> 1 día</span>
+                                                    <span><i class="bi bi-bar-chart"></i> Media</span>
+                                                </div>
+                                            </label>
+                                        </div>
+
+                                        <!-- Paneles Solares y Domótica -->
+                                        <div class="col-md-6">
+                                            <input type="radio" class="btn-check" name="serviceType" id="srvDomotica"
+                                                value="Domotica" th:field="*{serviceType}">
+                                            <label class="service-select-card p-4 h-100 d-flex flex-column"
+                                                for="srvDomotica">
+                                                <div class="service-icon-wrapper">
+                                                    <i class="bi bi-sun-fill fs-4 text-danger"></i>
+                                                </div>
+                                                <span class="service-title">Paneles Solares y Domótica</span>
+                                                <p class="service-desc flex-grow-1">Energía fotovoltaica híbrida y
+                                                    automatización inteligente de iluminación y climatización.</p>
+                                                <div class="service-meta mt-auto">
+                                                    <span><i class="bi bi-clock"></i> 3-5 días</span>
+                                                    <span><i class="bi bi-bar-chart"></i> Alta</span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end mt-5 pt-3 border-top">
+                                        <button type="button" class="btn btn-premium-red btn-lg px-5"
+                                            onclick="goToStep(2)">
+                                            Continuar <i class="bi bi-arrow-right ms-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- PASO 2: Preguntas Inteligentes -->
+                                <div class="wizard-step-node" id="stepNode2">
+                                    <div class="mb-4">
+                                        <h3 class="h5 fw-bold mb-1">
+                                            <i class="bi bi-chat-left-dots-fill text-danger me-2"></i>Cuéntanos sobre el
+                                            alcance de tu proyecto
+                                        </h3>
+                                        <p class="text-muted small">Estos datos nos ayudarán a generar una estimación
+                                            precisa para tu caso.</p>
+                                    </div>
+
+                                    <div class="row g-4">
+                                        <!-- Inmueble -->
+                                        <div class="col-12">
+                                            <label class="form-label-custom">
+                                                <i class="bi bi-building"></i> ¿Qué tipo de inmueble deseas
+                                                proteger/interconectar?
+                                            </label>
+                                            <div class="row g-2">
+                                                <div class="col-md-4 col-6">
+                                                    <input type="radio" class="btn-check" name="propertyType"
+                                                        id="propCasa" value="Residencial" th:field="*{propertyType}"
+                                                        checked>
+                                                    <label class="question-card-option p-3 d-block" for="propCasa">
+                                                        <i class="bi bi-house-door d-block mb-1 fs-5 text-muted"></i>
+                                                        Casa / Apto
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4 col-6">
+                                                    <input type="radio" class="btn-check" name="propertyType"
+                                                        id="propOficina" value="Comercial" th:field="*{propertyType}">
+                                                    <label class="question-card-option p-3 d-block" for="propOficina">
+                                                        <i class="bi bi-briefcase d-block mb-1 fs-5 text-muted"></i>
+                                                        Oficina / Local
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4 col-12">
+                                                    <input type="radio" class="btn-check" name="propertyType"
+                                                        id="propBodega" value="Industrial" th:field="*{propertyType}">
+                                                    <label class="question-card-option p-3 d-block" for="propBodega">
+                                                        <i class="bi bi-building-gear d-block mb-1 fs-5 text-muted"></i>
+                                                        Bodega / Industria
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Priority -->
+                                        <div class="col-12">
+                                            <label class="form-label-custom">
+                                                <i class="bi bi-bullseye"></i> ¿Cuál es tu prioridad principal?
+                                            </label>
+                                            <div class="row g-2">
+                                                <div class="col-6 col-md-3">
+                                                    <input type="radio" class="btn-check" name="priorityType"
+                                                        id="prioSeg" value="Seguridad" checked>
+                                                    <label class="question-card-option p-2 d-block small"
+                                                        for="prioSeg">Seguridad</label>
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <input type="radio" class="btn-check" name="priorityType"
+                                                        id="prioRed" value="Redes">
+                                                    <label class="question-card-option p-2 d-block small"
+                                                        for="prioRed">Redes</label>
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <input type="radio" class="btn-check" name="priorityType"
+                                                        id="prioMon" value="Monitoreo">
+                                                    <label class="question-card-option p-2 d-block small"
+                                                        for="prioMon">Monitoreo</label>
+                                                </div>
+                                                <div class="col-6 col-md-3">
+                                                    <input type="radio" class="btn-check" name="priorityType"
+                                                        id="prioAut" value="Automatizacion">
+                                                    <label class="question-card-option p-2 d-block small"
+                                                        for="prioAut">Aut. / Energía</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Area size -->
+                                        <div class="col-md-6">
+                                            <label class="form-label-custom">
+                                                <i class="bi bi-rulers"></i> Área Estimada del Inmueble (m²)
+                                            </label>
+                                            <div class="input-group input-group-custom">
+                                                <span class="input-group-text"><i
+                                                        class="bi bi-rulers text-danger"></i></span>
+                                                <input type="number" class="form-control form-control-custom"
+                                                    placeholder="Ej. 120" th:field="*{sizeSqMeters}" id="sqMeters"
+                                                    required>
+                                            </div>
+                                        </div>
+
+                                        <!-- Dynamic CCTV / Devices qty -->
+                                        <div class="col-md-6" id="cctvFieldsWrapper">
+                                            <label class="form-label-custom">
+                                                <i class="bi bi-cpu"></i> Cantidad estimada de Puntos/Cámaras
+                                            </label>
+                                            <div class="input-group input-group-custom">
+                                                <span class="input-group-text"><i
+                                                        class="bi bi-cpu text-danger"></i></span>
+                                                <input type="number" class="form-control form-control-custom" min="1"
+                                                    max="100" th:field="*{camerasQty}" id="camQty" value="4">
+                                            </div>
+                                        </div>
+
+                                        <!-- Extra fields -->
+                                        <div class="col-md-6">
+                                            <label class="form-label-custom">
+                                                <i class="bi bi-layers"></i> Número de Pisos
+                                            </label>
+                                            <input type="number" class="form-control form-control-custom"
+                                                id="floorsCount" value="1" min="1" max="50">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label-custom">
+                                                <i class="bi bi-door-open"></i> Puntos de Acceso / Entradas
+                                            </label>
+                                            <input type="number" class="form-control form-control-custom"
+                                                id="accessCount" value="2" min="1" max="100">
+                                        </div>
+
+                                        <!-- Switches -->
+                                        <div class="col-md-6">
+                                            <div class="form-check form-switch form-switch-custom pt-2">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="internetStable" checked>
+                                                <label class="form-check-label" for="internetStable">¿Cuenta con
+                                                    internet estable en sitio?</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check form-switch form-switch-custom pt-2">
+                                                <input class="form-check-input" type="checkbox" role="switch"
+                                                    id="powerStable" checked>
+                                                <label class="form-check-label" for="powerStable">¿Cuenta con energía
+                                                    estable 110V?</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Notes -->
+                                        <div class="col-12">
+                                            <label class="form-label-custom">
+                                                <i class="bi bi-pencil-square"></i> Requerimientos Específicos u
+                                                Observaciones
+                                            </label>
+                                            <textarea class="form-control form-control-custom" rows="3"
+                                                placeholder="Ej: Cableado libre de halógeno, respaldo eléctrico en baterías, grabación superior a 30 días..."
+                                                th:field="*{notes}"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between mt-5 pt-3 border-top">
+                                        <button type="button" class="btn btn-premium-outline btn-lg px-4"
+                                            onclick="goToStep(1)">
+                                            <i class="bi bi-arrow-left me-2"></i> Atrás
+                                        </button>
+                                        <button type="button" class="btn btn-premium-red btn-lg px-5"
+                                            onclick="runSimulation()">
+                                            Calcular Estimación <i class="bi bi-calculator ms-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- PASO 3: Simulación / Cargando Propuesta -->
+                                <div class="wizard-step-node" id="stepNodeSimulation">
+                                    <div class="simulation-container text-center">
+                                        <div class="mb-4">
+                                            <div class="position-relative d-inline-block">
+                                                <div class="spinner-border text-danger" role="status"
+                                                    style="width: 4rem; height: 4rem; border-width: 0.25rem;">
+                                                    <span class="visually-hidden">Calculando...</span>
+                                                </div>
+                                                <div class="position-absolute top-50 start-50 translate-middle">
+                                                    <i class="bi bi-cpu text-danger fs-4"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h3 class="h4 fw-bold mb-2 text-slate-dark" id="simulationHeader">Analizando tu
+                                            proyecto...</h3>
+                                        <p class="text-muted small mb-4">Nuestro sistema está procesando los datos para
+                                            generar tu propuesta personalizada.</p>
+
+                                        <div class="mx-auto" style="max-width: 400px; text-align: left;">
+                                            <div class="simulation-loader-item active" id="simStep1">
+                                                <div class="status-icon"><i class="bi bi-check-lg"></i></div>
+                                                <span>Analizando información del sitio...</span>
+                                            </div>
+                                            <div class="simulation-loader-item" id="simStep2">
+                                                <div class="status-icon"><i class="bi bi-hourglass-split"></i></div>
+                                                <span>Estimando cantidad de equipos...</span>
+                                            </div>
+                                            <div class="simulation-loader-item" id="simStep3">
+                                                <div class="status-icon"><i class="bi bi-hourglass-split"></i></div>
+                                                <span>Calculando cables e insumos...</span>
+                                            </div>
+                                            <div class="simulation-loader-item" id="simStep4">
+                                                <div class="status-icon"><i class="bi bi-hourglass-split"></i></div>
+                                                <span>Generando propuesta final...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- PASO 4: Resultados del Cotizador & WhatsApp -->
+                                <div class="wizard-step-node" id="stepNode3">
+                                    <div class="text-center mb-4">
+                                        <div class="d-inline-flex align-items-center justify-content-center mb-3"
+                                            style="width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, rgba(5,150,105,0.1) 0%, rgba(5,150,105,0.05) 100%);">
+                                            <i class="bi bi-clipboard-check-fill text-success fs-2"></i>
+                                        </div>
+                                        <h3 class="h4 fw-bold mb-1">¡Tu Propuesta Preliminar Está Lista!</h3>
+                                        <p class="text-muted small mx-auto" style="max-width: 500px;">Hemos analizado
+                                            tus respuestas. Abajo se muestra una cotización técnica preliminar para tu
+                                            proyecto.</p>
+                                    </div>
+
+                                    <div class="row g-3 text-start">
+                                        <!-- Inversion card -->
+                                        <div class="col-md-6">
+                                            <div class="result-card-premium text-center">
+                                                <span
+                                                    class="text-muted small text-uppercase fw-bold letter-spacing-1">Inversión
+                                                    Estimada</span>
+                                                <h3 class="price-display my-2" id="estimateCost">$ 0 COP</h3>
+                                                <div class="price-note">
+                                                    <i class="bi bi-info-circle-fill text-danger me-1"></i>
+                                                    <strong>Nota:</strong> Este valor es referencial. Los precios reales
+                                                    se acordarán por WhatsApp con un ingeniero de REDCONFER.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Installation parameters cards -->
+                                        <div class="col-md-6">
+                                            <div class="result-card-premium">
+                                                <h5
+                                                    class="h6 fw-bold text-slate-dark mb-3 d-flex align-items-center gap-2">
+                                                    <i class="bi bi-patch-check-fill text-danger"></i> Detalles Técnicos
+                                                    Sugeridos
+                                                </h5>
+                                                <ul class="list-unstyled mb-0 small text-secondary">
+                                                    <li class="mb-3 d-flex align-items-start gap-2">
+                                                        <i class="bi bi-clock-history text-danger mt-1"></i>
+                                                        <div>
+                                                            <span class="fw-bold text-dark">Tiempo de
+                                                                Instalación:</span>
+                                                            <div id="estimateTime" class="text-dark">1-2 Días</div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-3 d-flex align-items-start gap-2">
+                                                        <i class="bi bi-bar-chart-steps text-danger mt-1"></i>
+                                                        <div>
+                                                            <span class="fw-bold text-dark">Nivel de Complejidad:</span>
+                                                            <div id="estimateComplexity" class="text-dark">Medio</div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-3 d-flex align-items-start gap-2">
+                                                        <i class="bi bi-boxes text-danger mt-1"></i>
+                                                        <div>
+                                                            <span class="fw-bold text-dark">Equipos Estimados:</span>
+                                                            <div id="estimateQty" class="text-dark">4 Dispositivos</div>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-0 d-flex align-items-start gap-2">
+                                                        <i class="bi bi-shield-fill-check text-danger mt-1"></i>
+                                                        <div>
+                                                            <span class="fw-bold text-dark">Garantía REDCONFER:</span>
+                                                            <div class="text-dark">2 Años</div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Contact fields -->
+                                    <div class="mt-5">
+                                        <h4
+                                            class="h6 fw-bold text-slate-dark mb-3 border-bottom pb-2 d-flex align-items-center gap-2">
+                                            <i class="bi bi-person-vcard text-danger"></i> Información del Solicitante
+                                        </h4>
+                                        <div class="row g-3 text-start">
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">
+                                                    <i class="bi bi-person"></i> Tu Nombre Completo
+                                                </label>
+                                                <input type="text" class="form-control form-control-custom"
+                                                    th:field="*{clientName}" id="cliName" required
+                                                    placeholder="Ej: Carolina Gómez">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">
+                                                    <i class="bi bi-telephone"></i> Teléfono o WhatsApp
+                                                </label>
+                                                <input type="tel" class="form-control form-control-custom"
+                                                    th:field="*{clientPhone}" id="cliPhone" required
+                                                    placeholder="Ej: 3001234567">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">
+                                                    <i class="bi bi-building"></i> Empresa (Opcional)
+                                                </label>
+                                                <input type="text" class="form-control form-control-custom"
+                                                    th:field="*{clientCompany}" id="cliCompany"
+                                                    placeholder="Ej: Condominio Serena">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">
+                                                    <i class="bi bi-envelope"></i> Correo Electrónico
+                                                </label>
+                                                <input type="email" class="form-control form-control-custom"
+                                                    th:field="*{clientEmail}" id="cliEmail" required
+                                                    placeholder="Ej: carolina@correo.com">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">
+                                                    <i class="bi bi-geo-alt"></i> Dirección del Sitio
+                                                </label>
+                                                <input type="text" class="form-control form-control-custom"
+                                                    th:field="*{clientAddress}" id="cliAddress" required
+                                                    placeholder="Ej: Manga Calle 24 #15-30">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label-custom">
+                                                    <i class="bi bi-globe"></i> Ciudad
+                                                </label>
+                                                <input type="text" class="form-control form-control-custom"
+                                                    th:field="*{clientCity}" id="cliCity" value="Cartagena" required>
+                                            </div>
+
+                                            <!-- Drag and Drop Images zone -->
+                                            <div class="col-12">
+                                                <label class="form-label-custom">
+                                                    <i class="bi bi-images"></i> Sube planos o fotos del sitio
+                                                    (Opcional)
+                                                </label>
+                                                <div class="drag-drop-zone" id="dropzone"
+                                                    onclick="document.getElementById('fileInput').click()">
+                                                    <div class="upload-icon">
+                                                        <i class="bi bi-cloud-arrow-up text-danger fs-2"></i>
+                                                    </div>
+                                                    <span class="fw-bold d-block text-slate-dark mb-1">Arrastra fotos
+                                                        aquí o haz clic para subir</span>
+                                                    <span class="small text-muted">Formatos aceptados: JPG, PNG. Máx. 4
+                                                        archivos.</span>
+                                                    <input type="file" name="photos" id="fileInput" class="d-none"
+                                                        multiple accept="image/*">
+
+                                                    <!-- Previews -->
+                                                    <div class="preview-thumb-container justify-content-center"
+                                                        id="previewContainer"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- WhatsApp Alert -->
+                                    <div class="alert-whatsapp mt-4">
+                                        <div class="alert-icon">
+                                            <i class="bi bi-whatsapp"></i>
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark mb-1">¡Atención!</div>
+                                            <div class="small text-secondary">Para confirmar esta tarifa y agendar la
+                                                visita de inspección gratuita en Cartagena, enviaremos la solicitud por
+                                                WhatsApp a un ingeniero de REDCONFER.</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                                        <button type="button" class="btn btn-premium-outline btn-lg px-4"
+                                            onclick="goToStep(2)">
+                                            <i class="bi bi-arrow-left me-2"></i> Atrás
+                                        </button>
+                                        <button type="submit" class="btn btn-premium-red btn-lg px-5"
+                                            id="btnSubmitForm">
+                                            Confirmar y Enviar WhatsApp <i class="bi bi-whatsapp ms-2"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Summary and Trust Column -->
+                <div class="col-lg-4">
+                    <div class="summary-sidebar-sticky">
+
+                        <!-- Real-time summary -->
+                        <div class="sidebar-card mb-4">
+                            <div class="sidebar-header">
+                                <h5><i class="bi bi-journal-text"></i> Resumen de Solicitud</h5>
+                            </div>
+                            <div class="sidebar-body">
+                                <div class="sidebar-item">
+                                    <div>
+                                        <div class="sidebar-item-label">Servicio Elegido</div>
+                                    </div>
+                                    <div class="sidebar-item-value accent" id="sidebarService">Cargando...</div>
+                                </div>
+                                <div class="sidebar-item">
+                                    <div>
+                                        <div class="sidebar-item-label">Inmueble</div>
+                                    </div>
+                                    <div class="sidebar-item-value" id="sidebarProperty">Casa / Apto</div>
+                                </div>
+                                <div class="sidebar-item">
+                                    <div>
+                                        <div class="sidebar-item-label">Área Declarada</div>
+                                    </div>
+                                    <div class="sidebar-item-value" id="sidebarArea">0 m²</div>
+                                </div>
+                                <div class="sidebar-item">
+                                    <div>
+                                        <div class="sidebar-item-label">Puntos Estimados</div>
+                                    </div>
+                                    <div class="sidebar-item-value" id="sidebarQty">0 Puntos</div>
+                                </div>
+                                <div class="sidebar-item">
+                                    <div>
+                                        <div class="sidebar-item-label">Internet en Sitio</div>
+                                    </div>
+                                    <div class="sidebar-item-value" id="sidebarInternet">Sí</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trust Badges -->
+                        <div class="text-center">
+                            <div class="trust-badge-wizard"><i class="bi bi-patch-check-fill text-danger"></i> Asesoría
+                                Profesional Gratis</div>
+                            <div class="trust-badge-wizard"><i class="bi bi-shield-fill-check text-danger"></i>
+                                Instalación Certificada</div>
+                            <div class="trust-badge-wizard"><i class="bi bi-tools text-danger"></i> Soporte Directo
+                                Mamonal</div>
+                            <div class="trust-badge-wizard"><i class="bi bi-whatsapp text-danger"></i> Respuesta menor a
+                                1 hora</div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Fragment -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form step control
+        let currentStep = 1;
+
+        function updateProgress() {
+            const progressPct = currentStep === 1 ? 33 : (currentStep === 2 ? 66 : 100);
+            const indicatorText = `Paso ${currentStep} de 3: ${currentStep === 1 ? 'Solución' : (currentStep === 2 ? 'Alcance' : 'Estimación')}`;
+            const subtitleText = currentStep === 1 ? 'Selecciona el tipo de servicio que necesitas' :
+                (currentStep === 2 ? 'Cuéntanos los detalles de tu proyecto' : 'Revisa tu propuesta y confirma');
+
+            document.getElementById('wizardProgressBar').style.width = `${progressPct}%`;
+            document.getElementById('stepPercentageText').innerText = `${progressPct}% completado`;
+            document.getElementById('stepIndicatorText').innerText = indicatorText;
+            document.getElementById('stepSubtitle').innerText = subtitleText;
+            document.getElementById('stepNumberBadge').innerText = currentStep;
+
+            // Update step number badge style
+            const badge = document.getElementById('stepNumberBadge');
+            if (currentStep === 3) {
+                badge.style.background = 'var(--rc-success)';
+            } else {
+                badge.style.background = 'var(--rc-accent)';
+            }
+        }
+
+        function goToStep(step) {
+            // Validate step 2 inputs before moving to step 3
+            if (currentStep === 2 && step === 3) {
+                const sqMeters = parseFloat(document.getElementById('sqMeters').value);
+                if (isNaN(sqMeters) || sqMeters <= 0) {
+                    // Custom styled alert
+                    showToast('Por favor, ingrese un área estimada válida.', 'warning');
+                    document.getElementById('sqMeters').focus();
+                    return;
+                }
+            }
+
+            document.querySelectorAll('.wizard-step-node').forEach(el => el.classList.remove('active'));
+            document.getElementById('stepNode' + step).classList.add('active');
+            currentStep = step;
+            updateProgress();
+            updateSidebarSummary();
+
+            // Scroll to top of wizard
+            document.querySelector('.wizard-main-wrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function showToast(message, type = 'info') {
+            // Create toast element
+            const toast = document.createElement('div');
+            const bgColor = type === 'warning' ? '#d97706' : '#C61A22';
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${bgColor};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                font-weight: 600;
+                font-size: 0.9rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 9999;
+                animation: slideInRight 0.3s ease-out;
+                max-width: 350px;
+            `;
+            toast.innerHTML = `<i class="bi bi-exclamation-triangle-fill me-2"></i>${message}`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOutRight 0.3s ease-in forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Add keyframe animations for toast
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        function updateSidebarSummary() {
+            const serviceRadios = document.getElementsByName('serviceType');
+            let serviceValue = "CCTV";
+            for (let r of serviceRadios) {
+                if (r.checked) {
+                    if (r.value === 'CCTV') serviceValue = "Cámaras de Seguridad";
+                    if (r.value === 'Redes') serviceValue = "Redes y Cableado";
+                    if (r.value === 'Acceso') serviceValue = "Control de Acceso";
+                    if (r.value === 'Domotica') serviceValue = "Paneles Solares";
+                }
+            }
+            document.getElementById('sidebarService').innerText = serviceValue;
+
+            const propertyRadios = document.getElementsByName('propertyType');
+            let propertyValue = "Residencial";
+            for (let r of propertyRadios) {
+                if (r.checked) {
+                    if (r.value === 'Residencial') propertyValue = "Casa / Apto";
+                    if (r.value === 'Comercial') propertyValue = "Oficina / Local";
+                    if (r.value === 'Industrial') propertyValue = "Bodega / Industria";
+                }
+            }
+            document.getElementById('sidebarProperty').innerText = propertyValue;
+
+            const size = document.getElementById('sqMeters').value || 0;
+            document.getElementById('sidebarArea').innerText = `${size} m²`;
+
+            const qty = document.getElementById('camQty').value || 0;
+            document.getElementById('sidebarQty').innerText = `${qty} Puntos`;
+
+            const internet = document.getElementById('internetStable').checked ? "Sí" : "No";
+            document.getElementById('sidebarInternet').innerText = internet;
+        }
+
+        // Show/hide cctv qty input depending on service type
+        const serviceChecks = document.querySelectorAll('input[name="serviceType"]');
+        serviceChecks.forEach(input => {
+            input.addEventListener('change', () => {
+                const cctvWrapper = document.getElementById('cctvFieldsWrapper');
+                if (input.value === 'CCTV') {
+                    cctvWrapper.style.display = 'block';
+                } else {
+                    cctvWrapper.style.display = 'none';
+                }
+                updateSidebarSummary();
+            });
+        });
+
+        // Live update sidebar on input changes
+        document.getElementById('sqMeters').addEventListener('input', updateSidebarSummary);
+        document.getElementById('camQty').addEventListener('input', updateSidebarSummary);
+        document.getElementById('internetStable').addEventListener('change', updateSidebarSummary);
+
+        // Property type live update
+        document.querySelectorAll('input[name="propertyType"]').forEach(r => {
+            r.addEventListener('change', updateSidebarSummary);
+        });
+
+        // Run loading proposal simulation
+        function runSimulation() {
+            // Validate step 2 inputs
+            const sqMeters = parseFloat(document.getElementById('sqMeters').value);
+            if (isNaN(sqMeters) || sqMeters <= 0) {
+                showToast('Por favor, ingrese un área estimada válida.', 'warning');
+                document.getElementById('sqMeters').focus();
+                return;
+            }
+
+            // Hide step 2, show simulation
+            document.querySelectorAll('.wizard-step-node').forEach(el => el.classList.remove('active'));
+            document.getElementById('stepNodeSimulation').classList.add('active');
+
+            const steps = [
+                { id: 'simStep1', header: 'Analizando tu proyecto...' },
+                { id: 'simStep2', header: 'Calculando equipos necesarios...' },
+                { id: 'simStep3', header: 'Estimando materiales...' },
+                { id: 'simStep4', header: 'Generando propuesta final...' }
+            ];
+
+            let delay = 0;
+            steps.forEach((s, idx) => {
+                setTimeout(() => {
+                    document.querySelectorAll('.simulation-loader-item').forEach(el => {
+                        el.classList.remove('active');
+                        el.classList.remove('completed');
+                    });
+
+                    // Mark previous steps as completed
+                    for (let i = 0; i < idx; i++) {
+                        const prevEl = document.getElementById(steps[i].id);
+                        if (prevEl) {
+                            prevEl.classList.add('completed');
+                            prevEl.querySelector('.status-icon').innerHTML = '<i class="bi bi-check-lg"></i>';
+                        }
+                    }
+
+                    const currentEl = document.getElementById(s.id);
+                    if (currentEl) {
+                        currentEl.classList.add('active');
+                        currentEl.querySelector('.status-icon').innerHTML = '<i class="bi bi-arrow-repeat spin"></i>';
+                    }
+                    document.getElementById('simulationHeader').innerText = s.header;
+                }, delay);
+                delay += 900;
+            });
+
+            setTimeout(() => {
+                // Mark all as completed
+                document.querySelectorAll('.simulation-loader-item').forEach(el => {
+                    el.classList.remove('active');
+                    el.classList.add('completed');
+                    el.querySelector('.status-icon').innerHTML = '<i class="bi bi-check-lg"></i>';
+                });
+
+                calculateFinalEstimate();
+                goToStep(3);
+            }, delay);
+        }
+
+        // Add spin animation
+        const spinStyle = document.createElement('style');
+        spinStyle.textContent = `
+            @keyframes spin { 
+                from { transform: rotate(0deg); } 
+                to { transform: rotate(360deg); } 
+            }
+            .spin { 
+                animation: spin 1s linear infinite; 
+                display: inline-block;
+            }
+        `;
+        document.head.appendChild(spinStyle);
+
+        // Calculate final prices dynamically (Simulated low rates)
+        function calculateFinalEstimate() {
+            const serviceType = document.querySelector('input[name="serviceType"]:checked').value;
+            const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
+            const size = parseFloat(document.getElementById('sqMeters').value) || 0;
+            const cameras = parseInt(document.getElementById('camQty').value) || 0;
+
+            let basePrice = 0;
+            let installTime = "1-2 Días";
+            let complexity = "Medio";
+            let qtyLabel = `${cameras} Dispositivos`;
+
+            if (serviceType === 'CCTV') {
+                basePrice = (cameras * 75000) + 180000;
+                if (cameras > 8) {
+                    installTime = "2-3 Días";
+                    complexity = "Alto";
+                } else if (cameras <= 2) {
+                    installTime = "1 Día";
+                    complexity = "Bajo";
+                }
+            } else if (serviceType === 'Redes') {
+                basePrice = (size * 3500) + 250000;
+                installTime = size > 250 ? "3-5 Días" : "2-3 Días";
+                complexity = size > 250 ? "Alto" : "Medio";
+                qtyLabel = `${Math.ceil(size / 30)} Puntos de Red`;
+            } else if (serviceType === 'Acceso') {
+                basePrice = 450000;
+                installTime = "1-2 Días";
+                complexity = "Medio";
+                qtyLabel = "1 Lector Biométrico + Kit Cierre";
+            } else {
+                basePrice = size * 2000 + 200000;
+                installTime = "2-4 Días";
+                complexity = "Alto";
+                qtyLabel = "Sistema Solar Híbrido Completo";
+            }
+
+            if (propertyType === 'Industrial') {
+                basePrice *= 1.25;
+                complexity = "Industrial / Alto";
+            } else if (propertyType === 'Comercial') {
+                basePrice *= 1.1;
+            }
+
+            // Render output with animation
+            const costEl = document.getElementById('estimateCost');
+            const targetPrice = Math.round(basePrice);
+            animateNumber(costEl, targetPrice);
+
+            document.getElementById('estimateTime').innerText = installTime;
+            document.getElementById('estimateComplexity').innerText = complexity;
+            document.getElementById('estimateQty').innerText = qtyLabel;
+        }
+
+        // Number animation function
+        function animateNumber(element, target) {
+            const duration = 800;
+            const start = 0;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(start + (target - start) * easeOut);
+
+                element.innerText = `$ ${current.toLocaleString('es-CO')} COP`;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // Dropzone files handler
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('dragover');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('dragover');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+            handleFilesPreview(fileInput.files);
+        });
+
+        fileInput.addEventListener('change', () => {
+            handleFilesPreview(fileInput.files);
+        });
+
+        function handleFilesPreview(files) {
+            previewContainer.innerHTML = '';
+            Array.from(files).slice(0, 4).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'preview-thumb';
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // WhatsApp redirection handler upon submit
+        const quoteForm = document.getElementById('quoteForm');
+        quoteForm.addEventListener('submit', (e) => {
+            // Prevent normal submit block if validation fails
+            if (!quoteForm.checkValidity()) {
+                return;
+            }
+            e.preventDefault();
+
+            // Show loading state on button
+            const btn = document.getElementById('btnSubmitForm');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
+            btn.disabled = true;
+
+            // Extract values
+            const serviceType = document.querySelector('input[name="serviceType"]:checked').value;
+            const propertyType = document.querySelector('input[name="propertyType"]:checked').value;
+            const priority = document.querySelector('input[name="priorityType"]:checked').value;
+            const size = document.getElementById('sqMeters').value;
+            const qty = document.getElementById('camQty').value;
+            const city = document.getElementById('cliCity').value;
+            const name = document.getElementById('cliName').value;
+            const phone = document.getElementById('cliPhone').value;
+            const notes = document.getElementById('quoteForm').notes.value || "Ninguna";
+            const estimate = document.getElementById('estimateCost').innerText;
+
+            // Generate clean WhatsApp template message
+            const message = `Hola REDCONFER.
+Acabo de utilizar el Cotizador Inteligente.
+
+Estos son los datos de mi proyecto:
+• Solicitante: ${name}
+• Teléfono: ${phone}
+• Servicio: ${serviceType === 'CCTV' ? 'Cámaras de Seguridad' : (serviceType === 'Redes' ? 'Redes y Cableado Estructurado' : (serviceType === 'Acceso' ? 'Control de Acceso y Alarmas' : 'Paneles Solares y Domótica'))}
+• Inmueble: ${propertyType}
+• Ciudad: ${city}
+• Área: ${size} m²
+• Equipos estimados: ${qty}
+• Prioridad: ${priority}
+• Valor estimado: ${estimate}
+• Observaciones: ${notes}
+
+Quisiera continuar con la asesoría personalizada y recibir una cotización oficial.`;
+
+            // Open WhatsApp international API
+            const waNumber = "573233570996";
+            const waUrl = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(message)}`;
+
+            // Post form data asynchronously first so Spring Boot saves it in DB, then open WhatsApp
+            const formData = new FormData(quoteForm);
+
+            fetch(quoteForm.action, {
+                method: 'POST',
+                body: formData
+            }).then(() => {
+                // Open WhatsApp chat in a new tab
+                window.open(waUrl, '_blank');
+                // Redirect user to the success route locally
+                window.location.href = "/cotizador?success=true";
+            }).catch(err => {
+                console.error("Error submitting form data:", err);
+                window.open(waUrl, '_blank');
+            });
+        });
+
+        // Initialize sidebar on load
+        updateSidebarSummary(); 
+    </script>
+</body>
+
+</html>

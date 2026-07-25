@@ -1,0 +1,58 @@
+<!-- Header Fragment -->
+<div th:fragment="header" xmlns:th="http://www.thymeleaf.org">
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: rgba(0,0,0,0.05); z-index: 1050;">
+        <div id="scrollProgressBar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #C61A22, #ff4d5a); transition: width 0.1s ease-out;"></div>
+    </div>
+    
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark navbar-premium py-3" style="transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1040;">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <div class="brand-logo-wrapper me-2" style="position: relative;">
+                    <svg width="42" height="42" viewBox="0 0 100 100" class="brand-logo-svg">
+                        <circle cx="50" cy="25" r="8" fill="#C61A22"/>
+                        <circle cx="25" cy="50" r="8" fill="#C61A22"/>
+                        <circle cx="75" cy="50" r="8" fill="#a5a5ab"/>
+                        <circle cx="38" cy="75" r="8" fill="#a5a5ab"/>
+                        <circle cx="62" cy="75" r="8" fill="#a5a5ab"/>
+                        <line x1="50" y1="25" x2="25" y2="50" stroke="#C61A22" stroke-width="4"/>
+                        <line x1="50" y1="25" x2="75" y2="50" stroke="#a5a5ab" stroke-width="4"/>
+                        <line x1="25" y1="50" x2="38" y2="75" stroke="#C61A22" stroke-width="4"/>
+                        <line x1="75" y1="50" x2="62" y2="75" stroke="#a5a5ab" stroke-width="4"/>
+                        <line x1="38" y1="75" x2="62" y2="75" stroke="#a5a5ab" stroke-width="4"/>
+                        <circle cx="50" cy="50" r="10" fill="#C61A22"/>
+                    </svg>
+                </div>
+                <div class="lh-1">
+                    <span class="fs-4 fw-bold tracking-wide text-white brand-text-title"><span style="color: #C61A22;">RED</span>CONFER</span>
+                    <br><span style="font-size: 8px; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); font-weight: bold;" class="brand-text-subtitle">COMPREHENSIVE SERVICES</span>
+                </div>
+            </a>
+            <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link mx-2 active-indicator" href="/#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link mx-2 active-indicator" href="/#proyectos">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link mx-2 active-indicator" href="/cotizador">Calculadora</a></li>
+                    <li class="nav-item"><a class="nav-link mx-2 active-indicator" href="/blog">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link mx-2 active-indicator" href="/#faq">Preguntas</a></li>
+                    <li class="nav-item"><a class="nav-link mx-2 active-indicator" href="/#contacto">Contacto</a></li>
+                    
+
+
+                    <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+                        <a class="btn btn-outline-light btn-sm rounded-pill px-4 mx-1" href="/dashboard-redirect">Mi Panel</a>
+                    </li>
+                    <li class="nav-item" th:if="${#authorization.expression('!isAuthenticated()')}">
+                        <a class="btn btn-outline-light btn-sm rounded-pill px-4 mx-1" href="/login">Portal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary btn-sm rounded-pill px-4 mx-1 shadow-sm header-cta-btn" href="/cotizador" style="background-color: #C61A22; border-color: #C61A22;">Cotizar Ahora</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

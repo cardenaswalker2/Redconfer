@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Servicio - REDCONFER</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #DC2626;
+            --primary-dark: #B91C1C;
+            --primary-light: #FEE2E2;
+            --secondary: #1E293B;
+            --dark: #0F172A;
+            --light: #F8FAFC;
+            --surface: #FFFFFF;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== LAYOUT ===== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            transition: var(--transition);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 0.75rem 1rem 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .sidebar-nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.3);
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+        }
+
+        /* ===== TOP HEADER ===== */
+        .top-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .breadcrumb-custom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-custom a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-custom a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb-custom .separator {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        .breadcrumb-custom .current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .btn-icon:hover {
+            background: var(--light);
+            color: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 2px solid var(--surface);
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        .page-content {
+            padding: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .btn-back {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .btn-back:hover {
+            background: var(--light);
+            color: var(--primary);
+            border-color: var(--primary-light);
+            transform: translateX(-3px);
+        }
+
+        .page-header-info h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+
+        .page-header-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* ===== FORM CARD ===== */
+        .form-card-elevated {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .form-card-elevated:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-header {
+            padding: 28px 32px;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(220, 38, 38, 0.15);
+            border-radius: 50%;
+        }
+
+        .form-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+        }
+
+        .form-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header-icon {
+            position: absolute;
+            top: 20px;
+            right: 32px;
+            font-size: 4rem;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .form-body {
+            padding: 32px;
+        }
+
+        /* ===== SECTION TITLES ===== */
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ===== FORM GROUPS ===== */
+        .form-group-custom {
+            margin-bottom: 20px;
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--surface);
+            transition: var(--transition);
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08);
+        }
+
+        .form-control-custom::placeholder {
+            color: var(--text-muted);
+        }
+
+        select.form-control-custom {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748B' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 48px;
+        }
+
+        textarea.form-control-custom {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+        }
+
+        .input-icon-wrapper .form-control-custom {
+            padding-left: 48px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .input-icon-wrapper .form-control-custom:focus~.input-icon {
+            color: var(--primary);
+        }
+
+        /* ===== CURRENCY INPUT ===== */
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-input .currency-symbol {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .currency-input .form-control-custom {
+            padding-left: 40px;
+            font-weight: 600;
+            font-family: 'SF Mono', monospace;
+        }
+
+        /* ===== TOGGLE SWITCHES ===== */
+        .switches-row {
+            display: flex;
+            gap: 32px;
+            padding: 16px;
+            background: var(--light);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+        }
+
+        .switch-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .switch-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .switch-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Custom Toggle */
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--border);
+            border-radius: 28px;
+            transition: var(--transition);
+        }
+
+        .toggle-slider::before {
+            position: absolute;
+            content: '';
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-switch input:checked+.toggle-slider {
+            background: var(--primary);
+        }
+
+        .toggle-switch input:checked+.toggle-slider::before {
+            transform: translateX(24px);
+        }
+
+        .toggle-switch input:focus+.toggle-slider {
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        /* ===== FORM ACTIONS ===== */
+        .form-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .btn-cancel {
+            padding: 12px 28px;
+            border-radius: 100px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-cancel:hover {
+            background: var(--light);
+            color: var(--text-primary);
+            border-color: var(--text-muted);
+        }
+
+        .btn-submit {
+            padding: 14px 32px;
+            border-radius: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-toggle {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 20px;
+            }
+
+            .form-header {
+                padding: 24px;
+            }
+
+            .form-body {
+                padding: 24px;
+            }
+
+            .switches-row {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .btn-cancel,
+            .btn-submit {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .top-header {
+                padding: 12px 20px;
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 100px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar slide-in-left" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link" style="text-decoration: none;">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/servicios" class="sidebar-nav-link active">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="mobile-toggle" onclick="toggleSidebar()">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <nav class="breadcrumb-custom">
+                        <a href="/admin/dashboard"><i class="bi bi-house-door"></i></a>
+                        <span class="separator"><i class="bi bi-chevron-right"></i></span>
+                        <a href="/admin/servicios">Servicios</a>
+                        <span class="separator"><i class="bi bi-chevron-right"></i></span>
+                        <span class="current" th:text="${service.id != null ? 'Editar' : 'Nuevo'}">Nuevo</span>
+                    </nav>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <a href="/logout" class="btn-icon" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+
+                <!-- PAGE HEADER -->
+                <div class="page-header fade-in">
+                    <a href="/admin/servicios" class="btn-back">
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+                    <div class="page-header-info">
+                        <h1 th:text="${service.id != null ? 'Editar Servicio' : 'Nuevo Servicio'}">Nuevo Servicio</h1>
+                        <p>Configura los detalles del servicio que ofrece tu empresa.</p>
+                    </div>
+                </div>
+
+                <!-- FORM CARD -->
+                <div class="form-card-elevated fade-in">
+
+                    <!-- FORM HEADER -->
+                    <div class="form-header">
+                        <i class="bi bi-briefcase form-header-icon"></i>
+                        <h2><i class="bi bi-briefcase me-2"></i>Información del Servicio</h2>
+                        <p>Completa todos los campos para registrar o actualizar el servicio.</p>
+                    </div>
+
+                    <!-- FORM BODY -->
+                    <div class="form-body">
+                        <form th:action="@{/admin/servicios/guardar}" th:object="${service}" method="POST"
+                            id="serviceForm">
+                            <input type="hidden" th:field="*{id}">
+                            <input type="hidden" th:field="*{slug}">
+
+                            <!-- BASIC INFO SECTION -->
+                            <div class="section-title">
+                                <i class="bi bi-info-circle"></i>
+                                Datos Básicos
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Nombre del Servicio *</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="text" class="form-control-custom" th:field="*{name}"
+                                                placeholder="Ej: Instalación de CCTV" required>
+                                            <i class="bi bi-briefcase input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Categoría *</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="text" class="form-control-custom" th:field="*{category}"
+                                                placeholder="Ej: Videovigilancia, Conectividad" required>
+                                            <i class="bi bi-folder input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">Descripción Corta *</label>
+                                <div class="input-icon-wrapper">
+                                    <input type="text" class="form-control-custom" th:field="*{shortDescription}"
+                                        placeholder="Breve resumen del servicio (máx. 150 caracteres)" required>
+                                    <i class="bi bi-text-paragraph input-icon"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group-custom">
+                                <label class="form-label-custom">Descripción Completa</label>
+                                <textarea class="form-control-custom" th:field="*{fullDescription}" rows="4"
+                                    placeholder="Describe en detalle qué incluye el servicio, beneficios, especificaciones técnicas..."></textarea>
+                            </div>
+
+                            <!-- PRICING SECTION -->
+                            <div class="section-title" style="margin-top: 32px;">
+                                <i class="bi bi-cash-stack"></i>
+                                Precios y Tiempos
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Precio Desde ($) *</label>
+                                        <div class="currency-input">
+                                            <span class="currency-symbol">$</span>
+                                            <input type="number" class="form-control-custom" th:field="*{priceFrom}"
+                                                placeholder="0" required min="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Tiempo Estimado</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="text" class="form-control-custom" th:field="*{estimatedTime}"
+                                                placeholder="Ej: 1-2 días">
+                                            <i class="bi bi-clock input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Garantía</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="text" class="form-control-custom" th:field="*{warranty}"
+                                                placeholder="Ej: 2 años">
+                                            <i class="bi bi-shield-check input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SETTINGS SECTION -->
+                            <div class="section-title" style="margin-top: 32px;">
+                                <i class="bi bi-gear"></i>
+                                Configuración
+                            </div>
+
+                            <div class="switches-row">
+                                <label class="switch-item">
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" th:field="*{featured}" id="featured">
+                                        <span class="toggle-slider"></span>
+                                    </div>
+                                    <div>
+                                        <div class="switch-label">Destacar en Home</div>
+                                        <div class="switch-hint">Mostrar en la página principal</div>
+                                    </div>
+                                </label>
+                                <label class="switch-item">
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" th:field="*{active}" id="active" checked>
+                                        <span class="toggle-slider"></span>
+                                    </div>
+                                    <div>
+                                        <div class="switch-label">Activo</div>
+                                        <div class="switch-hint">Visible para los clientes</div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- FORM ACTIONS -->
+                            <div class="form-actions">
+                                <a href="/admin/servicios" class="btn-cancel">
+                                    <i class="bi bi-x-lg"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn-submit" id="submitBtn">
+                                    <i class="bi bi-check-lg"></i> Guardar Servicio
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ===== SIDEBAR TOGGLE (Mobile) =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (e) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 1200 &&
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) &&
+                !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // ===== FORM VALIDATION =====
+        const form = document.getElementById('serviceForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', function (e) {
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = 'var(--primary)';
+                    field.style.animation = 'shake 0.5s ease';
+                    setTimeout(() => {
+                        field.style.animation = '';
+                    }, 500);
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '';
+                }
+            });
+
+            // Validate price is positive
+            const priceField = form.querySelector('input[name="priceFrom"]');
+            if (priceField && parseFloat(priceField.value) < 0) {
+                priceField.style.borderColor = 'var(--primary)';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                return false;
+            }
+
+            // Loading state
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Guardando...';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.7';
+        });
+
+        // Real-time validation on input
+        form.querySelectorAll('[required]').forEach(field => {
+            field.addEventListener('blur', function () {
+                if (this.value.trim()) {
+                    this.style.borderColor = 'var(--success)';
+                    setTimeout(() => {
+                        this.style.transition = 'border-color 0.5s ease';
+                        this.style.borderColor = '';
+                    }, 1500);
+                }
+            });
+
+            field.addEventListener('input', function () {
+                if (this.style.borderColor === 'rgb(220, 38, 38)' || this.style.borderColor === '#DC2626' || this.style.borderColor === 'var(--primary)') {
+                    this.style.borderColor = '';
+                }
+            });
+        });
+
+        // ===== ANIMATE ON LOAD =====
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animate form card entrance
+            const formCard = document.querySelector('.form-card-elevated');
+            formCard.style.opacity = '0';
+            formCard.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                formCard.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                formCard.style.opacity = '1';
+                formCard.style.transform = 'translateY(0)';
+            }, 100);
+
+            // Set active state for toggle if editing
+            const activeToggle = document.getElementById('active');
+            if (activeToggle && !activeToggle.checked && !document.querySelector('input[name="id"]').value) {
+                activeToggle.checked = true;
+            }
+        });
+
+        // ===== INPUT ENHANCEMENTS =====
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('focus', function () {
+                if (this.value === '0') this.select();
+            });
+        });
+
+        // Prevent negative values
+        document.querySelectorAll('input[type="number"][min="0"]').forEach(input => {
+            input.addEventListener('change', function () {
+                if (parseFloat(this.value) < 0) this.value = 0;
+            });
+        });
+
+        // ===== CHARACTER COUNTER FOR SHORT DESCRIPTION =====
+        const shortDescField = document.querySelector('input[name="shortDescription"]');
+        if (shortDescField) {
+            const maxChars = 150;
+
+            const counterDiv = document.createElement('div');
+            counterDiv.style.cssText = 'font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; text-align: right;';
+            counterDiv.innerHTML = `<span id="charCount">0</span> / ${maxChars} caracteres`;
+            shortDescField.parentElement.appendChild(counterDiv);
+
+            shortDescField.addEventListener('input', function () {
+                const count = this.value.length;
+                const countSpan = document.getElementById('charCount');
+                countSpan.textContent = count;
+
+                if (count > maxChars) {
+                    countSpan.style.color = 'var(--primary)';
+                    this.style.borderColor = 'var(--primary)';
+                } else if (count > maxChars * 0.8) {
+                    countSpan.style.color = 'var(--warning)';
+                    this.style.borderColor = 'var(--warning)';
+                } else {
+                    countSpan.style.color = 'var(--text-muted)';
+                    this.style.borderColor = '';
+                }
+            });
+        }
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', function (e) {
+            // Ctrl+Enter to submit
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+
+    <style>
+        /* ===== SHAKE ANIMATION ===== */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+    </style>
+</body>
+
+</html>

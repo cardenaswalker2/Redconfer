@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de Cotizaciones - REDCONFER</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #DC2626;
+            --primary-dark: #B91C1C;
+            --primary-light: #FEE2E2;
+            --secondary: #1E293B;
+            --dark: #0F172A;
+            --light: #F8FAFC;
+            --surface: #FFFFFF;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== LAYOUT ===== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            transition: var(--transition);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 0.75rem 1rem 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .sidebar-nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.3);
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+        }
+
+        /* ===== TOP HEADER ===== */
+        .top-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .breadcrumb-custom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-custom a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-custom a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb-custom .separator {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        .breadcrumb-custom .current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .btn-icon:hover {
+            background: var(--light);
+            color: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 2px solid var(--surface);
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        .page-content {
+            padding: 32px;
+            max-width: 1400px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .page-header-left p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 100px;
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: var(--transition);
+            margin-bottom: 16px;
+        }
+
+        .btn-back:hover {
+            background: var(--light);
+            color: var(--text-primary);
+            border-color: var(--text-muted);
+            transform: translateX(-4px);
+        }
+
+        /* ===== FORM CARD ===== */
+        .form-card-elevated {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .form-card-elevated:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-header {
+            padding: 28px 32px;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(220, 38, 38, 0.15);
+            border-radius: 50%;
+        }
+
+        .form-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -5%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+        }
+
+        .form-header h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0 0 6px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header-icon {
+            position: absolute;
+            top: 20px;
+            right: 32px;
+            font-size: 4rem;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .form-body {
+            padding: 32px;
+        }
+
+        /* ===== STEPS INDICATOR ===== */
+        .steps-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 32px;
+            padding: 0 8px;
+        }
+
+        .step-item {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-item::after {
+            content: '';
+            position: absolute;
+            top: 16px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border);
+            z-index: 0;
+        }
+
+        .step-item:last-child::after {
+            display: none;
+        }
+
+        .step-item.completed::after {
+            background: var(--success);
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            margin: 0 auto 8px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .step-item.active .step-circle {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .step-item.completed .step-circle {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .step-item.active .step-label {
+            color: var(--primary);
+        }
+
+        .step-item.completed .step-label {
+            color: var(--success);
+        }
+
+        /* ===== SECTION TITLES ===== */
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ===== CLIENT SELECTOR ===== */
+        .client-selector-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .client-selector-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+
+        .client-selector {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid var(--primary-light);
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--surface);
+            transition: var(--transition);
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23DC2626' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+
+        .client-selector:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+        }
+
+        .client-hint {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .client-hint i {
+            color: var(--primary);
+        }
+
+        /* ===== FORM GROUPS ===== */
+        .form-group-custom {
+            margin-bottom: 20px;
+        }
+
+        .form-label-custom {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control-custom {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--surface);
+            transition: var(--transition);
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08);
+        }
+
+        .form-control-custom::placeholder {
+            color: var(--text-muted);
+        }
+
+        select.form-control-custom {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748B' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 48px;
+        }
+
+        textarea.form-control-custom {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+        }
+
+        .input-icon-wrapper .form-control-custom {
+            padding-left: 48px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .input-icon-wrapper .form-control-custom:focus~.input-icon {
+            color: var(--primary);
+        }
+
+        /* ===== ITEMS TABLE ===== */
+        .items-table-wrapper {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .items-table thead {
+            background: var(--light);
+        }
+
+        .items-table th {
+            padding: 14px 16px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .items-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        .items-table tbody tr {
+            transition: var(--transition);
+        }
+
+        .items-table tbody tr:hover {
+            background: var(--light);
+        }
+
+        .items-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--surface);
+            transition: var(--transition);
+        }
+
+        .table-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+        }
+
+        input[type="number"].table-input {
+            text-align: right;
+            font-family: 'SF Mono', monospace;
+            font-weight: 600;
+        }
+
+        .btn-delete-row {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-delete-row:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .btn-add-row {
+            padding: 10px 24px;
+            border-radius: 100px;
+            background: var(--light);
+            color: var(--text-secondary);
+            border: 1.5px dashed var(--border);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-add-row:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        /* ===== COSTS GRID ===== */
+        .costs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .cost-input-wrapper {
+            position: relative;
+        }
+
+        .cost-input-wrapper .currency-symbol {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .cost-input-wrapper .form-control-custom {
+            padding-left: 36px;
+            font-family: 'SF Mono', monospace;
+            font-weight: 600;
+        }
+
+        /* ===== SUMMARY CARD ===== */
+        .summary-card {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--secondary) 100%);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            margin-top: 28px;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 50%;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .summary-row:not(:last-child) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-row span {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .summary-row strong {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .summary-row.total {
+            padding: 16px 0;
+        }
+
+        .summary-row.total span {
+            font-size: 1rem;
+            font-weight: 700;
+            opacity: 1;
+        }
+
+        .summary-row.total strong {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #FCA5A5;
+        }
+
+        /* ===== SUBMIT BUTTON ===== */
+        .form-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .btn-submit {
+            padding: 14px 32px;
+            border-radius: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-toggle {
+                display: flex !important;
+            }
+
+            .costs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 20px;
+            }
+
+            .form-header {
+                padding: 24px;
+            }
+
+            .form-body {
+                padding: 24px;
+            }
+
+            .steps-indicator {
+                display: none;
+            }
+
+            .costs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .btn-submit {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .top-header {
+                padding: 12px 20px;
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 100px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar slide-in-left" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link" style="text-decoration: none;">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link active">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/servicios" class="sidebar-nav-link">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="mobile-toggle" onclick="toggleSidebar()">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <nav class="breadcrumb-custom">
+                        <a href="/admin/dashboard"><i class="bi bi-house-door"></i></a>
+                        <span class="separator"><i class="bi bi-chevron-right"></i></span>
+                        <a href="/admin/cotizaciones">Cotizaciones</a>
+                        <span class="separator"><i class="bi bi-chevron-right"></i></span>
+                        <span class="current">Nueva Cotización</span>
+                    </nav>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <a href="/logout" class="btn-icon" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+
+                <!-- PAGE HEADER -->
+                <div class="page-header fade-in">
+                    <div class="page-header-left">
+                        <a href="/admin/cotizaciones" class="btn-back">
+                            <i class="bi bi-arrow-left"></i> Volver a Cotizaciones
+                        </a>
+                        <h1>Constructor de Cotizaciones Manuales</h1>
+                        <p>Crea propuestas de ingeniería completas desde cero ingresando detalles de clientes y costos
+                            operativos.</p>
+                    </div>
+                </div>
+
+                <div class="form-card-elevated fade-in">
+
+                    <!-- FORM HEADER -->
+                    <div class="form-header">
+                        <i class="bi bi-file-earmark-plus form-header-icon"></i>
+                        <h2><i class="bi bi-file-earmark-plus me-2"></i>Nueva Cotización</h2>
+                        <p>Completa todos los campos para generar una propuesta profesional para tu cliente.</p>
+                    </div>
+
+                    <!-- STEPS INDICATOR -->
+                    <div class="steps-indicator" style="padding: 24px 32px 0;">
+                        <div class="step-item active" id="step1">
+                            <div class="step-circle">1</div>
+                            <div class="step-label">Cliente</div>
+                        </div>
+                        <div class="step-item" id="step2">
+                            <div class="step-circle">2</div>
+                            <div class="step-label">Items</div>
+                        </div>
+                        <div class="step-item" id="step3">
+                            <div class="step-circle">3</div>
+                            <div class="step-label">Costos</div>
+                        </div>
+                        <div class="step-item" id="step4">
+                            <div class="step-circle">4</div>
+                            <div class="step-label">Confirmar</div>
+                        </div>
+                    </div>
+
+                    <!-- FORM BODY -->
+                    <div class="form-body">
+                        <form th:action="@{/admin/cotizaciones/crear-manual}" th:object="${quote}" method="POST"
+                            id="quoteForm">
+
+                            <!-- CLIENT SECTION -->
+                            <div class="section-title">
+                                <i class="bi bi-person"></i>
+                                Información del Cliente
+                            </div>
+
+                            <!-- Client Selector -->
+                            <div class="client-selector-wrapper">
+                                <i class="bi bi-search"></i>
+                                <select id="clientSelector" class="client-selector" onchange="autoFillClient()">
+                                    <option value="">Buscar o seleccionar cliente existente para auto-completar...
+                                    </option>
+                                    <option th:each="c : ${clients}" th:value="${c.id}" th:data-name="${c.name}"
+                                        th:data-company="${c.company}"
+                                        th:data-email="${c.emails != null && !c.emails.isEmpty() ? c.emails[0] : ''}"
+                                        th:data-phone="${c.phones != null && !c.phones.isEmpty() ? c.phones[0] : ''}"
+                                        th:data-address="${c.address}" th:data-city="${c.city}"
+                                        th:text="${c.name + ' (' + c.company + ')'}"></option>
+                                </select>
+                                <div class="client-hint">
+                                    <i class="bi bi-lightbulb"></i>
+                                    Selecciona un cliente existente para llenar automáticamente los campos
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Nombre del Cliente *</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="text" th:field="*{clientName}" id="clientName"
+                                                class="form-control-custom" placeholder="Ej: Carlos Mendoza" required>
+                                            <i class="bi bi-person input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Empresa / Lugar</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="text" th:field="*{clientCompany}" id="clientCompany"
+                                                class="form-control-custom" placeholder="Ej: Casa, Oficina, Local...">
+                                            <i class="bi bi-building input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Correo Electrónico</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="email" th:field="*{clientEmail}" id="clientEmail"
+                                                class="form-control-custom" placeholder="Ej: cliente@correo.com">
+                                            <i class="bi bi-envelope input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Teléfono / WhatsApp</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="text" th:field="*{clientPhone}" id="clientPhone"
+                                                class="form-control-custom" placeholder="Ej: +57 300 123 4567">
+                                            <i class="bi bi-telephone input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Dirección</label>
+                                        <div class="input-icon-wrapper">
+                                            <input type="text" th:field="*{clientAddress}" id="clientAddress"
+                                                class="form-control-custom" placeholder="Ej: Transversal 54 No. 23-45">
+                                            <i class="bi bi-geo-alt input-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Ciudad</label>
+                                        <input type="text" th:field="*{clientCity}" id="clientCity"
+                                            class="form-control-custom" placeholder="Ej: Cartagena">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Tipo de Solución</label>
+                                        <select th:field="*{serviceType}" class="form-control-custom">
+                                            <option value="CCTV IP">Videovigilancia (CCTV IP)</option>
+                                            <option value="Redes y Cableado">Redes y Cableado Estructurado</option>
+                                            <option value="Control de Acceso">Control de Acceso y Puertas</option>
+                                            <option value="Fibra Óptica">Fibra Óptica Dedicada</option>
+                                            <option value="Domótica">Domótica y Automatización</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ITEMS SECTION -->
+                            <div class="section-title" style="margin-top: 32px;">
+                                <i class="bi bi-list-task"></i>
+                                Items / Productos y Servicios
+                            </div>
+
+                            <div class="items-table-wrapper">
+                                <table class="items-table" id="itemsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripción del Item</th>
+                                            <th style="width: 100px;">Cant.</th>
+                                            <th style="width: 150px;">Precio Unitario ($)</th>
+                                            <th style="width: 50px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" name="descItem" class="table-input"
+                                                    placeholder="Ej: Cámara Domo IP Hikvision 4MP" required></td>
+                                            <td><input type="number" name="qtyItem" class="table-input" value="1"
+                                                    min="1" onchange="calculateTotals()"></td>
+                                            <td><input type="number" name="priceItem" class="table-input" value="0"
+                                                    min="0" onchange="calculateTotals()"></td>
+                                            <td><button type="button" class="btn-delete-row"
+                                                    onclick="deleteRow(this)"><i class="bi bi-trash3"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="descItem" class="table-input"
+                                                    placeholder="Ej: Bobina Cable UTP Cat6"></td>
+                                            <td><input type="number" name="qtyItem" class="table-input" value="1"
+                                                    min="1" onchange="calculateTotals()"></td>
+                                            <td><input type="number" name="priceItem" class="table-input" value="0"
+                                                    min="0" onchange="calculateTotals()"></td>
+                                            <td><button type="button" class="btn-delete-row"
+                                                    onclick="deleteRow(this)"><i class="bi bi-trash3"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="text" name="descItem" class="table-input"
+                                                    placeholder="Ej: Mano de obra de canalización y montaje"></td>
+                                            <td><input type="number" name="qtyItem" class="table-input" value="1"
+                                                    min="1" onchange="calculateTotals()"></td>
+                                            <td><input type="number" name="priceItem" class="table-input" value="0"
+                                                    min="0" onchange="calculateTotals()"></td>
+                                            <td><button type="button" class="btn-delete-row"
+                                                    onclick="deleteRow(this)"><i class="bi bi-trash3"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="text-end mb-4">
+                                <button type="button" class="btn-add-row" onclick="addRow()">
+                                    <i class="bi bi-plus-lg"></i> Añadir Fila
+                                </button>
+                            </div>
+
+                            <!-- COSTS SECTION -->
+                            <div class="section-title">
+                                <i class="bi bi-wallet2"></i>
+                                Costos Internos y Ajustes Financieros
+                            </div>
+
+                            <div class="costs-grid">
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">Costo Materiales ($)</label>
+                                    <div class="cost-input-wrapper">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="number" name="materialCost" class="form-control-custom" value="0"
+                                            min="0" onchange="calculateTotals()">
+                                    </div>
+                                </div>
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">Mano de Obra ($)</label>
+                                    <div class="cost-input-wrapper">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="number" name="laborCost" class="form-control-custom" value="0"
+                                            min="0" onchange="calculateTotals()">
+                                    </div>
+                                </div>
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">Transporte ($)</label>
+                                    <div class="cost-input-wrapper">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="number" name="transportCost" class="form-control-custom" value="0"
+                                            min="0" onchange="calculateTotals()">
+                                    </div>
+                                </div>
+                                <div class="form-group-custom">
+                                    <label class="form-label-custom">Descuento ($)</label>
+                                    <div class="cost-input-wrapper">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="number" name="discount" class="form-control-custom" value="0"
+                                            min="0" onchange="calculateTotals()">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STATUS SECTION -->
+                            <div class="section-title" style="margin-top: 32px;">
+                                <i class="bi bi-gear"></i>
+                                Estado Operativo
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Estado de Cotización</label>
+                                        <select name="status" class="form-control-custom">
+                                            <option th:each="st : ${statusList}" th:value="${st}" th:text="${st}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Etapa CRM</label>
+                                        <select name="crmStage" class="form-control-custom">
+                                            <option value="CONTACT">Contacto Inicial</option>
+                                            <option value="ESCRIBI">Le escribí</option>
+                                            <option value="RESPONDIO">Respondió</option>
+                                            <option value="INTERESADO">Interesado</option>
+                                            <option value="SIN_RESPUESTA">Sin respuesta</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group-custom">
+                                        <label class="form-label-custom">Observaciones / Notas Internas</label>
+                                        <textarea name="observations" class="form-control-custom" rows="3"
+                                            placeholder="Ingresa notas operativas sobre la propuesta..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SUMMARY CARD -->
+                            <div class="summary-card">
+                                <div class="summary-row">
+                                    <span>Subtotal Items</span>
+                                    <strong id="subtotalDisplay">$0</strong>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Descuento</span>
+                                    <strong id="discountDisplay">$0</strong>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Subtotal Neto</span>
+                                    <strong id="netSubtotalDisplay">$0</strong>
+                                </div>
+                                <div class="summary-row">
+                                    <span id="taxLabel" th:text="${'IVA (' + (settings != null ? settings.taxRate : 19.0) + '%)'}">IVA (19%)</span>
+                                    <strong id="taxDisplay">$0</strong>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total Cotización</span>
+                                    <strong id="totalDisplay">$0</strong>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Costos Totales</span>
+                                    <strong id="costsDisplay" style="color: #FCA5A5;">$0</strong>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Utilidad Estimada</span>
+                                    <strong id="profitDisplay" style="color: #6EE7B7;">$0</strong>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Margen de Ganancia</span>
+                                    <strong id="marginDisplay" style="color: #93C5FD;">0%</strong>
+                                </div>
+                            </div>
+
+                            <!-- FORM ACTIONS -->
+                            <div class="form-actions">
+                                <button type="submit" class="btn-submit" id="submitBtn">
+                                    <i class="bi bi-file-earmark-check"></i> Generar y Guardar Cotización
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ===== SIDEBAR TOGGLE (Mobile) =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (e) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 1200 &&
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) &&
+                !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // ===== AUTO-FILL CLIENT =====
+        function autoFillClient() {
+            const selector = document.getElementById("clientSelector");
+            if (!selector) return;
+            
+            const selectedOption = selector.options[selector.selectedIndex];
+            if (!selectedOption || selectedOption.value === "") return;
+
+            const name = selectedOption.getAttribute("data-name") || "";
+            const company = selectedOption.getAttribute("data-company") || "";
+            const email = selectedOption.getAttribute("data-email") || "";
+            const phone = selectedOption.getAttribute("data-phone") || "";
+            const address = selectedOption.getAttribute("data-address") || "";
+            const city = selectedOption.getAttribute("data-city") || "";
+
+            const fields = {
+                clientName: name,
+                clientCompany: company,
+                clientEmail: email,
+                clientPhone: phone,
+                clientAddress: address,
+                clientCity: city
+            };
+
+            Object.keys(fields).forEach(id => {
+                const field = document.getElementById(id);
+                if (field) {
+                    field.value = fields[id];
+                    // Highlight filled fields
+                    if (fields[id]) {
+                        field.style.borderColor = 'var(--success)';
+                        field.style.background = 'var(--success-light)';
+                        setTimeout(() => {
+                            field.style.transition = 'all 0.5s ease';
+                            field.style.borderColor = '';
+                            field.style.background = '';
+                        }, 1500);
+                    }
+                }
+            });
+
+            updateSteps();
+        }
+
+        // ===== TABLE ROW MANAGEMENT =====
+        function addRow() {
+            const tbody = document.querySelector('#itemsTable tbody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" name="descItem" class="table-input" placeholder="Descripción del material o servicio"></td>
+                <td><input type="number" name="qtyItem" class="table-input" value="1" min="1" onchange="calculateTotals()"></td>
+                <td><input type="number" name="priceItem" class="table-input" value="0" min="0" onchange="calculateTotals()"></td>
+                <td><button type="button" class="btn-delete-row" onclick="deleteRow(this)"><i class="bi bi-trash3"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+
+            // Animate new row
+            tr.style.opacity = '0';
+            tr.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                tr.style.transition = 'all 0.3s ease';
+                tr.style.opacity = '1';
+                tr.style.transform = 'translateY(0)';
+            }, 10);
+
+            calculateTotals();
+            updateSteps();
+        }
+
+        function deleteRow(btn) {
+            const tr = btn.closest('tr');
+            const tbody = tr.parentElement;
+
+            // Don't delete if it's the last row
+            if (tbody.querySelectorAll('tr').length <= 1) {
+                tr.querySelectorAll('input').forEach(input => {
+                    input.value = input.type === 'text' ? '' : (input.name === 'qtyItem' ? '1' : '0');
+                });
+                calculateTotals();
+                return;
+            }
+
+            tr.style.transition = 'all 0.3s ease';
+            tr.style.opacity = '0';
+            tr.style.transform = 'translateX(-20px)';
+
+            setTimeout(() => {
+                tr.remove();
+                calculateTotals();
+                updateSteps();
+            }, 300);
+        }
+
+        // ===== CALCULATE TOTALS IN REAL TIME =====
+        const taxRate = /*[[${settings != null ? settings.taxRate : 19.0}]]*/ 19.0;
+
+        function calculateTotals() {
+            const rows = document.querySelectorAll('#itemsTable tbody tr');
+            let subtotal = 0;
+
+            rows.forEach(row => {
+                const qty = parseFloat(row.querySelector('input[name="qtyItem"]')?.value) || 0;
+                const price = parseFloat(row.querySelector('input[name="priceItem"]')?.value) || 0;
+                subtotal += qty * price;
+            });
+
+            const discount = parseFloat(document.querySelector('input[name="discount"]')?.value) || 0;
+            const materialCost = parseFloat(document.querySelector('input[name="materialCost"]')?.value) || 0;
+            const laborCost = parseFloat(document.querySelector('input[name="laborCost"]')?.value) || 0;
+            const transportCost = parseFloat(document.querySelector('input[name="transportCost"]')?.value) || 0;
+
+            const netSubtotal = Math.max(0, subtotal - discount);
+            const tax = netSubtotal * (taxRate / 100.0);
+            const total = netSubtotal + tax;
+            const totalCosts = materialCost + laborCost + transportCost;
+            const profit = netSubtotal - totalCosts;
+            const marginPercent = netSubtotal > 0 ? (profit / netSubtotal * 100) : 0;
+
+            // Update displays
+            document.getElementById('subtotalDisplay').textContent = formatCurrency(subtotal);
+            document.getElementById('discountDisplay').textContent = formatCurrency(discount);
+            document.getElementById('netSubtotalDisplay').textContent = formatCurrency(netSubtotal);
+            document.getElementById('taxDisplay').textContent = formatCurrency(tax);
+            document.getElementById('totalDisplay').textContent = formatCurrency(total);
+            document.getElementById('costsDisplay').textContent = formatCurrency(totalCosts);
+            document.getElementById('profitDisplay').textContent = formatCurrency(profit);
+            document.getElementById('marginDisplay').textContent = marginPercent.toFixed(1) + '%';
+
+            // Color coding for margin
+            const marginEl = document.getElementById('marginDisplay');
+            if (marginPercent >= 20) {
+                marginEl.style.color = '#6EE7B7';
+            } else if (marginPercent >= 10) {
+                marginEl.style.color = '#FCD34D';
+            } else if (marginPercent > 0) {
+                marginEl.style.color = '#FCA5A5';
+            } else {
+                marginEl.style.color = '#EF4444';
+            }
+
+            // Color coding for profit
+            const profitEl = document.getElementById('profitDisplay');
+            profitEl.style.color = profit >= 0 ? '#6EE7B7' : '#EF4444';
+        }
+
+        function formatCurrency(value) {
+            return '$' + Math.round(value).toLocaleString('es-CO');
+        }
+
+        // ===== FORM STEPS INDICATOR =====
+        function updateSteps() {
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const step4 = document.getElementById('step4');
+
+            const clientName = document.getElementById('clientName').value.trim();
+            const hasItems = document.querySelectorAll('#itemsTable tbody tr').length > 0;
+            const hasValidItems = Array.from(document.querySelectorAll('#itemsTable tbody tr')).some(row => {
+                const desc = row.querySelector('input[name="descItem"]')?.value.trim();
+                const price = parseFloat(row.querySelector('input[name="priceItem"]')?.value) || 0;
+                return desc && price > 0;
+            });
+
+            // Step 1: Client
+            if (clientName) {
+                step1.classList.add('completed');
+                step1.classList.remove('active');
+                step1.querySelector('.step-circle').innerHTML = '<i class="bi bi-check-lg"></i>';
+                if (!step2.classList.contains('completed')) {
+                    step2.classList.add('active');
+                }
+            } else {
+                step1.classList.add('active');
+                step1.classList.remove('completed');
+                step1.querySelector('.step-circle').textContent = '1';
+            }
+
+            // Step 2: Items
+            if (hasValidItems) {
+                step2.classList.add('completed');
+                step2.classList.remove('active');
+                step2.querySelector('.step-circle').innerHTML = '<i class="bi bi-check-lg"></i>';
+                if (!step3.classList.contains('completed')) {
+                    step3.classList.add('active');
+                }
+            } else if (!step1.classList.contains('completed')) {
+                step2.classList.remove('active', 'completed');
+                step2.querySelector('.step-circle').textContent = '2';
+            }
+
+            // Step 3: Costs (always available, check if any cost entered)
+            const hasCosts = parseFloat(document.querySelector('input[name="materialCost"]')?.value) > 0 ||
+                parseFloat(document.querySelector('input[name="laborCost"]')?.value) > 0 ||
+                parseFloat(document.querySelector('input[name="transportCost"]')?.value) > 0;
+
+            if (hasCosts && hasValidItems) {
+                step3.classList.add('completed');
+                step3.classList.remove('active');
+                step3.querySelector('.step-circle').innerHTML = '<i class="bi bi-check-lg"></i>';
+                if (!step4.classList.contains('completed')) {
+                    step4.classList.add('active');
+                }
+            } else if (!step2.classList.contains('completed')) {
+                step3.classList.remove('active', 'completed');
+                step3.querySelector('.step-circle').textContent = '3';
+            }
+
+            // Step 4: Ready to submit
+            if (clientName && hasValidItems) {
+                step4.classList.add('completed');
+                step4.classList.remove('active');
+                step4.querySelector('.step-circle').innerHTML = '<i class="bi bi-check-lg"></i>';
+            } else if (!step3.classList.contains('completed')) {
+                step4.classList.remove('active', 'completed');
+                step4.querySelector('.step-circle').textContent = '4';
+            }
+        }
+
+        // ===== FORM VALIDATION =====
+        document.getElementById('quoteForm').addEventListener('submit', function (e) {
+            const clientName = document.getElementById('clientName').value.trim();
+            if (!clientName) {
+                e.preventDefault();
+                document.getElementById('clientName').focus();
+                document.getElementById('clientName').style.borderColor = 'var(--primary)';
+                setTimeout(() => {
+                    document.getElementById('clientName').style.borderColor = '';
+                }, 2000);
+                return false;
+            }
+
+            // Check if at least one item has description and price
+            const rows = document.querySelectorAll('#itemsTable tbody tr');
+            let hasValidItem = false;
+            rows.forEach(row => {
+                const desc = row.querySelector('input[name="descItem"]')?.value.trim();
+                const price = parseFloat(row.querySelector('input[name="priceItem"]')?.value) || 0;
+                if (desc && price > 0) hasValidItem = true;
+            });
+
+            if (!hasValidItem) {
+                e.preventDefault();
+                alert('Debes agregar al menos un item con descripción y precio.');
+                return false;
+            }
+
+            // Loading state
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Generando cotización...';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.7';
+        });
+
+        // ===== INPUT ENHANCEMENTS =====
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('focus', function () {
+                if (this.value === '0') this.select();
+            });
+        });
+
+        // Prevent negative values
+        document.querySelectorAll('input[type="number"][min="0"]').forEach(input => {
+            input.addEventListener('change', function () {
+                if (parseFloat(this.value) < 0) this.value = 0;
+                calculateTotals();
+                updateSteps();
+            });
+        });
+
+        // Text inputs update steps
+        ['clientName', 'clientCompany', 'clientEmail', 'clientPhone'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', updateSteps);
+        });
+
+        // ===== ANIMATE ON LOAD =====
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animate form card entrance
+            const formCard = document.querySelector('.form-card-elevated');
+            formCard.style.opacity = '0';
+            formCard.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                formCard.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                formCard.style.opacity = '1';
+                formCard.style.transform = 'translateY(0)';
+            }, 100);
+
+            // Initialize
+            calculateTotals();
+            updateSteps();
+        });
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', function (e) {
+            // Ctrl+Enter to submit
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('quoteForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+
+</html>

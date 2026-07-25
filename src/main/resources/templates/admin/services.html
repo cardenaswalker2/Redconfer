@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Servicios - REDCONFER</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --primary: #DC2626;
+            --primary-dark: #B91C1C;
+            --primary-light: #FEE2E2;
+            --secondary: #1E293B;
+            --dark: #0F172A;
+            --light: #F8FAFC;
+            --surface: #FFFFFF;
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            --text-primary: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --info: #3B82F6;
+            --info-light: #DBEAFE;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --radius-sm: 8px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== LAYOUT ===== */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 0;
+            transition: var(--transition);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 0.75rem 1rem 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: var(--transition);
+            margin-bottom: 0.25rem;
+            position: relative;
+        }
+
+        .sidebar-nav-link i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-nav-link:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-nav-link.active {
+            color: #ffffff;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            box-shadow: 0 4px 15px rgba(198, 26, 34, 0.3);
+        }
+
+        .sidebar-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #C61A22 0%, #dc2626 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            overflow: hidden;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.75rem;
+        }
+
+        /* ===== TOP HEADER ===== */
+        .top-header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .breadcrumb-custom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .breadcrumb-custom a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-custom a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb-custom .separator {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+        }
+
+        .breadcrumb-custom .current {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .btn-icon:hover {
+            background: var(--light);
+            color: var(--primary);
+            border-color: var(--primary-light);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 2px solid var(--surface);
+        }
+
+        /* ===== PAGE CONTENT ===== */
+        .page-content {
+            padding: 32px;
+            max-width: 1400px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-header-left h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .page-header-left p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .btn-new-service {
+            padding: 12px 28px;
+            border-radius: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3);
+            text-decoration: none;
+        }
+
+        .btn-new-service:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(220, 38, 38, 0.4);
+            color: white;
+        }
+
+        .btn-new-service i {
+            font-size: 1.1rem;
+        }
+
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .stat-icon.blue {
+            background: var(--info-light);
+            color: var(--info);
+        }
+
+        .stat-icon.green {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .stat-icon.orange {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .stat-icon.purple {
+            background: #E9D5FF;
+            color: #7C3AED;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ===== FILTERS BAR ===== */
+        .filters-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border: 1.5px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: var(--surface);
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border-radius: 100px;
+            border: 1.5px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+        }
+
+        /* ===== TABLE CARD ===== */
+        .table-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .table-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .table-header h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-header h3 i {
+            color: var(--primary);
+        }
+
+        .table-responsive-custom {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: var(--light);
+        }
+
+        .data-table th {
+            padding: 14px 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .data-table th:first-child {
+            padding-left: 24px;
+        }
+
+        .data-table th:last-child {
+            padding-right: 24px;
+            text-align: right;
+        }
+
+        .data-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+            transition: var(--transition);
+        }
+
+        .data-table td:first-child {
+            padding-left: 24px;
+        }
+
+        .data-table td:last-child {
+            padding-right: 24px;
+            text-align: right;
+        }
+
+        .data-table tbody tr {
+            transition: var(--transition);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--light);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Service Name */
+        .service-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-light), #FEE2E2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .service-info h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0 0 2px;
+        }
+
+        .service-info span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Category Tag */
+        .category-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: var(--info-light);
+            color: var(--info);
+        }
+
+        /* Price */
+        .price-cell {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--dark);
+            font-family: 'SF Mono', monospace;
+            letter-spacing: -0.5px;
+        }
+
+        /* Badges */
+        .badge-custom {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-featured-yes {
+            background: var(--success-light);
+            color: #059669;
+        }
+
+        .badge-featured-no {
+            background: var(--border-light);
+            color: var(--text-muted);
+        }
+
+        .badge-active {
+            background: var(--success-light);
+            color: #059669;
+        }
+
+        .badge-inactive {
+            background: var(--primary-light);
+            color: #DC2626;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .badge-featured-yes .badge-dot {
+            background: #059669;
+        }
+
+        .badge-active .badge-dot {
+            background: #059669;
+        }
+
+        .badge-inactive .badge-dot {
+            background: #DC2626;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .btn-action-edit {
+            padding: 8px 18px;
+            border-radius: 100px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-action-edit:hover {
+            background: var(--dark);
+            color: white;
+            border-color: var(--dark);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+        }
+
+        .btn-action-delete {
+            padding: 8px 18px;
+            border-radius: 100px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-action-delete:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .empty-state-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: var(--text-muted);
+            font-size: 2.5rem;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            max-width: 400px;
+            margin: 0 auto 24px;
+        }
+
+        /* Pagination */
+        .pagination-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .pagination-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .pagination-info strong {
+            color: var(--text-primary);
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .page-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-toggle {
+                display: flex !important;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 20px;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                max-width: none;
+            }
+
+            .top-header {
+                padding: 12px 20px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 12px 16px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .pagination-bar {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
+        }
+
+        .mobile-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 100px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar slide-in-left" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link" style="text-decoration: none;">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/servicios" class="sidebar-nav-link active">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="mobile-toggle" onclick="toggleSidebar()">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    <nav class="breadcrumb-custom">
+                        <a href="/admin/dashboard"><i class="bi bi-house-door"></i></a>
+                        <span class="separator"><i class="bi bi-chevron-right"></i></span>
+                        <span class="current">Servicios</span>
+                    </nav>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon">
+                        <i class="bi bi-search"></i>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <a href="/logout" class="btn-icon" title="Cerrar Sesión">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+
+                <!-- PAGE HEADER -->
+                <div class="page-header fade-in">
+                    <div class="page-header-left">
+                        <h1>Catálogo de Servicios</h1>
+                        <p>Gestiona los servicios que ofrece tu empresa a los clientes.</p>
+                    </div>
+                    <a href="/admin/servicios/nuevo" class="btn-new-service">
+                        <i class="bi bi-plus-lg"></i> Nuevo Servicio
+                    </a>
+                </div>
+
+                <!-- STATS BAR -->
+                <div class="stats-bar fade-in">
+                    <div class="stat-card stagger-1">
+                        <div class="stat-header">
+                            <div class="stat-icon blue"><i class="bi bi-briefcase"></i></div>
+                        </div>
+                        <div class="stat-value" th:text="${totalServices != null ? totalServices : 0}">0</div>
+                        <div class="stat-label">Total Servicios</div>
+                    </div>
+                    <div class="stat-card stagger-2">
+                        <div class="stat-header">
+                            <div class="stat-icon green"><i class="bi bi-check-circle"></i></div>
+                        </div>
+                        <div class="stat-value" th:text="${activeServices != null ? activeServices : 0}">0</div>
+                        <div class="stat-label">Activos</div>
+                    </div>
+                    <div class="stat-card stagger-3">
+                        <div class="stat-header">
+                            <div class="stat-icon orange"><i class="bi bi-star-fill"></i></div>
+                        </div>
+                        <div class="stat-value" th:text="${featuredServices != null ? featuredServices : 0}">0</div>
+                        <div class="stat-label">Destacados</div>
+                    </div>
+                    <div class="stat-card stagger-4">
+                        <div class="stat-header">
+                            <div class="stat-icon purple"><i class="bi bi-cash-stack"></i></div>
+                        </div>
+                        <div class="stat-value" th:text="${categoriesCount != null ? categoriesCount : 0}">0</div>
+                        <div class="stat-label">Categorías</div>
+                    </div>
+                </div>
+
+                <!-- FILTERS BAR -->
+                <div class="filters-bar fade-in">
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Buscar servicios por nombre o categoría..." id="searchInput"
+                            onkeyup="filterServices()">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="setFilter('all', this)">Todos</button>
+                        <button class="filter-btn" onclick="setFilter('active', this)">Activos</button>
+                        <button class="filter-btn" onclick="setFilter('inactive', this)">Inactivos</button>
+                        <button class="filter-btn" onclick="setFilter('featured', this)">Destacados</button>
+                    </div>
+                </div>
+
+                <!-- TABLE CARD -->
+                <div class="table-card fade-in">
+                    <div class="table-header">
+                        <h3><i class="bi bi-list-ul"></i> Lista de Servicios</h3>
+                        <span class="badge bg-secondary"
+                            th:text="${services != null ? services.size() : 0} + ' registros'">0 registros</span>
+                    </div>
+
+                    <div class="table-responsive-custom">
+                        <table class="data-table" id="servicesTable">
+                            <thead>
+                                <tr>
+                                    <th>Servicio</th>
+                                    <th>Categoría</th>
+                                    <th>Precio Desde</th>
+                                    <th>Destacado</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="s : ${services}" th:data-active="${s.active}"
+                                    th:data-featured="${s.featured}" th:data-search="${s.name + ' ' + s.category}">
+                                    <td>
+                                        <div class="service-name">
+                                            <div class="service-icon">
+                                                <i class="bi bi-briefcase"></i>
+                                            </div>
+                                            <div class="service-info">
+                                                <h4 th:text="${s.name}">Instalación CCTV</h4>
+                                                <span th:if="${s.shortDescription != null}"
+                                                    th:text="${#strings.abbreviate(s.shortDescription, 40)}">Descripción
+                                                    corta</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="category-tag">
+                                            <i class="bi bi-folder"></i>
+                                            <span th:text="${s.category}">CCTV</span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="price-cell"
+                                            th:text="${'$' + #numbers.formatDecimal(s.priceFrom, 0, 'POINT', 0, 'COMMA')}">$0</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge-custom badge-featured-yes" th:if="${s.featured}">
+                                            <span class="badge-dot"></span> Sí
+                                        </span>
+                                        <span class="badge-custom badge-featured-no" th:unless="${s.featured}">
+                                            <span class="badge-dot"></span> No
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge-custom badge-active" th:if="${s.active}">
+                                            <span class="badge-dot"></span> Activo
+                                        </span>
+                                        <span class="badge-custom badge-inactive" th:unless="${s.active}">
+                                            <span class="badge-dot"></span> Inactivo
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a th:href="@{'/admin/servicios/editar/' + ${s.id}}"
+                                                class="btn-action-edit">
+                                                <i class="bi bi-pencil"></i> Editar
+                                            </a>
+                                            <a th:href="@{'/admin/servicios/eliminar/' + ${s.id}}"
+                                                class="btn-action-delete" onclick="return confirmDelete(this)">
+                                                <i class="bi bi-trash3"></i> Eliminar
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Empty State -->
+                        <div class="empty-state" th:if="${services == null || services.isEmpty()}">
+                            <div class="empty-state-icon">
+                                <i class="bi bi-briefcase"></i>
+                            </div>
+                            <h3>No hay servicios registrados</h3>
+                            <p>Aún no se han creado servicios en el catálogo. Crea el primero para comenzar.</p>
+                            <a href="/admin/servicios/nuevo" class="btn-new-service">
+                                <i class="bi bi-plus-lg"></i> Crear Servicio
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-bar" th:if="${services != null && !services.isEmpty()}">
+                        <div class="pagination-info">
+                            Mostrando <strong>1</strong> a <strong th:text="${services.size()}">10</strong> de <strong
+                                th:text="${services.size()}">50</strong> registros
+                        </div>
+                        <div class="pagination-buttons">
+                            <button class="page-btn"><i class="bi bi-chevron-left"></i></button>
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <button class="page-btn"><i class="bi bi-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ===== SIDEBAR TOGGLE (Mobile) =====
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (e) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.mobile-toggle');
+
+            if (window.innerWidth <= 1200 &&
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) &&
+                !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        // ===== SEARCH & FILTER =====
+        let currentFilter = 'all';
+
+        function filterServices() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const rows = document.querySelectorAll('#servicesTable tbody tr');
+
+            rows.forEach(row => {
+                const searchData = (row.getAttribute('data-search') || '').toLowerCase();
+                const isActive = row.getAttribute('data-active') === 'true';
+                const isFeatured = row.getAttribute('data-featured') === 'true';
+
+                const matchesSearch = !searchTerm || searchData.includes(searchTerm);
+
+                let matchesFilter = true;
+                if (currentFilter === 'active') matchesFilter = isActive;
+                else if (currentFilter === 'inactive') matchesFilter = !isActive;
+                else if (currentFilter === 'featured') matchesFilter = isFeatured;
+
+                if (matchesSearch && matchesFilter) {
+                    row.style.display = '';
+                    row.style.animation = 'fadeIn 0.4s ease-out';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            updateResultsCount();
+        }
+
+        function setFilter(filter, btn) {
+            currentFilter = filter;
+
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+
+            filterServices();
+        }
+
+        function updateResultsCount() {
+            const visibleRows = document.querySelectorAll('#servicesTable tbody tr:not([style*="display: none"])');
+            const totalRows = document.querySelectorAll('#servicesTable tbody tr');
+            const badge = document.querySelector('.table-header .badge');
+
+            if (badge) {
+                badge.textContent = `${visibleRows.length} de ${totalRows.length} registros`;
+            }
+        }
+
+        // ===== CONFIRM DELETE =====
+        function confirmDelete(element) {
+            const serviceName = element.closest('tr').querySelector('.service-info h4')?.textContent || 'este servicio';
+            return confirm(`¿Estás seguro de que deseas eliminar "${serviceName}"?\n\nEsta acción no se puede deshacer.`);
+        }
+
+        // ===== ANIMATE ON LOAD =====
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animate stat cards entrance
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 + (index * 100));
+            });
+
+            // Animate table rows entrance
+            const tableRows = document.querySelectorAll('#servicesTable tbody tr');
+            tableRows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    row.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, 400 + (index * 60));
+            });
+        });
+
+        // ===== KEYBOARD SHORTCUTS =====
+        document.addEventListener('keydown', function (e) {
+            // Ctrl/Cmd + K to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput')?.focus();
+            }
+
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput && searchInput.value) {
+                    searchInput.value = '';
+                    filterServices();
+                }
+            }
+        });
+
+        // ===== ROW HOVER ENHANCEMENTS =====
+        document.querySelectorAll('#servicesTable tbody tr').forEach(row => {
+            row.addEventListener('mouseenter', function () {
+                this.style.zIndex = '5';
+            });
+
+            row.addEventListener('mouseleave', function () {
+                setTimeout(() => {
+                    this.style.zIndex = '';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+
+</html>
