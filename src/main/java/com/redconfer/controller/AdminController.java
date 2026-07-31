@@ -107,7 +107,7 @@ public class AdminController {
     // --- SERVICES MANAGEMENT ---
     @GetMapping("/servicios")
     public String listServices(Model model) {
-        model.addAttribute("services", serviceRepository.findAll());
+        model.addAttribute("services", serviceRepository.findAllByOrderByDisplayOrderAsc());
         return "admin/services";
     }
 

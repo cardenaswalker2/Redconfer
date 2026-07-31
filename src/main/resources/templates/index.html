@@ -1851,120 +1851,21 @@
             </div>
 
             <div class="row g-4">
-                <!-- CCTV -->
-                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+                <!-- Dynamic Services -->
+                <div class="col-lg-4 col-md-6" th:each="s, iterStat : ${allServices}" data-aos="zoom-in" th:data-aos-delay="${100 + (iterStat.index * 50)}">
                     <div class="service-card">
                         <div class="service-header">
-                            <div class="service-icon"><i class="bi bi-camera-video-fill"></i></div>
-                            <h3>Cámaras de Seguridad (CCTV)</h3>
+                            <div class="service-icon">
+                                <i th:class="'bi ' + ${s.icon != null ? s.icon : 'bi-briefcase-fill'}"></i>
+                            </div>
+                            <h3 th:text="${s.name}">Nombre del Servicio</h3>
                         </div>
                         <div class="service-desc">
-                            <p>Instalación y mantenimiento de sistemas IP, analógicos y térmicos. Monitoreo remoto en
-                                tiempo real, analíticas de video con inteligencia artificial.</p>
+                            <p th:text="${s.shortDescription}">Descripción del servicio</p>
                         </div>
                         <div class="service-footer">
                             <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
-                                data-wa-custom-msg="Hola REDCONFER, requiero una cotización detallada para un sistema de Cámaras de Seguridad (CCTV).">
-                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Redes y Fibra -->
-                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="150">
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon"><i class="bi bi-diagram-3-fill"></i></div>
-                            <h3>Redes y Cableado Estructurado</h3>
-                        </div>
-                        <div class="service-desc">
-                            <p>Certificación de redes en Cat6, Cat6A y Cat7. Fusionado y tendido de Fibra Óptica aérea o
-                                subterránea. Ordenamiento de racks.</p>
-                        </div>
-                        <div class="service-footer">
-                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
-                                data-wa-custom-msg="Hola REDCONFER, solicito presupuesto para instalación y certificación de Cableado Estructurado o Fibra Óptica.">
-                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Control Acceso -->
-                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon"><i class="bi bi-fingerprint"></i></div>
-                            <h3>Control de Acceso y Biometría</h3>
-                        </div>
-                        <div class="service-desc">
-                            <p>Sistemas de control peatonal y vehicular. Cerraduras electromagnéticas, biometría facial,
-                                lectores de tarjetas RFID y barreras.</p>
-                        </div>
-                        <div class="service-footer">
-                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
-                                data-wa-custom-msg="Hola REDCONFER, deseo cotizar lectores biométricos y sistemas de Control de Acceso.">
-                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Alarmas y Cercas -->
-                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="250">
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon"><i class="bi bi-shield-lock-fill"></i></div>
-                            <h3>Alarmas y Cercas Eléctricas</h3>
-                        </div>
-                        <div class="service-desc">
-                            <p>Protección perimetral con alarmas contra robo inteligentes conectadas a su móvil y cercos
-                                eléctricos de alto voltaje controlado homologados.</p>
-                        </div>
-                        <div class="service-footer">
-                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
-                                data-wa-custom-msg="Hola REDCONFER, requiero una cotización para sistemas de Alarmas de Intrusión o Cercas Eléctricas.">
-                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Energía Solar -->
-                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon"><i class="bi bi-sun-fill"></i></div>
-                            <h3>Paneles y Energía Solar</h3>
-                        </div>
-                        <div class="service-desc">
-                            <p>Estudios de ahorro energético. Instalaciones fotovoltaicas híbridas, autónomas y
-                                conectadas a la red de alta eficiencia para empresas y residencias.</p>
-                        </div>
-                        <div class="service-footer">
-                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
-                                data-wa-custom-msg="Hola REDCONFER, solicito una cotización y estudio para la instalación de Paneles Solares y Energía Solar.">
-                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Domotica -->
-                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="350">
-                    <div class="service-card">
-                        <div class="service-header">
-                            <div class="service-icon"><i class="bi bi-cpu"></i></div>
-                            <h3>Automatización y Domótica</h3>
-                        </div>
-                        <div class="service-desc">
-                            <p>Control inteligente de iluminación, portones automatizados, aires acondicionados y
-                                sistemas de audio envolventes integrados en una App.</p>
-                        </div>
-                        <div class="service-footer">
-                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
-                                data-wa-custom-msg="Hola REDCONFER, deseo cotizar soluciones de Domótica y Automatización inteligente.">
+                                th:data-wa-custom-msg="'Hola REDCONFER, requiero una cotización detallada para el servicio de ' + ${s.name} + '.'">
                                 Cotizar Servicio<i class="bi bi-arrow-right"></i>
                             </a>
                         </div>

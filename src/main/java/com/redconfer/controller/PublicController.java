@@ -42,12 +42,12 @@ public class PublicController {
     @ModelAttribute
     public void addGlobalAttributes(Model model) {
         model.addAttribute("settings", settingsRepository.findFirstByOrderByIdAsc().orElse(null));
-        model.addAttribute("allServices", serviceRepository.findByActiveTrue());
+        model.addAttribute("allServices", serviceRepository.findByActiveTrueOrderByDisplayOrderAsc());
     }
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("featuredServices", serviceRepository.findByFeaturedTrueAndActiveTrue());
+        model.addAttribute("featuredServices", serviceRepository.findByFeaturedTrueAndActiveTrueOrderByDisplayOrderAsc());
         model.addAttribute("projects", projectRepository.findByActiveTrue());
         model.addAttribute("posts", blogPostRepository.findByPublishedTrueOrderByPublishedAtDesc());
         return "index";

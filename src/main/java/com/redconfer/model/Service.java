@@ -37,4 +37,8 @@ public class Service {
     // Paths to images/videos
     private List<String> images;
     private String videoUrl;
+    
+    private String icon; // Bootstrap icon class or image path (e.g. bi-camera-video-fill)
+    private Integer displayOrder; // Order of display in front-end
 }
+

@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface ServiceRepository extends MongoRepository<Service, String> {
     Optional<Service> findBySlug(String slug);
     List<Service> findByCategory(String category);
-    List<Service> findByFeaturedTrueAndActiveTrue();
-    List<Service> findByActiveTrue();
+    List<Service> findByFeaturedTrueAndActiveTrueOrderByDisplayOrderAsc();
+    List<Service> findByActiveTrueOrderByDisplayOrderAsc();
+    List<Service> findAllByOrderByDisplayOrderAsc();
 }
