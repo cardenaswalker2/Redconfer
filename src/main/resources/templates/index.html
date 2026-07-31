@@ -1864,9 +1864,15 @@
                             <p th:text="${s.shortDescription}">Descripción del servicio</p>
                         </div>
                         <div class="service-footer">
-                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2"
-                                th:data-wa-custom-msg="'Hola REDCONFER, requiero una cotización detallada para el servicio de ' + ${s.name} + '.'">
-                                Cotizar Servicio<i class="bi bi-arrow-right"></i>
+                            <a href="#" class="btn btn-premium-outline-dark w-100 py-2 btn-service-detail"
+                                 th:data-name="${s.name}"
+                                 th:data-desc="${s.fullDescription != null && !s.fullDescription.isEmpty() ? s.fullDescription : s.shortDescription}"
+                                 th:data-icon="${s.icon != null ? s.icon : 'bi-briefcase-fill'}"
+                                 th:data-price="${s.priceFrom}"
+                                 th:data-time="${s.estimatedTime}"
+                                 th:data-warranty="${s.warranty}"
+                                 th:data-wa-custom-msg="'Hola REDCONFER, requiero una cotización detallada para el servicio de ' + ${s.name} + '.'">
+                                 Cotizar Servicio<i class="bi bi-arrow-right"></i>
                             </a>
                         </div>
                     </div>
@@ -2563,7 +2569,7 @@
 
             // 9. Premium Unified WhatsApp Handler
             const phone = "573233570996";
-            const waElements = document.querySelectorAll('[data-wa-custom-msg]');
+            const waElements = document.querySelectorAll('[data-wa-custom-msg]:not(.btn-service-detail)');
 
             waElements.forEach(el => {
                 el.addEventListener('click', (e) => {
@@ -2593,10 +2599,116 @@
                 });
             });
 
-            // 11. Force light mode always
+            // 11. Service Detail Modal Handler
+            const serviceButtons = document.querySelectorAll('.btn-service-detail');
+            const serviceModalEl = document.getElementById('serviceDetailModal');
+            let serviceModal = null;
+            if (serviceModalEl) {
+                serviceModal = new bootstrap.Modal(serviceModalEl);
+            }
+
+            serviceButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Populate modal fields
+                    const name = btn.getAttribute('data-name');
+                    const desc = btn.getAttribute('data-desc');
+                    const iconClass = btn.getAttribute('data-icon');
+                    const price = btn.getAttribute('data-price');
+                    const time = btn.getAttribute('data-time');
+                    const warranty = btn.getAttribute('data-warranty');
+                    const waMsg = btn.getAttribute('data-wa-custom-msg');
+
+                    document.getElementById('modalServiceTitle').textContent = name;
+                    document.getElementById('modalServiceDesc').textContent = desc;
+                    
+                    const iconEl = document.getElementById('modalServiceIcon');
+                    iconEl.className = `bi ${iconClass}`;
+                    
+                    // Format price
+                    let priceText = "Consultar precio";
+                    if (price && parseFloat(price) > 0) {
+                        priceText = "Desde $" + parseFloat(price).toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+                    }
+                    document.getElementById('modalServicePrice').textContent = priceText;
+                    document.getElementById('modalServiceTime').textContent = time || 'A convenir';
+                    document.getElementById('modalServiceWarranty').textContent = warranty || 'Garantía estándar';
+                    
+                    // Set WhatsApp link
+                    const waBtn = document.getElementById('modalServiceWaBtn');
+                    waBtn.onclick = (event) => {
+                        event.preventDefault();
+                        const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(waMsg)}`;
+                        window.open(url, '_blank');
+                    };
+
+                    if (serviceModal) {
+                        serviceModal.show();
+                    }
+                });
+            });
+
+            // 12. Force light mode always
             document.documentElement.setAttribute('data-theme', 'light');
         });
     </script>
+
+    <!-- ============================================
+         MODAL DETALLE DE SERVICIO - PREMIUM
+         ============================================ -->
+    <div class="modal fade" id="serviceDetailModal" tabindex="-1" aria-labelledby="serviceDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content glass-panel" style="border-radius: 24px; border: 1px solid rgba(198, 26, 34, 0.15); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);">
+                <div class="modal-header border-0 pb-0 position-relative">
+                    <button type="button" class="btn-close position-absolute" style="top: 24px; right: 24px;" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 p-md-5">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="d-flex align-items-center justify-content-center bg-danger-subtle text-danger rounded-4" style="width: 60px; height: 60px; min-width: 60px;">
+                            <i id="modalServiceIcon" class="bi bi-briefcase-fill" style="font-size: 2rem;"></i>
+                        </div>
+                        <div>
+                            <span class="text-danger fw-bold text-uppercase tracking-wider" style="font-size: 0.8rem; letter-spacing: 0.1em;">SERVICIO DISPONIBLE</span>
+                            <h2 id="modalServiceTitle" class="h3 fw-bold mb-0 text-dark">Nombre del Servicio</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-7">
+                            <h4 class="h6 fw-bold text-muted mb-2 text-uppercase" style="letter-spacing: 0.05em;">Descripción del Servicio</h4>
+                            <p id="modalServiceDesc" class="text-secondary" style="font-size: 0.95rem; line-height: 1.6; white-space: pre-line;">Descripción detallada aquí...</p>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="p-4 rounded-4 bg-light border border-light-subtle">
+                                <h4 class="h6 fw-bold text-muted mb-3 text-uppercase" style="letter-spacing: 0.05em;">Información Comercial</h4>
+                                
+                                <div class="mb-3">
+                                    <div class="text-muted" style="font-size: 0.8rem;">Precio Estimado</div>
+                                    <div id="modalServicePrice" class="fw-extrabold text-dark font-monospace" style="font-size: 1.2rem; font-weight: 800;">Desde $0</div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="text-muted" style="font-size: 0.8rem;">Tiempo de Ejecución</div>
+                                    <div id="modalServiceTime" class="fw-semibold text-secondary" style="font-size: 0.9rem;">1-2 días</div>
+                                </div>
+                                <div>
+                                    <div class="text-muted" style="font-size: 0.8rem;">Garantía Técnica</div>
+                                    <div id="modalServiceWarranty" class="fw-semibold text-secondary" style="font-size: 0.9rem;">2 años</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-end mt-5 pt-3 border-top border-light">
+                        <button type="button" class="btn btn-premium-outline-dark px-4 py-2" data-bs-dismiss="modal">Cerrar</button>
+                        <a href="#" id="modalServiceWaBtn" class="btn btn-premium-red px-5 py-2" style="text-decoration: none;">
+                            <i class="bi bi-whatsapp me-2"></i>Hablar por WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
