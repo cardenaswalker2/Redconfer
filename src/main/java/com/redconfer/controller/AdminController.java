@@ -119,6 +119,9 @@ public class AdminController {
 
     @PostMapping("/servicios/guardar")
     public String saveService(@ModelAttribute Service service) {
+        if (service.getId() != null && service.getId().trim().isEmpty()) {
+            service.setId(null);
+        }
         if (service.getSlug() == null || service.getSlug().isEmpty()) {
             service.setSlug(service.getName().toLowerCase().replaceAll("[^a-z0-9]", "-"));
         }
