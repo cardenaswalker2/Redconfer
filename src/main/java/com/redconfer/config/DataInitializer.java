@@ -66,6 +66,12 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(admin);
         }
 
+        // Clean up any corrupt services with empty ID in MongoDB
+        if (serviceRepository.existsById("")) {
+            serviceRepository.deleteById("");
+            System.out.println("Cleaned up corrupt service with empty ID.");
+        }
+
         // 3. Initialize Default Services
         if (serviceRepository.count() == 0) {
             List<Service> defaultServices = Arrays.asList(
