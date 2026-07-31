@@ -906,13 +906,72 @@
                 padding: 12px 20px;
             }
 
-            .data-table th,
-            .data-table td {
-                padding: 12px 16px;
+            /* Force table to behave like block cards on mobile */
+            .data-table, 
+            .data-table thead, 
+            .data-table tbody, 
+            .data-table th, 
+            .data-table td, 
+            .data-table tr { 
+                display: block; 
             }
-
+            
+            /* Hide column headers */
+            .data-table thead tr { 
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            
+            .data-table tr { 
+                border: 1px solid var(--border);
+                border-radius: var(--radius-lg);
+                padding: 16px;
+                margin-bottom: 16px;
+                background: var(--surface);
+                box-shadow: var(--shadow-sm);
+            }
+            
+            .data-table td { 
+                border: none;
+                border-bottom: 1px solid var(--border-light); 
+                position: relative;
+                padding-left: 50% !important; 
+                text-align: right !important;
+                padding-top: 12px !important;
+                padding-bottom: 12px !important;
+                min-height: 48px;
+            }
+            
+            .data-table td:last-child {
+                border-bottom: 0;
+            }
+            
+            /* Label injection */
+            .data-table td:before { 
+                position: absolute;
+                top: 50%;
+                left: 16px;
+                transform: translateY(-50%);
+                width: 45%; 
+                padding-right: 10px; 
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 700;
+                font-size: 0.75rem;
+                text-transform: uppercase;
+                color: var(--text-secondary);
+                content: attr(data-label);
+            }
+            
+            .service-name {
+                justify-content: flex-end;
+            }
+            
             .action-buttons {
-                flex-direction: column;
+                justify-content: flex-end;
+                flex-direction: row !important;
+                gap: 8px;
             }
 
             .pagination-bar {
@@ -1223,7 +1282,7 @@
                             <tbody>
                                 <tr th:each="s : ${services}" th:data-active="${s.active}"
                                     th:data-featured="${s.featured}" th:data-search="${s.name + ' ' + s.category}">
-                                    <td>
+                                    <td data-label="Servicio">
                                         <div class="service-name">
                                             <div class="service-icon">
                                                 <i th:class="'bi ' + ${s.icon != null ? s.icon : 'bi-briefcase'}"></i>
@@ -1236,20 +1295,20 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td data-label="Categoría">
                                         <span class="category-tag">
                                             <i class="bi bi-folder"></i>
                                             <span th:text="${s.category}">CCTV</span>
                                         </span>
                                     </td>
-                                    <td>
+                                    <td data-label="Orden">
                                         <span class="badge bg-light text-dark font-monospace" style="font-size: 0.85rem;" th:text="${s.displayOrder != null ? s.displayOrder : '-'}">-</span>
                                     </td>
-                                    <td>
+                                    <td data-label="Precio Desde">
                                         <span class="price-cell"
                                             th:text="${'$' + #numbers.formatDecimal(s.priceFrom, 0, 'POINT', 0, 'COMMA')}">$0</span>
                                     </td>
-                                    <td>
+                                    <td data-label="Destacado">
                                         <span class="badge-custom badge-featured-yes" th:if="${s.featured}">
                                             <span class="badge-dot"></span> Sí
                                         </span>
@@ -1257,7 +1316,7 @@
                                             <span class="badge-dot"></span> No
                                         </span>
                                     </td>
-                                    <td>
+                                    <td data-label="Estado">
                                         <span class="badge-custom badge-active" th:if="${s.active}">
                                             <span class="badge-dot"></span> Activo
                                         </span>
@@ -1265,7 +1324,7 @@
                                             <span class="badge-dot"></span> Inactivo
                                         </span>
                                     </td>
-                                    <td>
+                                    <td data-label="Acciones">
                                         <div class="action-buttons">
                                             <a th:href="@{/admin/servicios/editar(id=${s.id})}"
                                                 class="btn-action-edit">
