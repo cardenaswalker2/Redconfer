@@ -129,8 +129,8 @@ public class AdminController {
         return "redirect:/admin/servicios";
     }
 
-    @GetMapping("/servicios/editar/{id}")
-    public String editServiceForm(@PathVariable String id, Model model) {
+    @GetMapping("/servicios/editar")
+    public String editServiceForm(@RequestParam String id, Model model) {
         Service service = serviceRepository.findById(id).orElse(null);
         if (service == null) {
             System.err.println("Error: Service with ID " + id + " not found");
@@ -140,8 +140,8 @@ public class AdminController {
         return "admin/service-form";
     }
 
-    @GetMapping("/servicios/eliminar/{id}")
-    public String deleteService(@PathVariable String id) {
+    @GetMapping("/servicios/eliminar")
+    public String deleteService(@RequestParam String id) {
         if (serviceRepository.existsById(id)) {
             serviceRepository.deleteById(id);
         } else {

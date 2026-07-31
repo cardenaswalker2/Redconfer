@@ -1267,11 +1267,11 @@
                                     </td>
                                     <td>
                                         <div class="action-buttons">
-                                            <a th:href="@{'/admin/servicios/editar/' + ${s.id}}"
+                                            <a th:href="@{/admin/servicios/editar(id=${s.id})}"
                                                 class="btn-action-edit">
                                                 <i class="bi bi-pencil"></i> Editar
                                             </a>
-                                            <a th:href="@{'/admin/servicios/eliminar/' + ${s.id}}"
+                                            <a th:href="@{/admin/servicios/eliminar(id=${s.id})}"
                                                 class="btn-action-delete" onclick="return confirmDelete(this)">
                                                 <i class="bi bi-trash3"></i> Eliminar
                                             </a>
