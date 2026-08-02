@@ -48,6 +48,9 @@
                 <a class="sidebar-nav-link" th:classappend="${activePage == 'finanzas' ? 'active' : ''}" href="/admin/finanzas"><i class="bi bi-wallet2 me-2"></i>Finanzas & Caja Menor</a>
             </li>
             <li class="nav-item">
+                <a class="sidebar-nav-link" th:classappend="${activePage == 'facturas' ? 'active' : ''}" href="/admin/facturas"><i class="bi bi-receipt me-2"></i>Facturación</a>
+            </li>
+            <li class="nav-item">
                 <a class="sidebar-nav-link" th:classappend="${activePage == 'configuracion' ? 'active' : ''}" href="/admin/configuracion"><i class="bi bi-gear-fill me-2"></i>Configuración</a>
             </li>
         </ul>

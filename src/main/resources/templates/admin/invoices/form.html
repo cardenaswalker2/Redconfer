@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isNew} ? 'Nueva Factura - REDCONFER' : 'Editar Factura - REDCONFER'">Nueva Factura - REDCONFER</title>
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --rc-primary: #0f172a;
+            --rc-secondary: #1e293b;
+            --rc-accent: #C61A22;
+            --rc-accent-light: #dc2626;
+            --rc-surface: #ffffff;
+            --rc-surface-alt: #f8fafc;
+            --rc-border: #e2e8f0;
+            --rc-border-dark: rgba(255, 255, 255, 0.06);
+            --rc-text: #0f172a;
+            --rc-text-secondary: #64748b;
+            --rc-text-muted: #94a3b8;
+            --rc-success: #059669;
+            --rc-danger: #dc2626;
+            --rc-info: #2563eb;
+            --rc-radius-sm: 10px;
+            --rc-radius-md: 14px;
+            --rc-radius-lg: 18px;
+            --rc-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --rc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --rc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--rc-text);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--rc-primary) 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--rc-border-dark);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--rc-border-dark);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.7rem;
+            color: var(--rc-text-muted);
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            padding: 1.5rem 1rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--rc-text-muted);
+            margin: 1.5rem 0.5rem 0.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: var(--rc-radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .sidebar-nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+            color: white;
+        }
+
+        .sidebar-nav-link.active {
+            background-color: var(--rc-accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.2);
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--rc-border-dark);
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: var(--rc-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .user-role {
+            color: var(--rc-text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex-grow: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+            background-color: #f8fafc;
+        }
+
+        .top-header {
+            margin-bottom: 2rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.75rem;
+            color: var(--rc-primary);
+        }
+
+        /* FORM CARDS */
+        .form-card {
+            background: white;
+            border-radius: var(--rc-radius-md);
+            border: 1px solid var(--rc-border);
+            box-shadow: var(--rc-shadow-sm);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            color: var(--rc-primary);
+            border-bottom: 2px solid var(--rc-border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--rc-secondary);
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid var(--rc-border);
+            padding: 0.55rem 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--rc-accent);
+            box-shadow: 0 0 0 0.18rem rgba(198, 26, 34, 0.15);
+        }
+
+        /* DYNAMIC TABLE */
+        .dynamic-table th {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            color: var(--rc-text-secondary);
+            font-weight: 600;
+            background: var(--rc-surface-alt);
+            padding: 0.75rem 0.5rem;
+        }
+
+        .dynamic-table td {
+            padding: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .item-row {
+            transition: var(--transition);
+        }
+
+        .item-row:hover {
+            background-color: var(--rc-surface-alt);
+        }
+
+        .btn-action {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            padding: 0;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .btn-action-delete {
+            background-color: #fee2e2;
+            color: var(--rc-danger);
+        }
+
+        .btn-action-delete:hover {
+            background-color: var(--rc-danger);
+            color: white;
+        }
+
+        .btn-action-duplicate {
+            background-color: #e0f2fe;
+            color: var(--rc-info);
+        }
+
+        .btn-action-duplicate:hover {
+            background-color: var(--rc-info);
+            color: white;
+        }
+
+        /* TOTALS CARD */
+        .totals-card {
+            background: var(--rc-surface-alt);
+            border-radius: var(--rc-radius-md);
+            padding: 1.5rem;
+            border: 1px solid var(--rc-border);
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--rc-text-secondary);
+        }
+
+        .totals-row.grand-total {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--rc-accent);
+            border-top: 2px dashed var(--rc-border);
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+        }
+
+        .btn-rc-primary {
+            background-color: var(--rc-accent);
+            color: white;
+            border: none;
+            border-radius: var(--rc-radius-sm);
+            padding: 0.625rem 1.5rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-rc-primary:hover {
+            background-color: var(--rc-accent-light);
+            color: white;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.25);
+        }
+
+        .btn-rc-secondary {
+            background-color: transparent;
+            color: var(--rc-text-secondary);
+            border: 1px solid var(--rc-border);
+            border-radius: var(--rc-radius-sm);
+            padding: 0.625rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-rc-secondary:hover {
+            background-color: var(--rc-surface-alt);
+            color: var(--rc-primary);
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-280px);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-wrapper">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+                <a href="/admin/facturas" class="sidebar-nav-link active">
+                    <i class="bi bi-receipt"></i>
+                    <span>Facturación</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-title">
+                    <h1 th:text="${isNew} ? 'Generar Nueva Factura de Venta' : 'Modificar Factura'">Nueva Factura</h1>
+                    <p>Completa la información para generar la factura electrónica en el sistema</p>
+                </div>
+            </header>
+
+            <form th:action="@{/admin/facturas/guardar}" method="POST" id="invoiceForm" th:object="${invoice}">
+                <input type="hidden" th:field="*{id}">
+                
+                <!-- CLIENT SECTION -->
+                <div class="form-card">
+                    <div class="form-section-title">
+                        <i class="bi bi-person-fill me-2 text-danger"></i>Información del Cliente
+                    </div>
+
+                    <!-- Client Select / Search -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Buscar / Seleccionar Usuario Existente</label>
+                            <select id="clientSelector" class="form-select" th:field="*{clientId}">
+                                <option value="">-- Ingresar cliente manualmente --</option>
+                                <option th:each="c : ${clients}" 
+                                        th:value="${c.id}" 
+                                        th:text="${c.name} + ' (' + ${c.email} + ')'"
+                                        th:data-nit="${c.nit}"
+                                        th:data-address="${c.address}"
+                                        th:data-city="${c.city}"
+                                        th:data-phone="${c.phone}"
+                                        th:data-email="${c.email}"
+                                        th:data-name="${c.name}"></option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6" id="quoteSelectContainer" style="display: none;">
+                            <label class="form-label text-primary fw-bold">Cotizaciones Registradas del Cliente</label>
+                            <select id="quoteSelector" class="form-select border-primary">
+                                <option value="">-- Seleccionar cotización para cargar ítems --</option>
+                            </select>
+                            <span class="text-xs text-muted">Cargará los ítems, precios e IVA de la cotización elegida.</span>
+                        </div>
+
+                        <!-- Cliente fields -->
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre del Cliente / Razón Social <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{clientName}" class="form-control" placeholder="Ej. Juan Pérez o REDCONFER S.A.S." required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">NIT o Cédula de Ciudadanía <span class="text-danger">*</span></label>
+                            <input type="text" th:field="*{clientNit}" class="form-control" placeholder="Ej. 901234567-8 o 1047123456" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Dirección</label>
+                            <input type="text" th:field="*{clientAddress}" class="form-control" placeholder="Ej. Calle 30 #5-25">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Ciudad / Municipio</label>
+                            <input type="text" th:field="*{clientCity}" class="form-control" placeholder="Ej. Cartagena">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Teléfono</label>
+                            <input type="text" th:field="*{clientPhone}" class="form-control" placeholder="Ej. 3233570996">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
+                            <input type="email" th:field="*{clientEmail}" class="form-control" placeholder="Ej. cliente@correo.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Vendedor / Asesor Comercial (Opcional)</label>
+                            <input type="text" th:field="*{seller}" class="form-control" placeholder="Ej. Carlos Valdés">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INVOICE METADATA -->
+                <div class="form-card">
+                    <div class="form-section-title">
+                        <i class="bi bi-info-circle-fill me-2 text-danger"></i>Detalles del Documento
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Número de Factura</label>
+                            <input type="text" th:field="*{invoiceNumber}" class="form-control fw-bold text-danger" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha de Emisión <span class="text-danger">*</span></label>
+                            <input type="date" th:field="*{issueDate}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha de Vencimiento <span class="text-danger">*</span></label>
+                            <input type="date" th:field="*{dueDate}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Estado Inicial</label>
+                            <select th:field="*{status}" class="form-select">
+                                <option value="PENDIENTE">Pendiente de Pago</option>
+                                <option value="PAGADA">Pagada</option>
+                                <option value="VENCIDA">Vencida</option>
+                                <option value="ANULADA">Anulada</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Forma de Pago</label>
+                            <select th:field="*{paymentForm}" class="form-select">
+                                <option value="Contado">Contado</option>
+                                <option value="Crédito 15 días">Crédito 15 días</option>
+                                <option value="Crédito 30 días">Crédito 30 días</option>
+                                <option value="Crédito 45 días">Crédito 45 días</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Método de Pago</label>
+                            <select th:field="*{paymentMethod}" class="form-select">
+                                <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Tarjeta de Crédito / Débito">Tarjeta de Crédito / Débito</option>
+                                <option value="PSE">PSE</option>
+                                <option value="Cheque">Cheque</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Moneda</label>
+                            <select th:field="*{currency}" class="form-select">
+                                <option value="COP">Peso Colombiano (COP)</option>
+                                <option value="USD">Dólar Americano (USD)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Valor Pagado (Abonado)</label>
+                            <input type="number" step="0.01" th:field="*{paidAmount}" id="paidAmountField" class="form-control" placeholder="0.00">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ITEMS SECTION -->
+                <div class="form-card">
+                    <div class="form-section-title d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-cart-fill me-2 text-danger"></i>Productos y Servicios
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-dark btn-sm rounded" onclick="addRow()">
+                                <i class="bi bi-plus-lg me-1"></i>Añadir Fila
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table dynamic-table align-middle" id="itemsTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">Código / SKU</th>
+                                    <th style="width: 25%;">Nombre Producto / Servicio</th>
+                                    <th style="width: 25%;">Descripción</th>
+                                    <th style="width: 8%;">Cant.</th>
+                                    <th style="width: 8%;">Unidad</th>
+                                    <th style="width: 10%;">P. Unitario</th>
+                                    <th style="width: 7%;">Dcto %</th>
+                                    <th style="width: 8%;">IVA %</th>
+                                    <th style="width: 10%;" class="text-end">Subtotal</th>
+                                    <th style="width: 8%;" class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemsBody">
+                                <!-- Thymeleaf loop for existing items (edit mode) -->
+                                <tr th:each="item, stat : ${invoice.items}" class="item-row">
+                                    <td>
+                                        <input type="text" name="itemCode" th:value="${item.code}" class="form-control form-control-sm" placeholder="Ej. CAM-01">
+                                    </td>
+                                    <td>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" name="itemName" th:value="${item.name}" class="form-control autocomplete-product" placeholder="Nombre..." required>
+                                            <button type="button" class="btn btn-outline-secondary" onclick="openProductSelector(this)" title="Buscar en Catálogo">
+                                                <i class="bi bi-search"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="itemDesc" th:value="${item.description}" class="form-control form-control-sm" placeholder="Detalle...">
+                                    </td>
+                                    <td>
+                                        <input type="number" name="itemQty" th:value="${item.quantity}" class="form-control form-control-sm text-center input-qty" value="1" min="1" required>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="itemUnit" th:value="${item.unit}" class="form-control form-control-sm text-center" placeholder="Und" value="Unidad">
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.01" name="itemPrice" th:value="${item.unitPrice}" class="form-control form-control-sm text-end input-price" placeholder="0.00" required>
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.1" name="itemDiscount" th:value="${item.discountPercent}" class="form-control form-control-sm text-center input-discount" placeholder="0" value="0">
+                                    </td>
+                                    <td>
+                                        <input type="number" step="0.1" name="itemTax" th:value="${item.taxRate}" class="form-control form-control-sm text-center input-tax" placeholder="19" value="19">
+                                    </td>
+                                    <td class="text-end fw-bold px-3 row-subtotal" th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">
+                                        $0.00
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <button type="button" class="btn-action btn-action-duplicate" onclick="duplicateRow(this)" title="Duplicar">
+                                                <i class="bi bi-copy"></i>
+                                            </button>
+                                            <button type="button" class="btn-action btn-action-delete" onclick="deleteRow(this)" title="Eliminar">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- TOTALS ROW -->
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <label class="form-label">Observaciones y Términos de la Factura</label>
+                            <textarea th:field="*{observations}" class="form-control" rows="5" placeholder="Ej. Válida por 30 días. Pago por transferencia electrónica a la cuenta de ahorros REDCONFER..."></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="totals-card">
+                                <div class="totals-row">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotalDisplay">$0.00</span>
+                                </div>
+                                <div class="totals-row text-success">
+                                    <span>Descuentos:</span>
+                                    <span id="discountDisplay">-$0.00</span>
+                                </div>
+                                <div class="totals-row">
+                                    <span>IVA:</span>
+                                    <span id="taxDisplay">$0.00</span>
+                                </div>
+                                <div class="totals-row grand-total">
+                                    <span>Total Factura:</span>
+                                    <span id="totalDisplay">$0.00</span>
+                                </div>
+                                <div class="totals-row mt-2">
+                                    <span>Valor Abonado:</span>
+                                    <span id="paidDisplay" class="text-success">$0.00</span>
+                                </div>
+                                <div class="totals-row fw-bold">
+                                    <span>Saldo Pendiente:</span>
+                                    <span id="dueDisplay" class="text-danger">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBMIT ACTIONS -->
+                <div class="d-flex justify-content-end gap-3 mb-5">
+                    <a href="/admin/facturas" class="btn btn-rc-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-rc-primary">
+                        <i class="bi bi-save me-2"></i>Guardar Factura
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Product catalog selection modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="border-radius: var(--rc-radius-md);">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-search me-2 text-danger"></i>Catálogo de Productos e Insumos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small">Selecciona un elemento para cargarlo automáticamente en la fila actual.</p>
+                    
+                    <ul class="nav nav-tabs mb-3" id="catalogTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventoryCatalog" type="button" role="tab" aria-controls="inventoryCatalog" aria-selected="true">Inventario de Bodega</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#servicesCatalog" type="button" role="tab" aria-controls="servicesCatalog" aria-selected="false">Servicios Técnicos</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="catalogTabsContent">
+                        <!-- Inventory tab -->
+                        <div class="tab-pane fade show active" id="inventoryCatalog" role="tabpanel" aria-labelledby="inventory-tab">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle" style="font-size: 0.85rem;">
+                                    <thead>
+                                        <tr class="table-light">
+                                            <th>Código</th>
+                                            <th>Producto</th>
+                                            <th>Categoría</th>
+                                            <th class="text-end">Precio Base</th>
+                                            <th class="text-center">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="inv : ${inventory}">
+                                            <td class="fw-bold" th:text="${inv.sku}">SKU</td>
+                                            <td th:text="${inv.name}">Producto</td>
+                                            <td th:text="${inv.category}">Categoría</td>
+                                            <td class="text-end" th:text="'$' + ${#numbers.formatDecimal(inv.unitPrice, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                        th:data-code="${inv.sku}"
+                                                        th:data-name="${inv.name}"
+                                                        th:data-desc="'Elemento de Bodega - ' + ${inv.category}"
+                                                        th:data-price="${inv.unitPrice}"
+                                                        th:data-unit="'Unidad'"
+                                                        onclick="selectProductFromCatalog(this)">
+                                                    Seleccionar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Services tab -->
+                        <div class="tab-pane fade" id="servicesCatalog" role="tabpanel" aria-labelledby="services-tab">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle" style="font-size: 0.85rem;">
+                                    <thead>
+                                        <tr class="table-light">
+                                            <th>Nombre del Servicio</th>
+                                            <th>Categoría</th>
+                                            <th class="text-end">Precio Estimado</th>
+                                            <th class="text-center">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="srv : ${services}">
+                                            <td class="fw-bold" th:text="${srv.name}">Servicio</td>
+                                            <td th:text="${srv.category}">Categoría</td>
+                                            <td class="text-end" th:text="'$' + ${#numbers.formatDecimal(srv.promoPrice > 0 ? srv.promoPrice : srv.priceFrom, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                        th:data-code="'SERV'"
+                                                        th:data-name="${srv.name}"
+                                                        th:data-desc="${srv.shortDescription}"
+                                                        th:data-price="${srv.promoPrice > 0 ? srv.promoPrice : srv.priceFrom}"
+                                                        th:data-unit="'Global'"
+                                                        onclick="selectProductFromCatalog(this)">
+                                                    Seleccionar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        var currentRowElement = null;
+        var productModalObj = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            productModalObj = new bootstrap.Modal(document.getElementById('productModal'));
+            
+            // Client selector change logic
+            document.getElementById('clientSelector').addEventListener('change', function() {
+                var selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.value !== "") {
+                    // Populate client details automatically
+                    document.getElementById('clientName').value = selectedOption.getAttribute('data-name') || '';
+                    document.getElementById('clientNit').value = selectedOption.getAttribute('data-nit') || '';
+                    document.getElementById('clientAddress').value = selectedOption.getAttribute('data-address') || '';
+                    document.getElementById('clientCity').value = selectedOption.getAttribute('data-city') || '';
+                    document.getElementById('clientPhone').value = selectedOption.getAttribute('data-phone') || '';
+                    document.getElementById('clientEmail').value = selectedOption.getAttribute('data-email') || '';
+
+                    // Load client quotes via Ajax
+                    loadClientQuotes(selectedOption.value);
+                } else {
+                    document.getElementById('quoteSelectContainer').style.display = 'none';
+                }
+            });
+
+            // Quote selector change logic
+            document.getElementById('quoteSelector').addEventListener('change', function() {
+                var quoteId = this.value;
+                if (quoteId !== "") {
+                    loadQuoteDetails(quoteId);
+                }
+            });
+
+            // Event delegation for real-time calculations
+            document.getElementById('itemsBody').addEventListener('input', function(e) {
+                if (e.target.classList.contains('input-qty') || 
+                    e.target.classList.contains('input-price') || 
+                    e.target.classList.contains('input-discount') || 
+                    e.target.classList.contains('input-tax')) {
+                    calculateTotals();
+                }
+            });
+
+            document.getElementById('paidAmountField').addEventListener('input', function() {
+                calculateTotals();
+            });
+
+            // Initialize page rows if empty
+            if (document.getElementById('itemsBody').children.length === 0) {
+                addRow();
+            } else {
+                calculateTotals();
+            }
+        });
+
+        function loadClientQuotes(clientId) {
+            fetch('/admin/facturas/api/quotes?clientId=' + clientId)
+                .then(response => response.json())
+                .then(data => {
+                    var quoteSelector = document.getElementById('quoteSelector');
+                    // Reset
+                    quoteSelector.innerHTML = '<option value="">-- Seleccionar cotización para cargar ítems --</option>';
+                    
+                    if (data && data.length > 0) {
+                        data.forEach(q => {
+                            var opt = document.createElement('option');
+                            opt.value = q.id;
+                            opt.textContent = q.quoteNumber + ' - ' + q.serviceType + ' ($' + q.total.toLocaleString() + ')';
+                            quoteSelector.appendChild(opt);
+                        });
+                        document.getElementById('quoteSelectContainer').style.display = 'block';
+                    } else {
+                        document.getElementById('quoteSelectContainer').style.display = 'none';
+                    }
+                });
+        }
+
+        function loadQuoteDetails(quoteId) {
+            if (confirm('¿Desea cargar los ítems de esta cotización en la factura actual? Esto reemplazará las filas existentes.')) {
+                fetch('/admin/facturas/api/quotes/' + quoteId)
+                    .then(response => response.json())
+                    .then(data => {
+                        var body = document.getElementById('itemsBody');
+                        body.innerHTML = ''; // Clear existing rows
+
+                        if (data.items && data.items.length > 0) {
+                            data.items.forEach(item => {
+                                addRowWithData(item.code, item.name, item.description, item.quantity, item.unit, item.unitPrice, item.discountPercent, item.taxRate);
+                            });
+                        }
+                        if (data.observations) {
+                            document.getElementById('observations').value = data.observations;
+                        }
+                        calculateTotals();
+                    });
+            }
+        }
+
+        function addRow() {
+            addRowWithData('', '', '', 1, 'Unidad', 0.0, 0.0, 19.0);
+        }
+
+        function addRowWithData(code, name, desc, qty, unit, price, discount, tax) {
+            var body = document.getElementById('itemsBody');
+            var tr = document.createElement('tr');
+            tr.className = 'item-row';
+            
+            tr.innerHTML = `
+                <td>
+                    <input type="text" name="itemCode" value="${code}" class="form-control form-control-sm" placeholder="Ej. CAM-01">
+                </td>
+                <td>
+                    <div class="input-group input-group-sm">
+                        <input type="text" name="itemName" value="${name}" class="form-control autocomplete-product" placeholder="Nombre..." required>
+                        <button type="button" class="btn btn-outline-secondary" onclick="openProductSelector(this)" title="Buscar en Catálogo">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </td>
+                <td>
+                    <input type="text" name="itemDesc" value="${desc}" class="form-control form-control-sm" placeholder="Detalle...">
+                </td>
+                <td>
+                    <input type="number" name="itemQty" value="${qty}" class="form-control form-control-sm text-center input-qty" min="1" required>
+                </td>
+                <td>
+                    <input type="text" name="itemUnit" value="${unit}" class="form-control form-control-sm text-center" placeholder="Und">
+                </td>
+                <td>
+                    <input type="number" step="0.01" name="itemPrice" value="${price}" class="form-control form-control-sm text-end input-price" placeholder="0.00" required>
+                </td>
+                <td>
+                    <input type="number" step="0.1" name="itemDiscount" value="${discount}" class="form-control form-control-sm text-center input-discount" placeholder="0">
+                </td>
+                <td>
+                    <input type="number" step="0.1" name="itemTax" value="${tax}" class="form-control form-control-sm text-center input-tax" placeholder="19">
+                </td>
+                <td class="text-end fw-bold px-3 row-subtotal">
+                    $0.00
+                </td>
+                <td class="text-center">
+                    <div class="d-flex justify-content-center gap-1">
+                        <button type="button" class="btn-action btn-action-duplicate" onclick="duplicateRow(this)" title="Duplicar">
+                            <i class="bi bi-copy"></i>
+                        </button>
+                        <button type="button" class="btn-action btn-action-delete" onclick="deleteRow(this)" title="Eliminar">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            `;
+            
+            body.appendChild(tr);
+            calculateTotals();
+        }
+
+        function deleteRow(button) {
+            var row = button.closest('tr');
+            var body = document.getElementById('itemsBody');
+            if (body.children.length > 1) {
+                row.remove();
+                calculateTotals();
+            } else {
+                alert('La factura debe tener al menos un ítem.');
+            }
+        }
+
+        function duplicateRow(button) {
+            var row = button.closest('tr');
+            var code = row.querySelector('[name="itemCode"]').value;
+            var name = row.querySelector('[name="itemName"]').value;
+            var desc = row.querySelector('[name="itemDesc"]').value;
+            var qty = row.querySelector('[name="itemQty"]').value;
+            var unit = row.querySelector('[name="itemUnit"]').value;
+            var price = row.querySelector('[name="itemPrice"]').value;
+            var discount = row.querySelector('[name="itemDiscount"]').value;
+            var tax = row.querySelector('[name="itemTax"]').value;
+
+            addRowWithData(code, name, desc, qty, unit, price, discount, tax);
+        }
+
+        function openProductSelector(button) {
+            currentRowElement = button.closest('tr');
+            productModalObj.show();
+        }
+
+        function selectProductFromCatalog(button) {
+            if (currentRowElement) {
+                var code = button.getAttribute('data-code');
+                var name = button.getAttribute('data-name');
+                var desc = button.getAttribute('data-desc');
+                var price = button.getAttribute('data-price');
+                var unit = button.getAttribute('data-unit');
+
+                currentRowElement.querySelector('[name="itemCode"]').value = code;
+                currentRowElement.querySelector('[name="itemName"]').value = name;
+                currentRowElement.querySelector('[name="itemDesc"]').value = desc;
+                currentRowElement.querySelector('[name="itemPrice"]').value = price;
+                currentRowElement.querySelector('[name="itemUnit"]').value = unit;
+                currentRowElement.querySelector('[name="itemQty"]').value = 1;
+                currentRowElement.querySelector('[name="itemDiscount"]').value = 0;
+                currentRowElement.querySelector('[name="itemTax"]').value = 19;
+
+                productModalObj.hide();
+                calculateTotals();
+            }
+        }
+
+        function calculateTotals() {
+            var rows = document.querySelectorAll('#itemsBody tr');
+            var subtotal = 0;
+            var discountAmount = 0;
+            var taxAmount = 0;
+            var grandTotal = 0;
+
+            rows.forEach(row => {
+                var qty = parseFloat(row.querySelector('[name="itemQty"]').value) || 0;
+                var price = parseFloat(row.querySelector('[name="itemPrice"]').value) || 0;
+                var discountPercent = parseFloat(row.querySelector('[name="itemDiscount"]').value) || 0;
+                var taxRate = parseFloat(row.querySelector('[name="itemTax"]').value) || 0;
+
+                var itemSubtotal = qty * price;
+                var itemDiscount = itemSubtotal * (discountPercent / 100);
+                var itemBase = itemSubtotal - itemDiscount;
+                var itemTax = itemBase * (taxRate / 100);
+                var totalRowValue = itemBase; // item subtotal shown represents base price after discount
+
+                subtotal += itemSubtotal;
+                discountAmount += itemDiscount;
+                taxAmount += itemTax;
+
+                row.querySelector('.row-subtotal').textContent = '$' + totalRowValue.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            });
+
+            grandTotal = subtotal - discountAmount + taxAmount;
+            
+            var paidAmount = parseFloat(document.getElementById('paidAmountField').value) || 0;
+            var dueAmount = grandTotal - paidAmount;
+
+            document.getElementById('subtotalDisplay').textContent = '$' + subtotal.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('discountDisplay').textContent = '-$' + discountAmount.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('taxDisplay').textContent = '$' + taxAmount.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('totalDisplay').textContent = '$' + grandTotal.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('paidDisplay').textContent = '$' + paidAmount.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('dueDisplay').textContent = '$' + dueAmount.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Facturación - REDCONFER</title>
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --rc-primary: #0f172a;
+            --rc-secondary: #1e293b;
+            --rc-accent: #C61A22;
+            --rc-accent-light: #dc2626;
+            --rc-surface: #ffffff;
+            --rc-surface-alt: #f8fafc;
+            --rc-border: #e2e8f0;
+            --rc-border-dark: rgba(255, 255, 255, 0.06);
+            --rc-text: #0f172a;
+            --rc-text-secondary: #64748b;
+            --rc-text-muted: #94a3b8;
+            --rc-success: #059669;
+            --rc-danger: #dc2626;
+            --rc-info: #2563eb;
+            --rc-radius-sm: 10px;
+            --rc-radius-md: 14px;
+            --rc-radius-lg: 18px;
+            --rc-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --rc-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --rc-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--rc-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        /* LAYOUT */
+        .dashboard-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--rc-primary) 0%, #111827 100%);
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--rc-border-dark);
+            transition: var(--transition);
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--rc-border-dark);
+        }
+
+        .brand-link {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--rc-accent) 0%, var(--rc-accent-light) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.3);
+        }
+
+        .brand-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .brand-text {
+            color: white;
+        }
+
+        .brand-text .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text .brand-tagline {
+            font-size: 0.7rem;
+            color: var(--rc-text-muted);
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            padding: 1.5rem 1rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .nav-section-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--rc-text-muted);
+            margin: 1.5rem 0.5rem 0.5rem;
+            font-weight: 600;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: #94a3b8;
+            text-decoration: none;
+            border-radius: var(--rc-radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .sidebar-nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+            color: white;
+        }
+
+        .sidebar-nav-link.active {
+            background-color: var(--rc-accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.2);
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--rc-border-dark);
+            background-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .user-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background-color: var(--rc-accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-name {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .user-role {
+            color: var(--rc-text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex-grow: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+            background-color: #f8fafc;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.75rem;
+            color: var(--rc-primary);
+        }
+
+        .header-title p {
+            color: var(--rc-text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* CARDS */
+        .metric-card {
+            background: white;
+            border-radius: var(--rc-radius-md);
+            padding: 1.5rem;
+            border: 1px solid var(--rc-border);
+            box-shadow: var(--rc-shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--rc-shadow-md);
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .metric-details h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-details span {
+            font-size: 0.85rem;
+            color: var(--rc-text-secondary);
+            font-weight: 500;
+        }
+
+        /* TABLES */
+        .table-card {
+            background: white;
+            border-radius: var(--rc-radius-md);
+            border: 1px solid var(--rc-border);
+            box-shadow: var(--rc-shadow-sm);
+            overflow: hidden;
+        }
+
+        .table-header-bar {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--rc-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .custom-table {
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .custom-table th {
+            background-color: var(--rc-surface-alt);
+            color: var(--rc-text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--rc-border);
+        }
+
+        .custom-table td {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--rc-border);
+        }
+
+        .custom-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .invoice-status-badge {
+            padding: 0.35em 0.75em;
+            border-radius: 50rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pendiente {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-pagada {
+            background-color: #d1fae5;
+            color: #059669;
+        }
+
+        .status-vencida {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-anulada {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* BUTTONS */
+        .btn-rc-primary {
+            background-color: var(--rc-accent);
+            color: white;
+            border: none;
+            border-radius: var(--rc-radius-sm);
+            padding: 0.625rem 1.25rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-rc-primary:hover {
+            background-color: var(--rc-accent-light);
+            color: white;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.25);
+        }
+
+        /* Filter elements style */
+        .filter-control {
+            border-radius: 8px;
+            border: 1px solid var(--rc-border);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+            color: var(--rc-text);
+            outline: none;
+        }
+        
+        .filter-control:focus {
+            border-color: var(--rc-accent);
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-280px);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-wrapper">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <a href="/" class="brand-link">
+                    <div class="brand-icon">
+                        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+                            <circle cx="50" cy="25" r="8" fill="white" />
+                            <circle cx="25" cy="50" r="8" fill="white" />
+                            <circle cx="75" cy="50" r="8" fill="white" opacity="0.6" />
+                            <circle cx="38" cy="75" r="8" fill="white" opacity="0.6" />
+                            <circle cx="62" cy="75" r="8" fill="white" opacity="0.6" />
+                            <line x1="50" y1="25" x2="25" y2="50" stroke="white" stroke-width="4" />
+                            <line x1="50" y1="25" x2="75" y2="50" stroke="white" stroke-width="4" opacity="0.6" />
+                            <line x1="25" y1="50" x2="38" y2="75" stroke="white" stroke-width="4" />
+                            <line x1="75" y1="50" x2="62" y2="75" stroke="white" stroke-width="4" opacity="0.6" />
+                            <circle cx="50" cy="50" r="10" fill="white" />
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">REDCONFER</div>
+                        <div class="brand-tagline">Centro de Operaciones</div>
+                    </div>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Principal</div>
+                <a href="/admin/dashboard" class="sidebar-nav-link">
+                    <i class="bi bi-grid-1x2-fill"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/crm/pipeline" class="sidebar-nav-link">
+                    <i class="bi bi-kanban-fill"></i>
+                    <span>CRM Pipeline</span>
+                </a>
+                <a href="/admin/clientes" class="sidebar-nav-link">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Clientes</span>
+                </a>
+
+                <div class="nav-section-label">Operaciones</div>
+                <a href="/admin/proyectos-activos" class="sidebar-nav-link">
+                    <i class="bi bi-cone-striped"></i>
+                    <span>Proyectos de Obra</span>
+                </a>
+                <a href="/admin/cotizaciones" class="sidebar-nav-link">
+                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <span>Cotizaciones</span>
+                </a>
+                <a href="/admin/inventario" class="sidebar-nav-link">
+                    <i class="bi bi-box-seam-fill"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="/admin/finanzas" class="sidebar-nav-link">
+                    <i class="bi bi-wallet2"></i>
+                    <span>Finanzas & Caja</span>
+                </a>
+                <a href="/admin/facturas" class="sidebar-nav-link active">
+                    <i class="bi bi-receipt"></i>
+                    <span>Facturación</span>
+                </a>
+
+                <div class="nav-section-label">Sistema</div>
+                <a href="/admin/configuracion" class="sidebar-nav-link">
+                    <i class="bi bi-gear-fill"></i>
+                    <span>Configuración</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-mini">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <div class="user-name">Administrador</div>
+                        <div class="user-role">Gerente General</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-title">
+                    <h1>Módulo de Facturación</h1>
+                    <p>Crea, gestiona y descarga facturas comerciales profesionales</p>
+                </div>
+                <div>
+                    <a href="/admin/facturas/nuevo" class="btn btn-rc-primary">
+                        <i class="bi bi-plus-lg me-2"></i>Nueva Factura
+                    </a>
+                </div>
+            </header>
+
+            <!-- Metrics Summary Grid -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-receipt"></i>
+                        </div>
+                        <div class="metric-details">
+                            <h3 th:text="${invoices.size()}">0</h3>
+                            <span>Total Facturas</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-success-subtle text-success">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <div class="metric-details">
+                            <h3 th:text="'$' + ${#numbers.formatDecimal(invoices.stream().filter(i -> i.status == T(com.redconfer.model.Invoice.InvoiceStatus).PAGADA).mapToDouble(Invoice::getTotal).sum(), 1, 'POINT', 2, 'COMMA')}">$0.00</h3>
+                            <span>Total Recaudado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-warning-subtle text-warning">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div class="metric-details">
+                            <h3 th:text="'$' + ${#numbers.formatDecimal(invoices.stream().filter(i -> i.status == T(com.redconfer.model.Invoice.InvoiceStatus).PENDIENTE).mapToDouble(Invoice::getDueAmount).sum(), 1, 'POINT', 2, 'COMMA')}">$0.00</h3>
+                            <span>Saldo Pendiente</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-danger-subtle text-danger">
+                            <i class="bi bi-slash-circle-fill"></i>
+                        </div>
+                        <div class="metric-details">
+                            <h3 th:text="${invoices.stream().filter(i -> i.status == T(com.redconfer.model.Invoice.InvoiceStatus).ANULADA).count()}">0</h3>
+                            <span>Anuladas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Card with Search & Filters -->
+            <div class="table-card">
+                <div class="table-header-bar">
+                    <h5 class="m-0 fw-bold">Historial de Ventas & Facturas</h5>
+                    <form th:action="@{/admin/facturas}" method="GET" class="d-flex align-items-center gap-2 flex-wrap">
+                        <input type="text" name="search" th:value="${search}" placeholder="N° Factura o Cliente..." class="filter-control" style="width: 220px;">
+                        
+                        <select name="status" class="filter-control">
+                            <option value="">-- Todos los Estados --</option>
+                            <option value="PENDIENTE" th:selected="${statusFilter == 'PENDIENTE'}">Pendiente</option>
+                            <option value="PAGADA" th:selected="${statusFilter == 'PAGADA'}">Pagada</option>
+                            <option value="VENCIDA" th:selected="${statusFilter == 'VENCIDA'}">Vencida</option>
+                            <option value="ANULADA" th:selected="${statusFilter == 'ANULADA'}">Anulada</option>
+                        </select>
+                        
+                        <div class="d-flex align-items-center gap-1">
+                            <input type="date" name="startDate" th:value="${startDate}" class="filter-control" style="font-size: 0.8rem;">
+                            <span class="text-muted text-xs">al</span>
+                            <input type="date" name="endDate" th:value="${endDate}" class="filter-control" style="font-size: 0.8rem;">
+                        </div>
+
+                        <button type="submit" class="btn btn-dark btn-sm rounded px-3 py-2">
+                            <i class="bi bi-filter"></i> Filtrar
+                        </button>
+                        <a href="/admin/facturas" class="btn btn-outline-secondary btn-sm rounded px-3 py-2">
+                            Limpiar
+                        </a>
+                    </form>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table custom-table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Factura</th>
+                                <th>Cliente</th>
+                                <th>Fecha Emisión</th>
+                                <th>Vencimiento</th>
+                                <th>Total</th>
+                                <th>Pagado</th>
+                                <th>Saldo</th>
+                                <th>Estado</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="invoice : ${invoices}">
+                                <td>
+                                    <strong th:text="${invoice.invoiceNumber}">FAC-2026-0001</strong>
+                                </td>
+                                <td>
+                                    <div class="fw-bold" th:text="${invoice.clientName}">Cliente Ejemplo</div>
+                                    <span class="text-muted small" th:text="${invoice.clientNit}">123.456.789</span>
+                                </td>
+                                <td th:text="${invoice.issueDate}">01/08/2026</td>
+                                <td th:text="${invoice.dueDate}">31/08/2026</td>
+                                <td>
+                                    <strong th:text="'$' + ${#numbers.formatDecimal(invoice.total, 1, 'POINT', 2, 'COMMA')}">$0.00</strong>
+                                </td>
+                                <td th:text="'$' + ${#numbers.formatDecimal(invoice.paidAmount, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
+                                <td class="text-danger" th:text="'$' + ${#numbers.formatDecimal(invoice.dueAmount, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
+                                <td>
+                                    <span class="invoice-status-badge"
+                                          th:classappend="'status-' + ${invoice.status.name().toLowerCase()}"
+                                          th:text="${invoice.status.name()}">PENDIENTE</span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group">
+                                        <a th:href="@{/admin/facturas/ver/{id}(id=${invoice.id})}" class="btn btn-outline-secondary btn-sm" title="Ver Detalle">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a th:href="@{/admin/facturas/pdf/{id}(id=${invoice.id})}" class="btn btn-outline-primary btn-sm" title="Descargar PDF">
+                                            <i class="bi bi-file-pdf"></i>
+                                        </a>
+                                        <a th:href="@{/admin/facturas/duplicar/{id}(id=${invoice.id})}" class="btn btn-outline-info btn-sm" title="Duplicar Factura">
+                                            <i class="bi bi-copy"></i>
+                                        </a>
+                                        <button th:if="${invoice.status.name() == 'PENDIENTE'}" 
+                                                th:onclick="'confirmPayment(\'' + ${invoice.id} + '\')'" 
+                                                class="btn btn-outline-success btn-sm" title="Marcar como Pagada">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </button>
+                                        <button th:if="${invoice.status.name() != 'ANULADA' && invoice.status.name() != 'PAGADA'}" 
+                                                th:onclick="'confirmVoid(\'' + ${invoice.id} + '\')'" 
+                                                class="btn btn-outline-danger btn-sm" title="Anular Factura">
+                                            <i class="bi bi-slash-circle"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${invoices.isEmpty()}">
+                                <td colspan="9" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                                    No se encontraron facturas registradas.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Payment confirmation form hidden -->
+    <form id="paymentForm" method="POST" style="display:none;"></form>
+    <form id="voidForm" method="POST" style="display:none;"></form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmPayment(id) {
+            if (confirm('¿Está seguro de marcar esta factura como PAGADA? Se registrará un ingreso en Finanzas.')) {
+                var form = document.getElementById('paymentForm');
+                form.action = '/admin/facturas/pagar/' + id;
+                form.submit();
+            }
+        }
+
+        function confirmVoid(id) {
+            if (confirm('¿Está seguro de ANULAR esta factura? Esta acción no se puede deshacer.')) {
+                var form = document.getElementById('voidForm');
+                form.action = '/admin/facturas/anular/' + id;
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>
