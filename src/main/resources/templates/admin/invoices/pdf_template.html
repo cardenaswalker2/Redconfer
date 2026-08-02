@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Factura de Venta - REDCONFER</title>
     <style type="text/css">
         @page {
@@ -15,18 +16,33 @@
                 color: #94a3b8;
             }
         }
-        
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: #1e293b;
-            margin: 0;
-            padding: 0;
             background-color: #ffffff;
-            font-size: 9px;
-            line-height: 1.35;
+            font-size: 9.5px;
+            line-height: 1.5;
         }
 
-        /* 3% Opacity Isotipo Watermark in Center */
+        /* ============================================
+           CONTENEDOR PRINCIPAL
+           ============================================ */
+        .invoice-wrapper {
+            width: 100%;
+            background: #ffffff;
+            position: relative;
+        }
+
+        /* ============================================
+           WATERMARK PROFESIONAL
+           ============================================ */
         .watermark-container {
             position: absolute;
             top: 40%;
@@ -37,167 +53,226 @@
             z-index: -9999;
         }
 
-        /* Accent bar */
-        .header-accent {
-            height: 5px;
-            background-color: #C61A22;
-            margin-bottom: 20px;
+        /* ============================================
+           HEADER PREMIUM
+           ============================================ */
+        .header-section {
+            position: relative;
+            background-color: #1e293b;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 30px 35px 35px 35px;
+            color: #ffffff;
+            border-bottom: 4px solid #C61A22;
         }
 
-        /* 3-Column Header Table */
         .header-grid {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
         }
 
-        .header-col-left {
-            width: 38%;
+        .header-grid td {
             vertical-align: top;
+            padding: 0;
         }
 
-        .header-col-mid {
-            width: 42%;
-            vertical-align: top;
-            padding-left: 15px;
+        .brand-section {
+            padding-right: 20px;
         }
 
-        .header-col-right {
-            width: 20%;
-            vertical-align: top;
-            text-align: right;
-        }
-
-        /* Branding typography */
         .brand-name {
-            font-size: 24px;
-            font-weight: 800;
-            color: #C61A22;
-            letter-spacing: -0.03em;
+            font-size: 28px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.04em;
             margin: 0;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: #ef4444;
         }
 
         .brand-tagline {
-            font-size: 7.5px;
-            font-weight: bold;
-            color: #475569;
-            margin: 2px 0 8px 0;
-            letter-spacing: 0.1em;
+            font-size: 8px;
+            font-weight: 700;
+            color: #94a3b8;
+            margin: 6px 0 14px 0;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
         }
 
         .emitter-detail {
-            font-size: 7.5px;
-            color: #64748b;
-            line-height: 1.5;
+            font-size: 8px;
+            color: #cbd5e1;
+            line-height: 1.7;
         }
 
         .emitter-detail strong {
-            color: #0f172a;
+            color: #ffffff;
+            font-weight: 600;
         }
 
-        /* Document Metadata (Center Column) */
+        /* Invoice metadata center */
+        .invoice-meta-section {
+            padding: 0 15px;
+        }
+
         .invoice-title {
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 800;
-            color: #0f172a;
-            letter-spacing: -0.02em;
-            margin: 0 0 2px 0;
+            color: #ffffff;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin: 0 0 4px 0;
+            opacity: 0.9;
         }
 
         .invoice-number {
-            font-size: 12px;
-            font-weight: bold;
-            color: #C61A22;
-            margin: 0 0 8px 0;
+            font-size: 18px;
+            font-weight: 900;
+            color: #ef4444;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.02em;
         }
 
         .meta-list {
-            font-size: 8px;
-            color: #475569;
-            margin-bottom: 2px;
+            font-size: 8.5px;
+            color: #cbd5e1;
+            margin-bottom: 4px;
+            line-height: 1.6;
         }
 
         .meta-list strong {
-            color: #0f172a;
+            color: #ffffff;
+            font-weight: 600;
         }
 
-        /* Modern Status Badge */
+        /* Status badge */
+        .status-wrapper {
+            margin-top: 10px;
+        }
+
         .status-badge-pill {
             display: inline-block;
-            padding: 3px 8px;
-            font-size: 7px;
-            font-weight: 700;
+            padding: 4px 14px;
+            font-size: 8px;
+            font-weight: 800;
             color: #ffffff;
-            border-radius: 20px;
+            border-radius: 50px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-align: center;
+            letter-spacing: 0.08em;
         }
-        
-        .badge-pendiente { background-color: #f59e0b; }
-        .badge-pagada { background-color: #10b981; }
-        .badge-vencida { background-color: #ef4444; }
-        .badge-anulada { background-color: #64748b; }
 
-        /* Integrated QR Code Card */
+        .badge-pendiente {
+            background-color: #f59e0b;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .badge-pagada {
+            background-color: #10b981;
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .badge-vencida {
+            background-color: #ef4444;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .badge-anulada {
+            background-color: #64748b;
+            background: linear-gradient(135deg, #64748b, #475569);
+        }
+
+        /* QR Section */
+        .qr-section {
+            text-align: right;
+        }
+
         .qr-card {
-            border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
-            border-radius: 8px;
-            padding: 8px;
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 10px;
             text-align: center;
-            width: 100px;
-            float: right;
         }
 
         .qr-card img {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
+            border-radius: 6px;
+            display: block;
+            margin: 0 auto;
         }
 
         .qr-text {
-            font-size: 5px;
-            color: #64748b;
-            font-weight: bold;
-            line-height: 1.1;
-            margin-top: 5px;
+            font-size: 6px;
+            color: #94a3b8;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-top: 6px;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        /* Client Card Layout */
+        /* ============================================
+           CONTENT AREA
+           ============================================ */
+        .content-area {
+            padding: 25px 0 100px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================
+           CLIENT CARD
+           ============================================ */
         .client-card {
-            background-color: #f8fafc;
+            background-color: #ffffff;
             border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 12px;
+            border-left: 4px solid #C61A22;
+            border-radius: 14px;
+            padding: 18px 20px;
             margin-bottom: 20px;
+            position: relative;
         }
 
         .client-header {
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 5px;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .client-avatar {
             float: left;
-            width: 22px;
-            height: 22px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background-color: #C61A22;
+            background: linear-gradient(135deg, #C61A22, #ef4444);
             color: #ffffff;
             text-align: center;
-            line-height: 22px;
-            font-size: 9px;
-            font-weight: bold;
-            margin-right: 8px;
+            line-height: 32px;
+            font-size: 12px;
+            font-weight: 800;
+            margin-right: 12px;
         }
 
         .client-title-text {
-            font-size: 9px;
-            font-weight: bold;
+            font-size: 10px;
+            font-weight: 800;
             color: #0f172a;
-            padding-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .client-subtitle {
+            font-size: 7.5px;
+            color: #94a3b8;
+            margin-top: 1px;
+            font-weight: 500;
         }
 
         .client-grid {
@@ -206,25 +281,35 @@
         }
 
         .client-grid td {
-            font-size: 8px;
+            font-size: 8.5px;
             color: #475569;
             vertical-align: top;
-            padding: 2px 0;
+            padding: 3px 0;
+            line-height: 1.6;
         }
 
-        /* Metadata Details Strip */
+        .client-grid td strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           METADATA STRIP
+           ============================================ */
+        .meta-strip-wrapper {
+            margin-bottom: 22px;
+        }
+
         .meta-strip {
             width: 100%;
             border-collapse: collapse;
-            background-color: #f8fafc;
+            background-color: #ffffff;
             border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            margin-bottom: 20px;
         }
 
         .meta-strip-cell {
             width: 25%;
-            padding: 6px 8px;
+            padding: 12px 10px;
             text-align: center;
             border-right: 1px solid #e2e8f0;
         }
@@ -235,103 +320,133 @@
 
         .meta-strip-label {
             font-size: 6.5px;
-            font-weight: bold;
-            color: #64748b;
+            font-weight: 800;
+            color: #94a3b8;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 5px;
         }
 
         .meta-strip-val {
-            font-size: 8.5px;
-            font-weight: bold;
+            font-size: 10px;
+            font-weight: 700;
             color: #0f172a;
         }
 
-        /* Premium Products Table */
+        /* ============================================
+           PRODUCTS TABLE PREMIUM
+           ============================================ */
+        .products-section {
+            margin-bottom: 22px;
+        }
+
         .products-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 25px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
         }
 
-        .products-table th {
+        .products-table thead th {
             background-color: #0f172a;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #ffffff;
-            font-weight: bold;
+            font-weight: 700;
             font-size: 7.5px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 7px 8px;
+            letter-spacing: 0.08em;
+            padding: 10px 8px;
             border: none;
+            text-align: left;
         }
 
-        .products-table td {
-            padding: 8px;
-            font-size: 8px;
+        .products-table tbody td {
+            padding: 10px 8px;
+            font-size: 8.5px;
             color: #334155;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
         }
 
-        .products-table tr.even-row {
-            background-color: #f8fafc;
+        .products-table tbody tr:last-child td {
+            border-bottom: none;
         }
 
-        /* Label Pills inside table */
+        .products-table tbody tr.even-row {
+            background-color: #fafbfc;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* Label Pills */
         .lbl-pill {
             display: inline-block;
-            padding: 1px 4px;
-            font-size: 6.5px;
-            font-weight: bold;
-            background-color: #e2e8f0;
+            padding: 2px 8px;
+            font-size: 7px;
+            font-weight: 700;
+            background-color: #f1f5f9;
             color: #475569;
-            border-radius: 3px;
+            border-radius: 20px;
+            letter-spacing: 0.02em;
         }
 
         .lbl-pill-tax {
-            background-color: #fee2e2;
+            background-color: #fef2f2;
             color: #991b1b;
         }
 
-        /* 2-Column Details Layout (Project vs Financials) */
+        /* ============================================
+           LOWER GRID
+           ============================================ */
         .details-grid {
             width: 100%;
             border-collapse: collapse;
         }
 
         .details-col-left {
-            width: 48%;
+            width: 52%;
             vertical-align: top;
-        }
-
-        .details-col-spacer {
-            width: 4%;
+            padding-right: 15px;
         }
 
         .details-col-right {
             width: 48%;
             vertical-align: top;
+            padding-left: 15px;
         }
 
-        /* Project specification sheet */
+        /* Project Card */
         .project-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 10px;
             background-color: #ffffff;
-            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+            border-top: 3px solid #C61A22;
+            padding: 16px 18px;
+            margin-bottom: 14px;
         }
 
         .project-card-title {
             font-size: 8px;
-            font-weight: bold;
+            font-weight: 800;
             color: #0f172a;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 4px;
-            margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .title-bullet {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #C61A22;
+            vertical-align: middle;
+            margin-right: 6px;
         }
 
         .project-grid {
@@ -340,53 +455,87 @@
         }
 
         .project-grid td {
-            font-size: 7.5px;
+            font-size: 8px;
             color: #475569;
-            padding: 3px 0;
+            padding: 4px 0;
             vertical-align: top;
+            line-height: 1.5;
         }
 
         .project-grid td strong {
             color: #0f172a;
+            font-weight: 600;
         }
 
-        /* Banking / Payment details card */
-        .payment-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 10px;
-            background-color: #ffffff;
+        .warranty-badge {
+            display: inline-block;
+            background-color: #dcfce7;
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+            color: #166534;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 7.5px;
+            font-weight: 700;
         }
 
         /* Terms Box */
         .terms-box {
             background-color: #f1f5f9;
-            border-left: 3px solid #C61A22;
-            border-radius: 4px;
-            padding: 8px;
-            margin-top: 10px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-left: 4px solid #C61A22;
+            border-radius: 0 10px 10px 0;
+            padding: 14px 16px;
+            margin-bottom: 14px;
         }
 
         .terms-title {
-            font-size: 7.5px;
-            font-weight: bold;
+            font-size: 8px;
+            font-weight: 800;
             color: #0f172a;
-            margin-bottom: 3px;
+            margin-bottom: 6px;
             text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         .terms-text {
-            font-size: 6.5px;
-            color: #475569;
-            line-height: 1.4;
+            font-size: 7.5px;
+            color: #64748b;
+            line-height: 1.6;
         }
 
-        /* Stripe Checkout Totals Card */
+        /* Total in words */
+        .words-section {
+            margin-top: 12px;
+            padding: 10px 0;
+        }
+
+        .words-label {
+            font-size: 6.5px;
+            color: #94a3b8;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 4px;
+        }
+
+        .words-value {
+            font-size: 9px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        /* ============================================
+           STRIPE TOTALS CARD
+           ============================================ */
         .stripe-totals-card {
             background-color: #f8fafc;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
             border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 12px;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 14px;
         }
 
         .totals-row-item {
@@ -395,39 +544,94 @@
         }
 
         .totals-row-item td {
-            padding: 5px 0;
-            font-size: 8px;
+            padding: 6px 0;
+            font-size: 9px;
             color: #475569;
             border-bottom: 1px solid #f1f5f9;
         }
 
-        .totals-row-item tr.grand-total-row td {
-            font-size: 14px;
-            font-weight: 800;
-            color: #C61A22;
-            border-top: 1px solid #cbd5e1;
+        .totals-row-item tr:last-child td {
             border-bottom: none;
-            padding-top: 8px;
         }
 
-        .totals-row-item tr.balance-due-row td {
-            font-size: 9px;
-            font-weight: bold;
-            color: #ef4444;
-            border-bottom: none;
-            padding-top: 6px;
+        .grand-total-row td {
+            font-size: 15px !important;
+            font-weight: 900 !important;
+            color: #C61A22 !important;
+            border-top: 2px solid #e2e8f0 !important;
+            border-bottom: none !important;
+            padding-top: 10px !important;
         }
 
-        /* Premium Dark Slate Footer */
-        .footer-banner {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: #0f172a;
+        .balance-due-row td {
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            color: #ef4444 !important;
+            padding-top: 8px !important;
+        }
+
+        .discount-row td {
+            color: #10b981 !important;
+        }
+
+        .paid-row td {
+            color: #059669 !important;
+        }
+
+        /* Payment Card */
+        .payment-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-top: 3px solid #0f172a;
+            padding: 16px 18px;
+            position: relative;
+        }
+
+        .bank-details {
+            font-size: 8px;
+            line-height: 1.8;
+            color: #475569;
+        }
+
+        .bank-details strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .bank-row {
+            clear: both;
+            overflow: hidden;
+            padding: 3px 0;
+            border-bottom: 1px dashed #f1f5f9;
+        }
+
+        .bank-row:last-child {
+            border-bottom: none;
+        }
+
+        .bank-label {
+            float: left;
             color: #94a3b8;
-            padding: 12px 30px;
-            margin: 0 -30px -40px -30px;
+            font-size: 7.5px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .bank-value {
+            float: right;
+        }
+
+        /* ============================================
+           FOOTER PREMIUM
+           ============================================ */
+        .footer-banner {
+            margin-top: 30px;
+            background-color: #0f172a;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #94a3b8;
+            padding: 16px 35px;
+            border-top: 3px solid #C61A22;
         }
 
         .footer-banner-table {
@@ -436,239 +640,331 @@
         }
 
         .footer-banner-table td {
-            font-size: 7px;
+            font-size: 7.5px;
             vertical-align: middle;
             border: none;
         }
+
+        .footer-brand {
+            font-weight: 900;
+            color: #ffffff;
+            font-size: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-divider {
+            color: #334155;
+            margin: 0 8px;
+        }
     </style>
 </head>
+
 <body>
 
-    <!-- Centers a light 3% transparent watermark icon/isotipo -->
-    <div class="watermark-container">
-        <!-- REDCONFER branding visual simulated using simple styling -->
-        <div style="font-size: 110px; font-weight: bold; color: rgba(15, 23, 42, 0.03); letter-spacing: -0.05em;">RC</div>
-    </div>
+    <div class="invoice-wrapper">
 
-    <!-- Header Accent Bar -->
-    <div class="header-accent"></div>
-
-    <!-- Header Grid -->
-    <table class="header-grid">
-        <tr>
-            <!-- Col 1: Emitter info -->
-            <td class="header-col-left">
-                <div class="brand-name">REDCONFER</div>
-                <div class="brand-tagline">INTEGRATED SECURITY &amp; TECHNOLOGY</div>
-                <div class="emitter-detail">
-                    <strong>REDCONFER Comprehensive Services S.A.S.</strong><br />
-                    NIT: 900.123.456-7<br />
-                    Dirección: Calle 100 #15-30, Cartagena, Colombia<br />
-                    Teléfono: +57 323 357 0996<br />
-                    Correo: contacto@redconfer.com<br />
-                    Web: www.redconfer.com
-                </div>
-            </td>
-            
-            <!-- Col 2: Invoice metadata -->
-            <td class="header-col-mid">
-                <div class="invoice-title">FACTURA DE VENTA</div>
-                <div class="invoice-number" th:text="'N°: ' + ${invoice.invoiceNumber}">FAC-2026-000001</div>
-                
-                <div class="meta-list"><strong>Fecha de Emisión:</strong> <span th:text="${invoice.issueDate}">01/08/2026</span></div>
-                <div class="meta-list"><strong>Fecha de Vencimiento:</strong> <span th:text="${invoice.dueDate}">01/08/2026</span></div>
-                <div class="meta-list" th:if="${invoice.projectName != null and !invoice.projectName.isEmpty()}"><strong>Proyecto:</strong> <span th:text="${invoice.projectName}">CCTV Central</span></div>
-                
-                <div style="margin-top: 6px;">
-                    <span class="status-badge-pill" 
-                          th:classappend="'badge-' + ${invoice.status.name().toLowerCase()}" 
-                          th:text="${invoice.status}">PENDIENTE</span>
-                </div>
-            </td>
-
-            <!-- Col 3: QR Code Card -->
-            <td class="header-col-right">
-                <div class="qr-card">
-                    <img th:src="'https://api.qrserver.com/v1/create-qr-code/?size=90x90&amp;data=https%3A%2F%2Fredconfer.onrender.com%2Fverificar%2F' + ${invoice.invoiceNumber}" 
-                         alt="QR" />
-                    <div class="qr-text">Verificar autenticidad</div>
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <!-- Client Card -->
-    <div class="client-card">
-        <div class="client-header">
-            <div class="client-avatar">
-                <span th:text="${invoice.clientName != null and invoice.clientName.length() > 0 ? invoice.clientName.substring(0,1) : 'C'}">C</span>
-            </div>
-            <div class="client-title-text">INFORMACIÓN DEL CLIENTE</div>
-            <div style="clear: both;"></div>
+        <!-- Centers a light 3% transparent watermark icon/isotipo -->
+        <div class="watermark-container">
+            <div style="font-size: 110px; font-weight: bold; color: rgba(15, 23, 42, 0.03); letter-spacing: -0.05em;">RC</div>
         </div>
-        <table class="client-grid">
-            <tr>
-                <td style="width: 50%;">
-                    <strong style="font-size: 9px; color: #0f172a;" th:text="${invoice.clientName}">Juan Fernando Agamez</strong><br />
-                    NIT / C.C: <span th:text="${invoice.clientNit != null ? invoice.clientNit : 'N/A'}">1047123456</span><br />
-                    Dirección: <span th:text="${invoice.clientAddress}">Calle del Emisor, Cartagena</span>
-                </td>
-                <td style="width: 50%; text-align: right;">
-                    Teléfono: <span th:text="${invoice.clientPhone}">+57 300 000 0000</span><br />
-                    Correo: <span th:text="${invoice.clientEmail}">cliente@email.com</span><br />
-                    Ciudad: <span th:text="${invoice.clientCity != null ? invoice.clientCity : 'N/A'}">Cartagena</span>
-                </td>
-            </tr>
-        </table>
-    </div>
 
-    <!-- Metadata Details Strip -->
-    <table class="meta-strip">
-        <tr>
-            <td class="meta-strip-cell">
-                <span class="meta-strip-label">Forma de Pago</span>
-                <span class="meta-strip-val" th:text="${invoice.paymentForm}">Contado</span>
-            </td>
-            <td class="meta-strip-cell">
-                <span class="meta-strip-label">Método de Pago</span>
-                <span class="meta-strip-val" th:text="${invoice.paymentMethod}">Efectivo</span>
-            </td>
-            <td class="meta-strip-cell">
-                <span class="meta-strip-label">Vendedor</span>
-                <span class="meta-strip-val" th:text="${invoice.seller != null and !invoice.seller.isEmpty() ? invoice.seller : 'Asesor REDCONFER'}">Carlos</span>
-            </td>
-            <td class="meta-strip-cell">
-                <span class="meta-strip-label">Moneda</span>
-                <span class="meta-strip-val" th:text="${invoice.currency}">COP</span>
-            </td>
-        </tr>
-    </table>
+        <!-- ============================================
+             HEADER PREMIUM
+             ============================================ -->
+        <div class="header-section">
+            <table class="header-grid">
+                <tr>
+                    <!-- Col 1: Emitter info -->
+                    <td class="brand-section" style="width: 38%;">
+                        <div class="brand-name">RED<span>CONFER</span></div>
+                        <div class="brand-tagline">Integrated Security &amp; Technology</div>
+                        <div class="emitter-detail">
+                            <strong>REDCONFER Comprehensive Services S.A.S.</strong><br />
+                            NIT: 900.123.456-7<br />
+                            Calle 100 #15-30, Cartagena, Colombia<br />
+                            Tel: +57 323 357 0996 &#160;|&#160; contacto@redconfer.com<br />
+                            www.redconfer.com
+                        </div>
+                    </td>
 
-    <!-- Products & Services Table -->
-    <table class="products-table">
-        <thead>
-            <tr>
-                <th style="width: 10%;">Código</th>
-                <th style="width: 25%;">Producto / Servicio</th>
-                <th style="width: 25%;">Descripción</th>
-                <th style="width: 6%; text-align: center;">Cant.</th>
-                <th style="width: 6%; text-align: center;">Und.</th>
-                <th style="width: 11%; text-align: right;">Precio Unit.</th>
-                <th style="width: 6%; text-align: center;">Dcto.</th>
-                <th style="width: 11%; text-align: right;">Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="item, stat : ${invoice.items}" th:class="${stat.even} ? 'even-row' : 'odd-row'">
-                <td style="font-weight: bold;" th:text="${item.code}">SKU-001</td>
-                <td th:text="${item.name}">Obra Civil</td>
-                <td th:text="${item.description}">Remodelación y cableado</td>
-                <td class="text-center" th:text="${item.quantity}">1</td>
-                <td class="text-center" th:text="${item.unit != null ? item.unit : 'Und'}">Global</td>
-                <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(item.unitPrice, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
-                <td class="text-center">
-                    <span class="lbl-pill" th:text="${item.discountPercent} + '%'">0%</span>
-                </td>
-                <td class="text-right" style="font-weight: bold; color: #0f172a;" th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
-            </tr>
-        </tbody>
-    </table>
+                    <!-- Col 2: Invoice metadata -->
+                    <td class="invoice-meta-section" style="width: 42%;">
+                        <div class="invoice-title">Factura de Venta</div>
+                        <div class="invoice-number" th:text="'N° ' + ${invoice.invoiceNumber}">FAC-2026-000001</div>
 
-    <!-- Lower Details Split Grid -->
-    <table class="details-grid">
-        <tr>
-            <!-- Left Column: Project specification, terms, totals in words -->
-            <td class="details-col-left">
-                <!-- Project info sheet -->
-                <div class="project-card">
-                    <div class="project-card-title">FICHA TÉCNICA Y PROYECTO</div>
-                    <table class="project-grid">
+                        <div class="meta-list"><strong>Fecha de Emisión:</strong> <span
+                                th:text="${invoice.issueDate}">01/08/2026</span></div>
+                        <div class="meta-list"><strong>Fecha de Vencimiento:</strong> <span
+                                th:text="${invoice.dueDate}">01/08/2026</span></div>
+                        <div class="meta-list"
+                            th:if="${invoice.projectName != null and !invoice.projectName.isEmpty()}">
+                            <strong>Proyecto:</strong> <span th:text="${invoice.projectName}">CCTV Central</span>
+                        </div>
+
+                        <div class="status-wrapper">
+                            <span class="status-badge-pill"
+                                th:classappend="'badge-' + ${invoice.status.name().toLowerCase()}"
+                                th:text="${invoice.status}">PENDIENTE</span>
+                        </div>
+                    </td>
+
+                    <!-- Col 3: QR Code Card -->
+                    <td class="qr-section" style="width: 20%;">
+                        <div class="qr-card">
+                            <img th:src="'https://api.qrserver.com/v1/create-qr-code/?size=90x90&amp;data=https%3A%2F%2Fredconfer.onrender.com%2Fverificar%2F' + ${invoice.invoiceNumber}"
+                                alt="QR" />
+                            <div class="qr-text">Verificar autenticidad</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ============================================
+             CONTENT AREA
+             ============================================ -->
+        <div class="content-area">
+
+            <!-- Client Card -->
+            <div class="client-card">
+                <div class="client-header" style="overflow: hidden; clear: both;">
+                    <div class="client-avatar">
+                        <span
+                            th:text="${invoice.clientName != null and invoice.clientName.length() > 0 ? invoice.clientName.substring(0,1) : 'C'}">C</span>
+                    </div>
+                    <div style="float: left; padding-top: 2px;">
+                        <div class="client-title-text">Información del Cliente</div>
+                        <div class="client-subtitle">Datos de facturación</div>
+                    </div>
+                </div>
+                <table class="client-grid">
+                    <tr>
+                        <td style="width: 55%;">
+                            <strong style="font-size: 10px; color: #0f172a;" th:text="${invoice.clientName}">Juan
+                                Fernando Agamez</strong><br />
+                            <span style="color: #94a3b8;">NIT / C.C:</span> <span
+                                th:text="${invoice.clientNit != null ? invoice.clientNit : 'N/A'}">1047123456</span><br />
+                            <span style="color: #94a3b8;">Dirección:</span> <span
+                                th:text="${invoice.clientAddress}">Calle del Emisor, Cartagena</span>
+                        </td>
+                        <td style="width: 45%; text-align: right;">
+                            <span style="color: #94a3b8;">Teléfono:</span> <span th:text="${invoice.clientPhone}">+57
+                                300 000 0000</span><br />
+                            <span style="color: #94a3b8;">Correo:</span> <span
+                                th:text="${invoice.clientEmail}">cliente@email.com</span><br />
+                            <span style="color: #94a3b8;">Ciudad:</span> <span
+                                th:text="${invoice.clientCity != null ? invoice.clientCity : 'N/A'}">Cartagena</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Metadata Details Strip -->
+            <div class="meta-strip-wrapper">
+                <table class="meta-strip">
+                    <tr>
+                        <td class="meta-strip-cell">
+                            <span class="meta-strip-label">Forma de Pago</span>
+                            <span class="meta-strip-val" th:text="${invoice.paymentForm}">Contado</span>
+                        </td>
+                        <td class="meta-strip-cell">
+                            <span class="meta-strip-label">Método de Pago</span>
+                            <span class="meta-strip-val" th:text="${invoice.paymentMethod}">Efectivo</span>
+                        </td>
+                        <td class="meta-strip-cell">
+                            <span class="meta-strip-label">Vendedor</span>
+                            <span class="meta-strip-val"
+                                th:text="${invoice.seller != null and !invoice.seller.isEmpty() ? invoice.seller : 'Asesor REDCONFER'}">Carlos</span>
+                        </td>
+                        <td class="meta-strip-cell">
+                            <span class="meta-strip-label">Moneda</span>
+                            <span class="meta-strip-val" th:text="${invoice.currency}">COP</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Products & Services Table -->
+            <div class="products-section">
+                <table class="products-table">
+                    <thead>
                         <tr>
-                            <td>
-                                <strong>Proyecto:</strong> <span th:text="${invoice.projectName != null ? invoice.projectName : 'N/A'}">Instalación CCTV</span><br />
-                                <strong>Código:</strong> <span th:text="${invoice.projectCode != null ? invoice.projectCode : 'N/A'}">PRJ-001</span><br />
-                                <strong>Técnico Encargado:</strong> <span th:text="${invoice.technicianName != null ? invoice.technicianName : 'N/A'}">Carlos Pérez</span><br />
-                                <strong>Supervisor Técnico:</strong> <span th:text="${invoice.supervisorName != null ? invoice.supervisorName : 'N/A'}">Ing. Luis Gómez</span><br />
-                                <strong>Garantía de Servicio:</strong> <span style="color: #10b981; font-weight: bold;" th:text="${invoice.warrantyTerm != null ? invoice.warrantyTerm : '12 Meses'}">12 Meses</span>
+                            <th style="width: 10%;">Código</th>
+                            <th style="width: 24%;">Producto / Servicio</th>
+                            <th style="width: 26%;">Descripción</th>
+                            <th style="width: 6%; text-align: center;">Cant.</th>
+                            <th style="width: 7%; text-align: center;">Und.</th>
+                            <th style="width: 11%; text-align: right;">Precio Unit.</th>
+                            <th style="width: 7%; text-align: center;">Dcto.</th>
+                            <th style="width: 11%; text-align: right;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item, stat : ${invoice.items}" th:class="${stat.even} ? 'even-row' : 'odd-row'">
+                            <td style="font-weight: 700; color: #0f172a;" th:text="${item.code}">SKU-001</td>
+                            <td th:text="${item.name}">Obra Civil</td>
+                            <td th:text="${item.description}">Remodelación y cableado</td>
+                            <td class="text-center" th:text="${item.quantity}">1</td>
+                            <td class="text-center" th:text="${item.unit != null ? item.unit : 'Und'}">Global</td>
+                            <td class="text-right"
+                                th:text="'$' + ${#numbers.formatDecimal(item.unitPrice, 1, 'POINT', 2, 'COMMA')}">$0.00
+                            </td>
+                            <td class="text-center">
+                                <span class="lbl-pill" th:text="${item.discountPercent} + '%'">0%</span>
+                            </td>
+                            <td class="text-right" style="font-weight: 700; color: #0f172a;"
+                                th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">$0.00
                             </td>
                         </tr>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
+            </div>
 
-                <!-- Terms and Conditions Card -->
-                <div class="terms-box">
-                    <div class="terms-title">Términos, Condiciones &amp; Garantía</div>
-                    <div class="terms-text" th:text="${invoice.observations != null and !invoice.observations.isEmpty() ? invoice.observations : 'Esta factura se asimila a una letra de cambio según art. 774 de código de comercio. Garantía de 12 meses en equipos.'}">
-                        Términos de ley...
-                    </div>
-                </div>
+            <!-- Lower Details Split Grid -->
+            <table class="details-grid">
+                <tr>
+                    <!-- Left Column -->
+                    <td class="details-col-left">
+                        <!-- Project info sheet -->
+                        <div class="project-card">
+                            <div class="project-card-title"><span class="title-bullet"></span>Ficha Técnica y Proyecto</div>
+                            <table class="project-grid">
+                                <tr>
+                                    <td>
+                                        <strong>Proyecto:</strong> <span
+                                            th:text="${invoice.projectName != null ? invoice.projectName : 'N/A'}">Instalación
+                                            CCTV</span><br />
+                                        <strong>Código:</strong> <span
+                                            th:text="${invoice.projectCode != null ? invoice.projectCode : 'N/A'}">PRJ-001</span><br />
+                                        <strong>Técnico Encargado:</strong> <span
+                                            th:text="${invoice.technicianName != null ? invoice.technicianName : 'N/A'}">Carlos
+                                            Pérez</span><br />
+                                        <strong>Supervisor Técnico:</strong> <span
+                                            th:text="${invoice.supervisorName != null ? invoice.supervisorName : 'N/A'}">Ing.
+                                            Luis Gómez</span><br />
+                                        <strong>Garantía de Servicio:</strong>
+                                        <span class="warranty-badge"
+                                            th:text="${invoice.warrantyTerm != null ? invoice.warrantyTerm : '12 Meses'}">12
+                                            Meses</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
 
-                <div style="font-size: 6.5px; color: #64748b; font-weight: bold; text-transform: uppercase; margin-top: 12px;">Valor total en letras:</div>
-                <div style="font-size: 8px; font-weight: bold; color: #0f172a; margin-top: 2px;" th:text="${invoice.totalInWords}">CUATROCIENTOS DIECISEIS MIL PESOS M/CTE</div>
-            </td>
+                        <!-- Terms and Conditions -->
+                        <div class="terms-box">
+                            <div class="terms-title">Términos, Condiciones &amp; Garantía</div>
+                            <div class="terms-text"
+                                th:text="${invoice.observations != null and !invoice.observations.isEmpty() ? invoice.observations : 'Esta factura se asimila a una letra de cambio según art. 774 del Código de Comercio. Garantía de 12 meses en equipos y servicios prestados.'}">
+                                Términos de ley...
+                            </div>
+                        </div>
 
-            <!-- Spacer -->
-            <td class="details-col-spacer">&nbsp;</td>
+                        <!-- Total in words -->
+                        <div class="words-section">
+                            <div class="words-label">Valor total en letras</div>
+                            <div class="words-value" th:text="${invoice.totalInWords}">CUATROCIENTOS DIECISEIS MIL PESOS
+                                M/CTE</div>
+                        </div>
+                    </td>
 
-            <!-- Right Column: Stripe financials & banking card -->
-            <td class="details-col-right">
-                <!-- Stripe Checkout Totals Card -->
-                <div class="stripe-totals-card">
-                    <table class="totals-row-item">
-                        <tr>
-                            <td>Subtotal:</td>
-                            <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(invoice.subtotal, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td style="color: #10b981;">Descuentos aplicados:</td>
-                            <td class="text-right" style="color: #10b981;" th:text="'-$' + ${#numbers.formatDecimal(invoice.discountAmount, 1, 'POINT', 2, 'COMMA')}">-$0.00</td>
-                        </tr>
-                        <tr>
-                            <td>IVA (19%):</td>
-                            <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(invoice.taxAmount, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td>Monto Pagado:</td>
-                            <td class="text-right" style="color: #059669;" th:text="'$' + ${#numbers.formatDecimal(invoice.paidAmount, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
-                        </tr>
-                        <tr class="grand-total-row">
-                            <td>TOTAL FACTURA:</td>
-                            <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(invoice.total, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
-                        </tr>
-                        <tr class="balance-due-row">
-                            <td>SALDO PENDIENTE:</td>
-                            <td class="text-right" th:text="'$' + ${#numbers.formatDecimal(invoice.dueAmount, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
-                        </tr>
-                    </table>
-                </div>
+                    <!-- Right Column -->
+                    <td class="details-col-right">
+                        <!-- Stripe Checkout Totals Card -->
+                        <div class="stripe-totals-card">
+                            <table class="totals-row-item">
+                                <tr>
+                                    <td>Subtotal:</td>
+                                    <td class="text-right"
+                                        th:text="'$' + ${#numbers.formatDecimal(invoice.subtotal, 1, 'POINT', 2, 'COMMA')}">
+                                        $0.00</td>
+                                </tr>
+                                <tr class="discount-row">
+                                    <td>Descuentos aplicados:</td>
+                                    <td class="text-right"
+                                        th:text="'-$' + ${#numbers.formatDecimal(invoice.discountAmount, 1, 'POINT', 2, 'COMMA')}">
+                                        -$0.00</td>
+                                </tr>
+                                <tr>
+                                    <td>IVA (19%):</td>
+                                    <td class="text-right"
+                                        th:text="'$' + ${#numbers.formatDecimal(invoice.taxAmount, 1, 'POINT', 2, 'COMMA')}">
+                                        $0.00</td>
+                                </tr>
+                                <tr class="paid-row">
+                                    <td>Monto Pagado:</td>
+                                    <td class="text-right"
+                                        th:text="'$' + ${#numbers.formatDecimal(invoice.paidAmount, 1, 'POINT', 2, 'COMMA')}">
+                                        $0.00</td>
+                                </tr>
+                                <tr class="grand-total-row">
+                                    <td>TOTAL FACTURA:</td>
+                                    <td class="text-right"
+                                        th:text="'$' + ${#numbers.formatDecimal(invoice.total, 1, 'POINT', 2, 'COMMA')}">
+                                        $0.00</td>
+                                </tr>
+                                <tr class="balance-due-row">
+                                    <td>SALDO PENDIENTE:</td>
+                                    <td class="text-right"
+                                        th:text="'$' + ${#numbers.formatDecimal(invoice.dueAmount, 1, 'POINT', 2, 'COMMA')}">
+                                        $0.00</td>
+                                </tr>
+                            </table>
+                        </div>
 
-                <div style="margin-top: 10px;"></div>
+                        <!-- Banking details card -->
+                        <div class="payment-card">
+                            <div class="project-card-title">Datos para Pago / Transferencia</div>
+                            <div class="bank-details">
+                                <div class="bank-row">
+                                    <span class="bank-label">Banco</span>
+                                    <span class="bank-value"><strong>Bancolombia</strong></span>
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">Tipo de Cuenta</span>
+                                    <span class="bank-value"><strong>Cuenta Corriente</strong></span>
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">Número</span>
+                                    <span class="bank-value"><strong>12345678910</strong></span>
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">Titular</span>
+                                    <span class="bank-value"><strong>REDCONFER Comprehensive Services S.A.S.</strong></span>
+                                </div>
+                                <div class="bank-row">
+                                    <span class="bank-label">NIT</span>
+                                    <span class="bank-value"><strong>900.123.456-7</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-                <!-- Banking details card -->
-                <div class="payment-card">
-                    <div class="project-card-title">Datos para Pago / Transferencia</div>
-                    <div style="font-size: 7.5px; line-height: 1.4; color: #475569;">
-                        Banco: <strong>Bancolombia</strong><br />
-                        Tipo de Cuenta: <strong>Cuenta Corriente</strong><br />
-                        Número de Cuenta: <strong>12345678910</strong><br />
-                        Titular: REDCONFER Comprehensive Services S.A.S.<br />
-                        NIT Emisor: 900.123.456-7
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
+        </div><!-- /content-area -->
 
-    <!-- Dark Slate Footer Banner -->
-    <div class="footer-banner">
-        <table class="footer-banner-table">
-            <tr>
-                <td style="text-align: left; font-weight: bold; color: #ffffff;">REDCONFER S.A.S.</td>
-                <td style="text-align: center; color: #94a3b8;">Tel: +57 323 357 0996 | Email: contacto@redconfer.com</td>
-                <td style="text-align: right; color: #94a3b8;">www.redconfer.com</td>
-            </tr>
-        </table>
-    </div>
+        <!-- ============================================
+             FOOTER PREMIUM
+             ============================================ -->
+        <div class="footer-banner">
+            <table class="footer-banner-table">
+                <tr>
+                    <td style="text-align: left;">
+                        <span class="footer-brand">REDCONFER S.A.S.</span>
+                    </td>
+                    <td style="text-align: center;">
+                        Tel: +57 323 357 0996 <span class="footer-divider">|</span> contacto@redconfer.com
+                    </td>
+                    <td style="text-align: right;">
+                        www.redconfer.com
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div><!-- /invoice-wrapper -->
 
 </body>
+
 </html>
