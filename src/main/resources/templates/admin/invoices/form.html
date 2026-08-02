@@ -652,10 +652,10 @@
                                         <input type="number" step="0.01" name="itemPrice" th:value="${item.unitPrice}" class="form-control form-control-sm text-end input-price" placeholder="0.00" required>
                                     </td>
                                     <td>
-                                        <input type="number" step="0.1" name="itemDiscount" th:value="${item.discountPercent}" class="form-control form-control-sm text-center input-discount" placeholder="0" value="0">
+                                        <input type="number" step="0.1" name="itemDiscount" th:value="${item.discountPercent != null ? item.discountPercent : 0.0}" class="form-control form-control-sm text-center input-discount" placeholder="0" min="0" value="0">
                                     </td>
                                     <td>
-                                        <input type="number" step="0.1" name="itemTax" th:value="${item.taxRate}" class="form-control form-control-sm text-center input-tax" placeholder="19" value="19">
+                                        <input type="number" step="0.1" name="itemTax" th:value="${item.taxRate != null && item.taxRate > 0 ? item.taxRate : 19.0}" class="form-control form-control-sm text-center input-tax" placeholder="19" min="0" value="19">
                                     </td>
                                     <td class="text-end fw-bold px-3 row-subtotal" th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">
                                         $0.00
@@ -956,10 +956,10 @@
                     <input type="number" step="0.01" name="itemPrice" value="${price}" class="form-control form-control-sm text-end input-price" placeholder="0.00" required>
                 </td>
                 <td>
-                    <input type="number" step="0.1" name="itemDiscount" value="${discount}" class="form-control form-control-sm text-center input-discount" placeholder="0">
+                    <input type="number" step="0.1" name="itemDiscount" value="${discount !== undefined && discount !== null ? discount : 0.0}" class="form-control form-control-sm text-center input-discount" placeholder="0" min="0">
                 </td>
                 <td>
-                    <input type="number" step="0.1" name="itemTax" value="${tax}" class="form-control form-control-sm text-center input-tax" placeholder="19">
+                    <input type="number" step="0.1" name="itemTax" value="${tax !== undefined && tax !== null && tax > 0 ? tax : 19.0}" class="form-control form-control-sm text-center input-tax" placeholder="19" min="0">
                 </td>
                 <td class="text-end fw-bold px-3 row-subtotal">
                     $0.00
