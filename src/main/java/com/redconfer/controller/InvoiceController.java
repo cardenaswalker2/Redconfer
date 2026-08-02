@@ -338,6 +338,13 @@ public class InvoiceController {
                 .body(pdfBytes);
     }
 
+    @GetMapping("/preview/{id}")
+    public String previewInvoiceHtml(@PathVariable String id, Model model) {
+        Invoice invoice = invoiceRepository.findById(id).orElseThrow();
+        model.addAttribute("invoice", invoice);
+        return "admin/invoices/pdf_template";
+    }
+
     @PostMapping("/pagar/{id}")
     public String markAsPaid(@PathVariable String id) {
         Invoice invoice = invoiceRepository.findById(id).orElseThrow();
