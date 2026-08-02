@@ -671,6 +671,67 @@
                     </div>
                 </div>
 
+                <!-- PROJECT & REFERENCES (ERP) -->
+                <div class="form-card">
+                    <div class="form-section-title">
+                        <i class="bi bi-cone-striped me-2 text-danger"></i>Referencias del Proyecto y Servicio (ERP)
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Orden de Trabajo (N°)</label>
+                            <input type="text" th:field="*{workOrderNumber}" class="form-control" placeholder="Ej. OT-2026-042">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Cotización Relacionada</label>
+                            <input type="text" th:field="*{quoteNumber}" class="form-control" placeholder="Ej. COT-2026-099">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Código del Proyecto</label>
+                            <input type="text" th:field="*{projectCode}" class="form-control" placeholder="Ej. PRJ-SEC-01">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Nombre del Proyecto</label>
+                            <input type="text" th:field="*{projectName}" class="form-control" placeholder="Ej. Instalación CCTV Bodega">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Técnico Responsable</label>
+                            <input type="text" th:field="*{technicianName}" class="form-control" placeholder="Ej. Carlos Pérez">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Supervisor Técnico</label>
+                            <input type="text" th:field="*{supervisorName}" class="form-control" placeholder="Ej. Ing. Luis Gómez">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Tipo de Servicio</label>
+                            <input type="text" th:field="*{installationType}" class="form-control" placeholder="Ej. Control de Acceso / Redes">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Fecha de Instalación</label>
+                            <input type="date" th:field="*{installationDate}" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Dirección de Instalación</label>
+                            <input type="text" th:field="*{installationAddress}" class="form-control" placeholder="Ej. Av. Santander #40-10, Cartagena">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Tiempo Estimado</label>
+                            <input type="text" th:field="*{estimatedTime}" class="form-control" placeholder="Ej. 16 Horas">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Tiempo Ejecutado</label>
+                            <input type="text" th:field="*{executedTime}" class="form-control" placeholder="Ej. 14 Horas">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Término de Garantía</label>
+                            <input type="text" th:field="*{warrantyTerm}" class="form-control" placeholder="Ej. 12 Meses">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Valor Total en Letras</label>
+                            <input type="text" th:field="*{totalInWords}" class="form-control" placeholder="Ej. CUATROCIENTOS DIECISEIS MIL QUINIENTOS PESOS M/CTE">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- ITEMS SECTION -->
                 <div class="form-card">
                     <div class="form-section-title d-flex justify-content-between align-items-center">

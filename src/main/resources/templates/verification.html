@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación de Factura - REDCONFER</title>
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --rc-primary: #0f172a;
+            --rc-secondary: #1e293b;
+            --rc-accent: #C61A22;
+            --rc-accent-light: #dc2626;
+            --rc-surface: #ffffff;
+            --rc-surface-alt: #f8fafc;
+            --rc-border: #e2e8f0;
+            --rc-text: #0f172a;
+            --rc-text-secondary: #64748b;
+            --rc-success: #10b981;
+            --rc-success-dark: #059669;
+            --rc-danger: #ef4444;
+            --rc-radius-md: 14px;
+            --rc-radius-lg: 20px;
+            --rc-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--rc-text);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .portal-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Verification Status Card */
+        .status-card {
+            background: var(--rc-surface);
+            border-radius: var(--rc-radius-lg);
+            border: 1px solid var(--rc-border);
+            box-shadow: var(--rc-shadow);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+        }
+
+        .status-card.verified::before {
+            background: var(--rc-success);
+        }
+
+        .status-card.not-found::before {
+            background: var(--rc-danger);
+        }
+
+        .status-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.25rem;
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .verified .status-icon-wrapper {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--rc-success);
+        }
+
+        .not-found .status-icon-wrapper {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--rc-danger);
+        }
+
+        /* Detail Cards */
+        .info-card {
+            background: var(--rc-surface);
+            border-radius: var(--rc-radius-md);
+            border: 1px solid var(--rc-border);
+            box-shadow: var(--rc-shadow);
+            padding: 1.75rem;
+            height: 100%;
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-header-custom {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--rc-border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-header-custom i {
+            font-size: 1.25rem;
+            color: var(--rc-accent);
+        }
+
+        .card-header-custom h5 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--rc-primary);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            padding: 0.35em 0.85em;
+            border-radius: 50rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Timeline style */
+        .timeline-container {
+            position: relative;
+            padding-left: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--rc-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '\F272'; /* Bootstrap icons check-circle-fill */
+            font-family: 'bootstrap-icons';
+            position: absolute;
+            left: -27px;
+            top: 2px;
+            width: 14px;
+            height: 14px;
+            background: white;
+            color: var(--rc-success-dark);
+            font-size: 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--rc-text-secondary);
+            font-weight: 600;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            font-size: 0.88rem;
+            margin: 0.1rem 0;
+            color: var(--rc-primary);
+        }
+
+        .timeline-desc {
+            font-size: 0.75rem;
+            color: var(--rc-text-secondary);
+        }
+
+        /* Custom Table */
+        .table-responsive {
+            border-radius: var(--rc-radius-md);
+            border: 1px solid var(--rc-border);
+            overflow: hidden;
+            background: white;
+        }
+
+        .table-custom {
+            margin: 0;
+        }
+
+        .table-custom th {
+            background-color: var(--rc-surface-alt);
+            color: var(--rc-text-secondary);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.85rem 1.25rem;
+            border-bottom: 1px solid var(--rc-border);
+        }
+
+        .table-custom td {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--rc-border);
+        }
+
+        .table-custom tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Financial summary card */
+        .totals-card {
+            background: var(--rc-surface-alt);
+            border-radius: 10px;
+            padding: 1.25rem;
+            border: 1px solid var(--rc-border);
+        }
+
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .totals-row.grand-total {
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-top: 1px dashed var(--rc-border);
+            padding-top: 0.75rem;
+            margin-top: 0.5rem;
+            color: var(--rc-accent);
+        }
+
+        /* Verification Seal */
+        .verification-seal {
+            border: 3px double var(--rc-success-dark);
+            color: var(--rc-success-dark);
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            text-transform: uppercase;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            display: inline-block;
+            transform: rotate(-3deg);
+            margin: 2rem 0;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.05);
+        }
+
+        /* Action Buttons */
+        .btn-action-custom {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-action-primary {
+            background-color: var(--rc-accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-action-primary:hover {
+            background-color: var(--rc-accent-light);
+            color: white;
+            box-shadow: 0 4px 12px rgba(198, 26, 34, 0.2);
+        }
+
+        .btn-action-outline {
+            background-color: transparent;
+            color: var(--rc-text-secondary);
+            border: 1px solid var(--rc-border);
+        }
+
+        .btn-action-outline:hover {
+            background-color: var(--rc-surface-alt);
+            color: var(--rc-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portal-container {
+                margin: 1rem auto;
+            }
+            .table-responsive {
+                border: none;
+            }
+            .table-custom thead {
+                display: none;
+            }
+            .table-custom tr {
+                display: block;
+                background: white;
+                border: 1px solid var(--rc-border);
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+            .table-custom td {
+                display: block;
+                text-align: left !important;
+                padding: 0.4rem 0;
+                border: none;
+            }
+            .table-custom td::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 0.72rem;
+                font-weight: 700;
+                color: var(--rc-text-secondary);
+                text-transform: uppercase;
+                margin-bottom: 0.15rem;
+            }
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portal-container">
+        
+        <!-- Header Brand -->
+        <div class="text-center mb-4">
+            <a href="/" class="d-inline-flex align-items-center gap-2 text-decoration-none">
+                <span class="fs-3 fw-bold text-dark" style="font-family: 'Space Grotesk', sans-serif;">REDCONFER</span>
+            </a>
+            <p class="text-muted small text-uppercase tracking-wider">Módulo de Verificación de Documentos</p>
+        </div>
+
+        <!-- 1. NOT FOUND STATE -->
+        <div th:if="${!found}" class="status-card not-found">
+            <div class="status-icon-wrapper">
+                <i class="bi bi-x-circle-fill"></i>
+            </div>
+            <h2 class="text-danger mb-2">Factura No Encontrada</h2>
+            <p class="text-muted mb-4" th:text="'El documento con identificador \'' + ${invoiceNumber} + '\' no existe en el sistema REDCONFER. Por favor, verifique el código QR o enlace proporcionado.'"></p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/" class="btn btn-action-custom btn-action-outline">
+                    <i class="bi bi-house-door"></i> Ir al Inicio
+                </a>
+                <a href="https://redconfer.com" target="_blank" class="btn btn-action-custom btn-action-primary">
+                    <i class="bi bi-chat-dots"></i> Contactar Soporte
+                </a>
+            </div>
+        </div>
+
+        <!-- 2. VERIFIED STATE -->
+        <div th:if="${found}">
+            
+            <!-- Main status banner -->
+            <div class="status-card verified">
+                <div class="status-icon-wrapper">
+                    <i class="bi bi-patch-check-fill"></i>
+                </div>
+                <h2 class="text-success mb-1">Factura Verificada con Éxito</h2>
+                <p class="text-muted mb-4" th:text="'Documento Oficial de REDCONFER Comprehensive Services S.A.S.'"></p>
+                
+                <div class="row justify-content-center g-3 text-start">
+                    <div class="col-6 col-md-3">
+                        <span class="text-muted text-xs d-block">Número de Factura</span>
+                        <strong class="fs-6" th:text="${invoice.invoiceNumber}">FAC-2026-0001</strong>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <span class="text-muted text-xs d-block">Estado Actual</span>
+                        <span class="status-badge" 
+                              th:classappend="'status-' + ${invoice.status.name().toLowerCase()}" 
+                              th:text="${invoice.status}">PAGADA</span>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <span class="text-muted text-xs d-block">Fecha Emisión</span>
+                        <span class="fw-semibold" th:text="${invoice.issueDate}">01/08/2026</span>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <span class="text-muted text-xs d-block">Valor Total</span>
+                        <strong class="text-danger fs-6" th:text="'$' + ${#numbers.formatDecimal(invoice.total, 1, 'POINT', 2, 'COMMA')}">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Double Grid: Info & Timeline -->
+            <div class="row g-4 mb-4">
+                <!-- Timeline/Historial -->
+                <div class="col-md-5">
+                    <div class="info-card">
+                        <div class="card-header-custom">
+                            <i class="bi bi-clock-history"></i>
+                            <h5>Línea de Tiempo del Documento</h5>
+                        </div>
+                        <div class="timeline-container">
+                            <div th:each="event : ${invoice.timeline}" class="timeline-item">
+                                <div class="timeline-date" th:text="${#temporals.format(event.timestamp, 'dd/MM/yyyy HH:mm')}">31/07/2026 14:30</div>
+                                <div class="timeline-title" th:text="${event.name}">Factura Creada</div>
+                                <div class="timeline-desc" th:text="'Responsable: ' + ${event.responsibleUser}">Administrador</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- References & Meta -->
+                <div class="col-md-7">
+                    <div class="info-card">
+                        <div class="card-header-custom">
+                            <i class="bi bi-info-square-fill"></i>
+                            <h5>Información del Documento</h5>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <span class="text-muted text-xs d-block">Cliente</span>
+                                <span class="fw-semibold d-block" th:text="${invoice.clientName}">Juan Pérez</span>
+                                <span class="text-muted small" th:text="${invoice.clientNit}">Nit. 123456</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="text-muted text-xs d-block">Proyecto Relacionado</span>
+                                <span class="fw-semibold d-block" th:text="${invoice.projectName != null ? invoice.projectName : 'N/A'}">Instalación CCTV</span>
+                                <span class="text-muted small" th:text="${invoice.projectCode != null ? 'Código: ' + invoice.projectCode : ''}"></span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted text-xs d-block">Método de Pago</span>
+                                <span class="fw-medium" th:text="${invoice.paymentMethod}">Transferencia</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted text-xs d-block">Forma de Pago</span>
+                                <span class="fw-medium" th:text="${invoice.paymentForm}">Contado</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted text-xs d-block">Moneda</span>
+                                <span class="fw-medium" th:text="${invoice.currency}">COP</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="text-muted text-xs d-block">Vendedor / Asesor</span>
+                                <span class="fw-medium" th:text="${invoice.seller != null ? invoice.seller : 'Asignado General'}">Carlos Valdés</span>
+                            </div>
+                            <div class="col-12" th:if="${invoice.workOrderNumber != null || invoice.quoteNumber != null}">
+                                <hr class="my-2 border-slate">
+                                <span class="text-muted text-xs d-block mb-1">Documentos de Referencia</span>
+                                <div class="d-flex gap-3">
+                                    <span th:if="${invoice.quoteNumber != null}" class="badge bg-secondary-subtle text-secondary" th:text="'Cotización: ' + ${invoice.quoteNumber}"></span>
+                                    <span th:if="${invoice.workOrderNumber != null}" class="badge bg-primary-subtle text-primary" th:text="'Orden Trabajo: ' + ${invoice.workOrderNumber}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="table-responsive mb-4">
+                <table class="table table-custom align-middle">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">Código</th>
+                            <th style="width: 25%;">Producto / Servicio</th>
+                            <th style="width: 25%;">Descripción</th>
+                            <th style="width: 8%;" class="text-center">Cant</th>
+                            <th style="width: 12%;" class="text-end">Precio Unit.</th>
+                            <th style="width: 8%;" class="text-center">Dcto</th>
+                            <th style="width: 12%;" class="text-end">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${invoice.items}">
+                            <td data-label="Código" class="fw-bold" th:text="${item.code}">SKU-01</td>
+                            <td data-label="Producto / Servicio" th:text="${item.name}">Cámara de Seguridad</td>
+                            <td data-label="Descripción" th:text="${item.description}">Detalles técnicos</td>
+                            <td data-label="Cant" class="text-center" th:text="${item.quantity}">1</td>
+                            <td data-label="Precio Unit." class="text-end" th:text="'$' + ${#numbers.formatDecimal(item.unitPrice, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
+                            <td data-label="Dcto" class="text-center" th:text="${item.discountPercent} + '%'">0%</td>
+                            <td data-label="Subtotal" class="text-end fw-semibold" th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">$0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Split Grid: Financial Summary & Project details -->
+            <div class="row g-4 mb-4">
+                <!-- Project Installation Details -->
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <div class="card-header-custom">
+                            <i class="bi bi-cone-striped"></i>
+                            <h5>Información del Proyecto y Servicio</h5>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <span class="text-muted text-xs d-block">Tipo de Instalación</span>
+                                <span class="fw-medium" th:text="${invoice.installationType != null ? invoice.installationType : 'Instalación Estándar'}">Seguridad Electrónica</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="text-muted text-xs d-block">Garantía del Servicio</span>
+                                <span class="fw-semibold text-success" th:text="${invoice.warrantyTerm != null ? invoice.warrantyTerm : '12 Meses'}">12 Meses</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="text-muted text-xs d-block">Fecha de Instalación</span>
+                                <span class="fw-medium" th:text="${invoice.installationDate != null ? invoice.installationDate : invoice.issueDate}">01/08/2026</span>
+                            </div>
+                            <div class="col-sm-6">
+                                <span class="text-muted text-xs d-block">Técnico Encargado</span>
+                                <span class="fw-medium" th:text="${invoice.technicianName != null ? invoice.technicianName : 'Operador Asignado'}">Carlos Pérez</span>
+                            </div>
+                            <div class="col-12">
+                                <span class="text-muted text-xs d-block">Lugar de Ejecución</span>
+                                <span class="fw-medium" th:text="${invoice.installationAddress != null ? invoice.installationAddress : invoice.clientAddress}">Calle 30, Cartagena</span>
+                            </div>
+                            <div class="col-12" th:if="${invoice.estimatedTime != null}">
+                                <div class="d-flex justify-content-between text-xs text-muted">
+                                    <span th:text="'Tiempo Estimado: ' + ${invoice.estimatedTime}"></span>
+                                    <span th:text="'Tiempo Real: ' + ${invoice.executedTime}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial calculation grid -->
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <div class="card-header-custom">
+                            <i class="bi bi-wallet2"></i>
+                            <h5>Resumen Financiero</h5>
+                        </div>
+                        <div class="totals-card">
+                            <div class="totals-row">
+                                <span>Subtotal antes de Descuentos:</span>
+                                <strong th:text="'$' + ${#numbers.formatDecimal(invoice.subtotal, 1, 'POINT', 2, 'COMMA')}">$0.00</strong>
+                            </div>
+                            <div class="totals-row text-success">
+                                <span>Descuentos aplicados:</span>
+                                <strong th:text="'-$' + ${#numbers.formatDecimal(invoice.discountAmount, 1, 'POINT', 2, 'COMMA')}">-$0.00</strong>
+                            </div>
+                            <div class="totals-row">
+                                <span>Impuestos (IVA 19%):</span>
+                                <strong th:text="'$' + ${#numbers.formatDecimal(invoice.taxAmount, 1, 'POINT', 2, 'COMMA')}">$0.00</strong>
+                            </div>
+                            <div class="totals-row grand-total">
+                                <span>Total Factura:</span>
+                                <span th:text="'$' + ${#numbers.formatDecimal(invoice.total, 1, 'POINT', 2, 'COMMA')}">$0.00</span>
+                            </div>
+                            <div class="totals-row mt-2 text-success-dark fw-medium">
+                                <span>Monto Pagado:</span>
+                                <span th:text="'$' + ${#numbers.formatDecimal(invoice.paidAmount, 1, 'POINT', 2, 'COMMA')}">$0.00</span>
+                            </div>
+                            <div class="totals-row fw-bold text-danger">
+                                <span>Saldo Pendiente:</span>
+                                <span th:text="'$' + ${#numbers.formatDecimal(invoice.dueAmount, 1, 'POINT', 2, 'COMMA')}">$0.00</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-xs text-muted">
+                            <span class="d-block text-uppercase fw-semibold mb-1">Valor en letras:</span>
+                            <span class="fw-medium italic" th:text="${invoice.totalInWords}">CUATROCIENTOS DIECISEIS MIL QUINIENTOS PESOS M/CTE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sello & Payment Details -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <div class="card-header-custom">
+                            <i class="bi bi-bank"></i>
+                            <h5>Instrucciones de Pago</h5>
+                        </div>
+                        <div class="row g-2 text-xs">
+                            <div class="col-6"><strong>Entidad Bancaria:</strong> Bancolombia</div>
+                            <div class="col-6"><strong>Tipo de Cuenta:</strong> Cuenta Corriente</div>
+                            <div class="col-12"><strong>Número de Cuenta:</strong> 12345678910</div>
+                            <div class="col-12"><strong>Titular:</strong> REDCONFER Comprehensive Services S.A.S.</div>
+                            <div class="col-12"><strong>NIT Emisor:</strong> 900.123.456-7</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <div class="info-card d-flex flex-column align-items-center justify-content-center">
+                        <div class="verification-seal">
+                            <i class="bi bi-shield-fill-check me-1"></i> Factura Verificada
+                        </div>
+                        <span class="text-xs text-muted" th:text="'Verificado el: ' + ${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm:ss')}">01/08/2026 21:00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="d-flex justify-content-center gap-3 flex-wrap mb-5">
+                <button onclick="window.print()" class="btn btn-action-custom btn-action-outline">
+                    <i class="bi bi-printer"></i> Imprimir
+                </button>
+                <a th:href="@{/admin/facturas/pdf/{id}(id=${invoice.id})}" class="btn btn-action-custom btn-action-primary">
+                    <i class="bi bi-file-earmark-pdf"></i> Descargar PDF
+                </a>
+                <button onclick="shareLink()" class="btn btn-action-custom btn-action-outline">
+                    <i class="bi bi-share"></i> Compartir
+                </button>
+                <a href="https://wa.me/573233570996" target="_blank" class="btn btn-action-custom btn-action-outline">
+                    <i class="bi bi-whatsapp"></i> Soporte REDCONFER
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <hr class="border-slate">
+        <div class="text-center text-muted small py-3">
+            <p class="m-0">&copy; 2026 REDCONFER. Todos los derechos reservados.</p>
+            <p class="m-0 text-xs">Instalaciones de CCTV | Redes y Servidores | Automatizaciones Profesionales</p>
+        </div>
+
+    </div>
+
+    <script th:inline="javascript">
+        function shareLink() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Verificación de Factura REDCONFER',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('Enlace de validación copiado al portapapeles!');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -59,12 +59,40 @@ public class Invoice {
     
     private String totalInWords; // e.g., "UN MILLÓN DOSCIENTOS MIL PESOS M/CTE"
     
+    // Project and reference tracking fields
+    private String quoteNumber;
+    private String workOrderNumber;
+    private String projectCode;
+    private String projectName;
+    private String technicianName;
+    private String supervisorName;
+    private String installationType;
+    private String installationAddress;
+    private String estimatedTime;
+    private String executedTime;
+    private String warrantyTerm;
+    private LocalDate installationDate;
+
+    @Builder.Default
+    private List<InvoiceEvent> timeline = new ArrayList<>();
+
     @CreatedDate
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
     public enum InvoiceStatus {
         PENDIENTE, PAGADA, VENCIDA, ANULADA
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class InvoiceEvent {
+        private String name; // e.g. "Factura creada", "Pago recibido"
+        private LocalDateTime timestamp;
+        private String responsibleUser;
+        private boolean completed;
     }
     
     @Data
