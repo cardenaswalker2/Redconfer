@@ -367,6 +367,21 @@
             color: var(--rc-primary);
         }
 
+        .input-qty, .input-discount, .input-tax {
+            min-width: 58px;
+            text-align: center;
+        }
+
+        /* Hide HTML5 number spinners for input fields */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
         @media (max-width: 991.98px) {
             .sidebar {
                 transform: translateX(-280px);
@@ -673,16 +688,16 @@
                         <table class="table dynamic-table align-middle" id="itemsTable">
                             <thead>
                                 <tr>
-                                    <th style="width: 15%;">Código / SKU</th>
-                                    <th style="width: 25%;">Nombre Producto / Servicio</th>
-                                    <th style="width: 25%;">Descripción</th>
-                                    <th style="width: 8%;">Cant.</th>
-                                    <th style="width: 8%;">Unidad</th>
+                                    <th style="width: 10%;">Código / SKU</th>
+                                    <th style="width: 22%;">Nombre Producto / Servicio</th>
+                                    <th style="width: 22%;">Descripción</th>
+                                    <th style="width: 6%;">Cant.</th>
+                                    <th style="width: 6%;">Unidad</th>
                                     <th style="width: 10%;">P. Unitario</th>
-                                    <th style="width: 7%;">Dcto %</th>
-                                    <th style="width: 8%;">IVA %</th>
-                                    <th style="width: 10%;" class="text-end">Subtotal</th>
-                                    <th style="width: 8%;" class="text-center">Acciones</th>
+                                    <th style="width: 6%;">Dcto %</th>
+                                    <th style="width: 7%;">IVA %</th>
+                                    <th style="width: 11%;" class="text-end">Subtotal</th>
+                                    <th style="width: 10%;" class="text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="itemsBody">

@@ -718,26 +718,6 @@ public class PdfService {
 
             document.add(totalsTable);
             
-            // Space for signatures
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph(" "));
-            PdfPTable signatureTable = new PdfPTable(2);
-            signatureTable.setWidthPercentage(100);
-            signatureTable.setWidths(new float[]{50, 50});
-            signatureTable.setKeepTogether(true);
-            
-            PdfPCell sig1 = new PdfPCell(new Paragraph("\n\n___________________________________\nFirma Autorizada REDCONFER", regularFont));
-            sig1.setBorder(Rectangle.NO_BORDER);
-            sig1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            
-            PdfPCell sig2 = new PdfPCell(new Paragraph("\n\n___________________________________\nRecibí Conforme (Cliente)", regularFont));
-            sig2.setBorder(Rectangle.NO_BORDER);
-            sig2.setHorizontalAlignment(Element.ALIGN_CENTER);
-            
-            signatureTable.addCell(sig1);
-            signatureTable.addCell(sig2);
-            document.add(signatureTable);
-            
             // Bottom Branded Footer
             document.add(new Paragraph(" "));
             Paragraph signatureText = new Paragraph("Factura generada electrónicamente por REDCONFER. ¡Gracias por su compra!", FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 8, textSubdued));
