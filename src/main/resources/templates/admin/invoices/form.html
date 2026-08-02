@@ -375,6 +375,60 @@
                 margin-left: 0;
             }
         }
+
+        @media (max-width: 768px) {
+            /* Hide table headers on mobile */
+            #itemsTable thead {
+                display: none;
+            }
+            
+            /* Make table rows act as cards */
+            #itemsTable, #itemsTable tbody, #itemsTable tr, #itemsTable td {
+                display: block;
+                width: 100% !important;
+            }
+            
+            #itemsTable tr {
+                margin-bottom: 1.5rem;
+                background: #ffffff;
+                border: 1px solid var(--rc-border);
+                border-radius: var(--rc-radius-md);
+                padding: 1.25rem;
+                box-shadow: var(--rc-shadow-sm);
+            }
+            
+            /* Layout fields inside each row-card */
+            #itemsTable td {
+                padding: 0.5rem 0;
+                border: none;
+                position: relative;
+            }
+            
+            /* Add labels before the values/inputs */
+            #itemsTable td::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 0.72rem;
+                font-weight: 700;
+                color: var(--rc-text-secondary);
+                margin-bottom: 0.35rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+            
+            /* Specific styling for mobile card elements */
+            #itemsTable td.text-end {
+                text-align: left !important;
+            }
+            
+            #itemsTable td.row-subtotal {
+                font-size: 1.15rem;
+                color: var(--rc-accent);
+                border-top: 1px dashed var(--rc-border);
+                padding-top: 0.75rem;
+                margin-top: 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -382,7 +436,7 @@
     <div class="dashboard-wrapper">
         <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-brand">
+            <div class="sidebar-brand d-flex justify-content-between align-items-center">
                 <a href="/" class="brand-link">
                     <div class="brand-icon">
                         <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
@@ -403,6 +457,7 @@
                         <div class="brand-tagline">Centro de Operaciones</div>
                     </div>
                 </a>
+                <button class="btn-close btn-close-white d-lg-none" onclick="toggleSidebar()"></button>
             </div>
 
             <nav class="sidebar-nav">
@@ -462,10 +517,15 @@
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
-            <header class="top-header">
-                <div class="header-title">
-                    <h1 th:text="${isNew} ? 'Generar Nueva Factura de Venta' : 'Modificar Factura'">Nueva Factura</h1>
-                    <p>Completa la información para generar la factura electrónica en el sistema</p>
+            <header class="top-header flex-wrap gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-dark d-lg-none" onclick="toggleSidebar()" style="padding: 0.4rem 0.75rem; border-radius: 8px;">
+                        <i class="bi bi-list fs-5"></i>
+                    </button>
+                    <div class="header-title">
+                        <h1 class="m-0" th:text="${isNew} ? 'Generar Nueva Factura de Venta' : 'Modificar Factura'">Nueva Factura</h1>
+                        <p class="m-0 text-muted small">Completa la información para generar la factura electrónica en el sistema</p>
+                    </div>
                 </div>
             </header>
 
@@ -628,10 +688,10 @@
                             <tbody id="itemsBody">
                                 <!-- Thymeleaf loop for existing items (edit mode) -->
                                 <tr th:each="item, stat : ${invoice.items}" class="item-row">
-                                    <td>
+                                    <td data-label="Código / SKU">
                                         <input type="text" name="itemCode" th:value="${item.code}" class="form-control form-control-sm" placeholder="Ej. CAM-01">
                                     </td>
-                                    <td>
+                                    <td data-label="Nombre Producto / Servicio">
                                         <div class="input-group input-group-sm">
                                             <input type="text" name="itemName" th:value="${item.name}" class="form-control autocomplete-product" placeholder="Nombre..." required>
                                             <button type="button" class="btn btn-outline-secondary" onclick="openProductSelector(this)" title="Buscar en Catálogo">
@@ -639,28 +699,28 @@
                                             </button>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td data-label="Descripción">
                                         <input type="text" name="itemDesc" th:value="${item.description}" class="form-control form-control-sm" placeholder="Detalle...">
                                     </td>
-                                    <td>
+                                    <td data-label="Cant.">
                                         <input type="number" name="itemQty" th:value="${item.quantity}" class="form-control form-control-sm text-center input-qty" value="1" min="1" required>
                                     </td>
-                                    <td>
+                                    <td data-label="Unidad">
                                         <input type="text" name="itemUnit" th:value="${item.unit}" class="form-control form-control-sm text-center" placeholder="Und" value="Unidad">
                                     </td>
-                                    <td>
+                                    <td data-label="P. Unitario">
                                         <input type="number" step="0.01" name="itemPrice" th:value="${item.unitPrice}" class="form-control form-control-sm text-end input-price" placeholder="0.00" required>
                                     </td>
-                                    <td>
+                                    <td data-label="Dcto %">
                                         <input type="number" step="0.1" name="itemDiscount" th:value="${item.discountPercent != null ? item.discountPercent : 0.0}" class="form-control form-control-sm text-center input-discount" placeholder="0" min="0" value="0">
                                     </td>
-                                    <td>
+                                    <td data-label="IVA %">
                                         <input type="number" step="0.1" name="itemTax" th:value="${item.taxRate != null && item.taxRate > 0 ? item.taxRate : 19.0}" class="form-control form-control-sm text-center input-tax" placeholder="19" min="0" value="19">
                                     </td>
-                                    <td class="text-end fw-bold px-3 row-subtotal" th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">
+                                    <td data-label="Subtotal" class="text-end fw-bold px-3 row-subtotal" th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}">
                                         $0.00
                                     </td>
-                                    <td class="text-center">
+                                    <td data-label="Acciones" class="text-center">
                                         <div class="d-flex justify-content-center gap-1">
                                             <button type="button" class="btn-action btn-action-duplicate" onclick="duplicateRow(this)" title="Duplicar">
                                                 <i class="bi bi-copy"></i>
@@ -932,10 +992,10 @@
             tr.className = 'item-row';
             
             tr.innerHTML = `
-                <td>
+                <td data-label="Código / SKU">
                     <input type="text" name="itemCode" value="${code}" class="form-control form-control-sm" placeholder="Ej. CAM-01">
                 </td>
-                <td>
+                <td data-label="Nombre Producto / Servicio">
                     <div class="input-group input-group-sm">
                         <input type="text" name="itemName" value="${name}" class="form-control autocomplete-product" placeholder="Nombre..." required>
                         <button type="button" class="btn btn-outline-secondary" onclick="openProductSelector(this)" title="Buscar en Catálogo">
@@ -943,28 +1003,28 @@
                         </button>
                     </div>
                 </td>
-                <td>
+                <td data-label="Descripción">
                     <input type="text" name="itemDesc" value="${desc}" class="form-control form-control-sm" placeholder="Detalle...">
                 </td>
-                <td>
+                <td data-label="Cant.">
                     <input type="number" name="itemQty" value="${qty}" class="form-control form-control-sm text-center input-qty" min="1" required>
                 </td>
-                <td>
+                <td data-label="Unidad">
                     <input type="text" name="itemUnit" value="${unit}" class="form-control form-control-sm text-center" placeholder="Und">
                 </td>
-                <td>
+                <td data-label="P. Unitario">
                     <input type="number" step="0.01" name="itemPrice" value="${price}" class="form-control form-control-sm text-end input-price" placeholder="0.00" required>
                 </td>
-                <td>
+                <td data-label="Dcto %">
                     <input type="number" step="0.1" name="itemDiscount" value="${discount !== undefined && discount !== null ? discount : 0.0}" class="form-control form-control-sm text-center input-discount" placeholder="0" min="0">
                 </td>
-                <td>
+                <td data-label="IVA %">
                     <input type="number" step="0.1" name="itemTax" value="${tax !== undefined && tax !== null && tax > 0 ? tax : 19.0}" class="form-control form-control-sm text-center input-tax" placeholder="19" min="0">
                 </td>
-                <td class="text-end fw-bold px-3 row-subtotal">
+                <td data-label="Subtotal" class="text-end fw-bold px-3 row-subtotal">
                     $0.00
                 </td>
-                <td class="text-center">
+                <td data-label="Acciones" class="text-center">
                     <div class="d-flex justify-content-center gap-1">
                         <button type="button" class="btn-action btn-action-duplicate" onclick="duplicateRow(this)" title="Duplicar">
                             <i class="bi bi-copy"></i>
@@ -1069,6 +1129,9 @@
             document.getElementById('totalDisplay').textContent = '$' + grandTotal.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('paidDisplay').textContent = '$' + paidAmount.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             document.getElementById('dueDisplay').textContent = '$' + dueAmount.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('show');
         }
     </script>
 </body>
