@@ -502,7 +502,7 @@
                             <i class="bi bi-check-circle-fill"></i>
                         </div>
                         <div class="metric-details">
-                            <h3 th:text="'$' + ${#numbers.formatDecimal(invoices.stream().filter(i -> i.status == T(com.redconfer.model.Invoice.InvoiceStatus).PAGADA).mapToDouble(Invoice::getTotal).sum(), 1, 'POINT', 2, 'COMMA')}">$0.00</h3>
+                            <h3 th:text="'$' + ${#numbers.formatDecimal(totalCollected, 1, 'POINT', 2, 'COMMA')}">$0.00</h3>
                             <span>Total Recaudado</span>
                         </div>
                     </div>
@@ -513,7 +513,7 @@
                             <i class="bi bi-clock-history"></i>
                         </div>
                         <div class="metric-details">
-                            <h3 th:text="'$' + ${#numbers.formatDecimal(invoices.stream().filter(i -> i.status == T(com.redconfer.model.Invoice.InvoiceStatus).PENDIENTE).mapToDouble(Invoice::getDueAmount).sum(), 1, 'POINT', 2, 'COMMA')}">$0.00</h3>
+                            <h3 th:text="'$' + ${#numbers.formatDecimal(dueAmountFiltered, 1, 'POINT', 2, 'COMMA')}">$0.00</h3>
                             <span>Saldo Pendiente</span>
                         </div>
                     </div>
@@ -524,7 +524,7 @@
                             <i class="bi bi-slash-circle-fill"></i>
                         </div>
                         <div class="metric-details">
-                            <h3 th:text="${invoices.stream().filter(i -> i.status == T(com.redconfer.model.Invoice.InvoiceStatus).ANULADA).count()}">0</h3>
+                            <h3 th:text="${cancelledCount}">0</h3>
                             <span>Anuladas</span>
                         </div>
                     </div>

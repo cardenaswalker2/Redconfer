@@ -86,7 +86,24 @@ public class InvoiceController {
             return comp;
         });
 
+        double totalCollected = invoices.stream()
+                .filter(i -> i.getStatus() == Invoice.InvoiceStatus.PAGADA)
+                .mapToDouble(Invoice::getTotal)
+                .sum();
+
+        double dueAmountFiltered = invoices.stream()
+                .filter(i -> i.getStatus() == Invoice.InvoiceStatus.PENDIENTE)
+                .mapToDouble(Invoice::getDueAmount)
+                .sum();
+
+        long cancelledCount = invoices.stream()
+                .filter(i -> i.getStatus() == Invoice.InvoiceStatus.ANULADA)
+                .count();
+
         model.addAttribute("invoices", invoices);
+        model.addAttribute("totalCollected", totalCollected);
+        model.addAttribute("dueAmountFiltered", dueAmountFiltered);
+        model.addAttribute("cancelledCount", cancelledCount);
         model.addAttribute("search", search);
         model.addAttribute("statusFilter", status);
         model.addAttribute("startDate", startDateStr);
